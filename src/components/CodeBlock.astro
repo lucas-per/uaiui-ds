@@ -1,6 +1,6 @@
 ---
 import { Code } from 'astro:components';
-interface Props { code: string; lang?: string; standalone?: boolean }
+interface Props { code: string; lang?: 'html' | 'css' | 'js'; standalone?: boolean }
 const { code, lang = 'html', standalone = false } = Astro.props;
 ---
 <div class:list={['code', { 'code--standalone': standalone }]}>

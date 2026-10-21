@@ -7,7 +7,7 @@
   padding: 0 var(--accordion-header-padding-x);
   border: var(--border-width-default) solid var(--accordion-border); border-radius: var(--radius-control);
   background: var(--accordion-header-normal-background); color: var(--accordion-header-normal-txtOn);
-  font: 700 var(--accordion-title-font-size)/var(--accordion-title-line-height) "JetBrains Mono", monospace;
+  font: var(--font-weight-label) var(--accordion-title-font-size)/var(--accordion-title-line-height) var(--font-family-label), monospace;
   text-align: left; cursor: pointer;
   transition: background-color var(--motion-duration-press), color var(--motion-duration-press);
 }
@@ -24,7 +24,7 @@
   padding: var(--accordion-panel-padding-y) var(--accordion-panel-padding-x);
   border: var(--border-width-default) solid var(--accordion-border); border-top: 0;
   background: var(--accordion-panel-background); color: var(--accordion-panel-txt);
-  font: 400 var(--accordion-panel-font-size)/var(--accordion-panel-line-height) "DM Sans Variable", sans-serif;
+  font: 400 var(--accordion-panel-font-size)/var(--accordion-panel-line-height) var(--font-family-body), sans-serif;
 }
 .uai-accordion-panel[hidden] { display: none; }
 .uai-accordion { display: flex; flex-direction: column; gap: var(--size-scale-x3); }

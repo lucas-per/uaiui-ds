@@ -1,19 +1,36 @@
 {
   "name": "uaiui-ds",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "engines": { "node": ">=22.12.0" },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "tokens": "node scripts/figma-to-css.mjs",
     "dev": "npm run tokens && astro dev",
     "build": "npm run tokens && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "node scripts/check-wrapper.mjs && astro check"
   },
-  "dependencies": {
-    "@fontsource-variable/dm-sans": "^5.2.0",
+  "files": [
+    "src/styles/tokens.css",
+    "src/styles/tokens-wrapper.css",
+    "src/styles/components"
+  ],
+  "exports": {
+    "./tokens.css": "./src/styles/tokens.css",
+    "./tokens-wrapper.css": "./src/styles/tokens-wrapper.css",
+    "./components/button.css": "./src/styles/components/button.css",
+    "./components/accordion.css": "./src/styles/components/accordion.css",
+    "./components/toast.css": "./src/styles/components/toast.css",
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@fontsource/dm-sans": "^5.2.0",
     "@fontsource/jetbrains-mono": "^5.2.0",
-    "astro": "^7.3.1"
+    "astro": "^7.3.1",
+    "typescript": "^6.0.3"
   }
 }
