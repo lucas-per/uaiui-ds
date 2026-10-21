@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../../data/url';
 import DocsLayout from '../../../layouts/DocsLayout.astro';
 import Example from '../../../components/Example.astro';
 import CodeBlock from '../../../components/CodeBlock.astro';
@@ -41,7 +42,7 @@ const rows = [
 
   <h2 id="instalacao">Instalação</h2>
   <ol>
-    <li>Copie <code>src/styles/tokens.css</code> (veja <a href="/docs/tokens">Tokens e temas</a>) e importe no projeto.</li>
+    <li>Copie <code>src/styles/tokens.css</code> (veja <a href={withBase("/docs/tokens")}>Tokens e temas</a>) e importe no projeto.</li>
     <li>Copie o CSS abaixo para <code>accordion.css</code> e importe.</li>
     <li>Acrescente o comportamento: alternar <code>aria-expanded</code> no botão e <code>hidden</code> no painel.</li>
   </ol>

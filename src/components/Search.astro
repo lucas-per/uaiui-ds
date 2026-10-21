@@ -1,5 +1,7 @@
 ---
 import { flat } from '../data/nav';
+import { withBase, stripBase } from '../data/url';
+
 ---
 <dialog class="search-dialog" data-search aria-label="Buscar na documentação">
   <form method="dialog">
@@ -7,5 +9,5 @@ import { flat } from '../data/nav';
     <input id="q" type="search" autocomplete="off" placeholder="Buscar componente ou página…" role="combobox" aria-expanded="true" aria-controls="search-results" aria-autocomplete="list" />
   </form>
   <ul id="search-results" role="listbox" aria-label="Resultados"></ul>
-  <script type="application/json" id="search-index" set:html={JSON.stringify(flat)} />
+  <script type="application/json" id="search-index" set:html={JSON.stringify(flat.map((i) => ({ ...i, href: withBase(i.href) })))} />
 </dialog>

@@ -8,10 +8,12 @@ import Header from '../components/Header.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Search from '../components/Search.astro';
 import { flat } from '../data/nav';
+import { withBase, stripBase } from '../data/url';
+
 
 interface Props { title: string; description?: string; docs?: boolean }
 const { title, description = 'UaiUI: sistema de design com bordas retas, sombras duras e temas por tokens.', docs = true } = Astro.props;
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const path = stripBase(Astro.url.pathname);
 const idx = flat.findIndex((i) => i.href === path);
 const prev = idx > 0 ? flat[idx - 1] : undefined;
 const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
@@ -41,8 +43,8 @@ const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
         <main class="content" id="conteudo">
           <slot />
           <nav class="pager" aria-label="Páginas anterior e seguinte">
-            {prev ? <a href={prev.href} rel="prev"><small>Anterior</small><strong>{prev.title}</strong></a> : <span />}
-            {next && <a href={next.href} rel="next"><small>Próxima</small><strong>{next.title}</strong></a>}
+            {prev ? <a href={withBase(prev.href)} rel="prev"><small>Anterior</small><strong>{prev.title}</strong></a> : <span />}
+            {next && <a href={withBase(next.href)} rel="next"><small>Próxima</small><strong>{next.title}</strong></a>}
           </nav>
         </main>
         <nav class="toc" aria-label="Nesta página" data-toc hidden><h2>Nesta página</h2><ul></ul></nav>

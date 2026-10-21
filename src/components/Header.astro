@@ -1,5 +1,6 @@
 ---
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+import { withBase, stripBase } from '../data/url';
+const path = stripBase(Astro.url.pathname);
 const links = [{ href: '/docs', label: 'Docs' }, { href: '/docs/components/button', label: 'Componentes' }, { href: '/docs/tokens', label: 'Tokens' }];
 const isActive = (h: string) => (h === '/docs/components/button' ? path.startsWith('/docs/components') : h === '/docs' ? path === '/docs' : path.startsWith(h));
 ---
@@ -8,9 +9,9 @@ const isActive = (h: string) => (h === '/docs/components/button' ? path.startsWi
     <button type="button" class="menu-btn uai-button uai-icon-button" data-type="outlined" data-menu aria-label="Abrir menu" aria-expanded="false" aria-controls="sidebar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
-    <a class="brand" href="/"><span class="brand__mark" aria-hidden="true">U</span>UaiUI</a>
+    <a class="brand" href={withBase("/")}><span class="brand__mark" aria-hidden="true">U</span>UaiUI</a>
     <nav class="site-nav" aria-label="Principal">
-      {links.map((l) => <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
+      {links.map((l) => <a href={withBase(l.href)} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="header-tools">
       <button type="button" class="search-btn" data-search-open aria-haspopup="dialog">

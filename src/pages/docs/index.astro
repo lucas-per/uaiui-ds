@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../data/url';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { nav } from '../../data/nav';
 const comps = nav[1].items;
@@ -17,7 +18,7 @@ const comps = nav[1].items;
 
   <h2 id="componentes">Componentes</h2>
   <div class="cards">
-    {comps.map((c) => <a class="card" href={c.href}><h3>{c.title}</h3><p>{c.description}</p></a>)}
+    {comps.map((c) => <a class="card" href={withBase(c.href)}><h3>{c.title}</h3><p>{c.description}</p></a>)}
   </div>
 
   <h2 id="como-ler">Como ler cada página</h2>
