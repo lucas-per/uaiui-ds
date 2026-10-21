@@ -18,7 +18,7 @@
   box-shadow: var(--shadow-offset-component) var(--shadow-offset-component) 0 0 var(--button-shadow-color);
   font: var(--font-weight-label) var(--button-label-font-size)/var(--button-label-line-height) var(--font-family-label), monospace;
   text-transform: var(--font-transform-label);
-  max-width: 100%; overflow-wrap: anywhere;
+  max-width: 100%;
   cursor: pointer; text-decoration: none;
   transition: background-color var(--motion-duration-press), color var(--motion-duration-press), box-shadow var(--motion-duration-press), transform var(--motion-duration-press);
 }
