@@ -1,4 +1,5 @@
-// Converte tokens/figma-variables.txt em src/styles/tokens.css
+// Converte tokens/figma-variables.txt em src/styles/tokens.css (site de docs, :root)
+// e src/styles/tokens-wrapper.css (consumo por dependência, escopado em .uaiui)
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const cssName = (n) => '--' + n.replace(/\//g, '-');
@@ -30,3 +31,17 @@ const out = [
 ].join('\n');
 writeFileSync(new URL('../src/styles/tokens.css', import.meta.url), out);
 console.log('tokens.css:', out.split('\n').length, 'linhas');
+
+// Versão escopada: tudo no próprio .uaiui (aliases var() resolvem no wrapper e nada vaza).
+// Tema só por data-uaiui-theme (sem atributo: claro, sem prefers-color-scheme).
+const W = '.uaiui';
+const wrapper = [
+  '/* Gerado por scripts/figma-to-css.mjs a partir de tokens/figma-variables.txt. Não edite à mão. */',
+  '/* Tokens escopados no wrapper .uaiui. Tema: data-uaiui-theme="dark" (padrão: claro). Densidade: data-uaiui-density="mobile|compact" (padrão: Desktop). */\n',
+  block(W, [...light, ...fixed, ...dens(2)]),
+  block(`${W}[data-uaiui-theme="dark"]`, dark),
+  block(`${W}[data-uaiui-density="mobile"]`, dens(3)),
+  block(`${W}[data-uaiui-density="compact"]`, dens(4)),
+].join('\n');
+writeFileSync(new URL('../src/styles/tokens-wrapper.css', import.meta.url), wrapper);
+console.log('tokens-wrapper.css:', wrapper.split('\n').length, 'linhas');

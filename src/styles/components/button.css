@@ -16,7 +16,7 @@
   border-radius: var(--radius-control);
   background: var(--_bg); color: var(--_fg);
   box-shadow: var(--shadow-offset-component) var(--shadow-offset-component) 0 0 var(--button-shadow-color);
-  font: 700 var(--button-label-font-size)/var(--button-label-line-height) "JetBrains Mono", monospace;
+  font: var(--font-weight-label) var(--button-label-font-size)/var(--button-label-line-height) var(--font-family-label), monospace;
   cursor: pointer; text-decoration: none;
   transition: background-color var(--motion-duration-press), color var(--motion-duration-press), box-shadow var(--motion-duration-press), transform var(--motion-duration-press);
 }
