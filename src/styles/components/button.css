@@ -67,11 +67,9 @@
   .uai-button { background: ButtonText; color: ButtonFace; border-color: ButtonText; }
   .uai-button[data-type="outlined"] { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
   .uai-button[data-type="ghost"] { background: ButtonFace; color: ButtonText; border-color: ButtonFace; }
-  .uai-button:hover, .uai-button:active,
-  .uai-button[data-type="outlined"]:hover, .uai-button[data-type="outlined"]:active,
-  .uai-button[data-type="ghost"]:hover, .uai-button[data-type="ghost"]:active { background: Highlight; color: HighlightText; border-color: Highlight; }
+  .uai-button:not(:disabled):not([aria-disabled="true"]):hover,
+  .uai-button:not(:disabled):not([aria-disabled="true"]):active { background: Highlight; color: HighlightText; border-color: Highlight; }
   .uai-button:focus-visible { outline-color: Highlight; }
-  .uai-button:disabled, .uai-button[aria-disabled="true"],
-  .uai-button[data-type="ghost"]:disabled { background: ButtonFace; color: GrayText; border-color: GrayText; }
-  .uai-button[data-type="ghost"]:disabled { border-color: ButtonFace; }
+  .uai-button:disabled, .uai-button[aria-disabled="true"] { background: ButtonFace; color: GrayText; border-color: GrayText; }
+  .uai-button[data-type="ghost"]:disabled, .uai-button[data-type="ghost"][aria-disabled="true"] { background: ButtonFace; border-color: ButtonFace; }
 }
