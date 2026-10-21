@@ -45,7 +45,8 @@
   --_bg: var(--interface-function-ghost-normal-background); --_fg: var(--interface-function-ghost-normal-txtOn);
   --_bg-hover: var(--interface-function-ghost-action-background); --_fg-hover: var(--interface-function-ghost-action-txtOn);
   --_bg-press: var(--interface-function-ghost-active-background); --_fg-press: var(--interface-function-ghost-active-txtOn);
-  border-color: transparent; box-shadow: none; padding-inline: 0;
+  border-color: transparent; box-shadow: none; padding-inline: var(--button-ghost-padding-x);
+  min-width: var(--button-min-height); justify-content: center; text-align: center;
 }
 .uai-button[data-type="ghost"]:hover, .uai-button[data-type="ghost"]:active { box-shadow: none; transform: none; }
 .uai-button:disabled, .uai-button[aria-disabled="true"] {

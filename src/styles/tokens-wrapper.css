@@ -70,6 +70,7 @@
   --font-family-body: "DM Sans";
   --font-weight-label: 700;
   --font-transform-label: uppercase;
+  --button-ghost-padding-x: 0;
   --ui-fg-default: var(--marca-neutrals-surface-130);
   --ui-bg-page: var(--marca-neutrals-surface-10);
   --ui-border-strong: var(--ui-fg-default);
