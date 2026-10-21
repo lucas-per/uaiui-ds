@@ -16,8 +16,8 @@
 .uai-toast__body { flex: 1; display: flex; align-items: flex-start; gap: var(--toast-gap); padding: var(--toast-padding); min-width: 0; }
 .uai-toast__icon { flex: none; width: var(--toast-icon-size); height: var(--toast-icon-size); fill: none; stroke: var(--_icon); stroke-width: var(--toast-icon-weight); stroke-linecap: square; stroke-linejoin: miter; }
 .uai-toast__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--toast-content-gap); align-items: flex-start; }
-.uai-toast__title { margin: 0; font: var(--font-weight-label) var(--toast-font-size)/var(--toast-line-height) var(--font-family-label), monospace; text-transform: var(--font-transform-label); }
-.uai-toast__message { margin: 0; font: 400 var(--toast-font-size)/var(--toast-line-height) var(--font-family-body), sans-serif; }
+.uai-toast__title { margin: 0; font: var(--font-weight-label) var(--toast-font-size)/var(--toast-line-height) var(--font-family-label), monospace; text-transform: var(--font-transform-label); overflow-wrap: anywhere; }
+.uai-toast__message { margin: 0; font: 400 var(--toast-font-size)/var(--toast-line-height) var(--font-family-body), sans-serif; overflow-wrap: anywhere; }
 .uai-toast__content .uai-button { margin-top: var(--size-scale-base); max-width: 100%; white-space: normal; text-align: center; }
 
 /* entrada: 100 ms só com opacidade. A saída não é animada aqui e fica com quem monta a região de avisos. */
