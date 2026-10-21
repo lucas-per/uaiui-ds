@@ -1,0 +1,45 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+const swatch = (name: string) => `<div class="swatch"><i style="background:var(${name})"></i>${name.replace('--', '')}</div>`;
+const sample = ['--ui-bg-page', '--ui-bg-panel', '--ui-fg-default', '--ui-fg-muted', '--ui-brand-band', '--interface-function-primary-normal-background', '--interface-function-secondary-normal-background', '--interface-function-error-normal-background', '--success-behavior-normal-surface', '--warning-behavior-normal-surface', '--info-behavior-normal-surface'];
+---
+<DocsLayout title="Tokens e temas" description="Como as variables do Figma viram CSS, e como trocar tema e densidade.">
+  <h1>Tokens e temas</h1>
+  <p class="lead">As variables do Figma são a fonte de verdade. Um script as converte em <code>tokens.css</code>, e os componentes só leem essas propriedades.</p>
+
+  <h2 id="camadas">Camadas</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th scope="col">Coleção no Figma</th><th scope="col">Modos</th><th scope="col">Papel</th></tr></thead>
+    <tbody>
+      <tr><td>Escala</td><td>Valor</td><td>Medidas base: 0, 2, 4, 8, 12, 16, 24 e 44 px.</td></tr>
+      <tr><td>Dimensões</td><td>Valor</td><td>Borda, sombra, raio, anel de foco e movimento.</td></tr>
+      <tr><td>Primitivos</td><td>Claro, Escuro</td><td>Paletas por família, papel (surface, txtOn, border, txt) e nível (20 a 180).</td></tr>
+      <tr><td>Semântica</td><td>Positiva</td><td>Papéis de interface e níveis de comportamento (lightest, active, normal, action, pressed, darkest).</td></tr>
+      <tr><td>Componente</td><td>Valor</td><td>Um token por parte do componente, apontando para a semântica.</td></tr>
+      <tr><td>Densidade</td><td>Desktop, Mobile, Compacto</td><td>Todos os tamanhos dos componentes.</td></tr>
+    </tbody>
+  </table></div>
+  <p>As propriedades CSS seguem o nome da variable com barras trocadas por hífens: <code>button/padding-x</code> vira <code>--button-padding-x</code>.</p>
+
+  <h2 id="usar">Usar no projeto</h2>
+  <CodeBlock lang="html" standalone code={`<link rel="stylesheet" href="tokens.css" />
+
+<!-- Tema: sem atributo, segue o sistema -->
+<html data-theme="dark" data-density="compact">`} />
+  <ul>
+    <li><code>data-theme</code>: <code>light</code> ou <code>dark</code>. Sem o atributo, vale <code>prefers-color-scheme</code>.</li>
+    <li><code>data-density</code>: <code>mobile</code> ou <code>compact</code>. Sem o atributo, vale Desktop.</li>
+  </ul>
+
+  <h2 id="atualizar">Atualizar a partir do Figma</h2>
+  <ol>
+    <li>Exporte as variables para <code>tokens/figma-variables.txt</code> (uma linha por variable, um valor por modo).</li>
+    <li>Rode <code>npm run tokens</code>. O script gera <code>src/styles/tokens.css</code>.</li>
+  </ol>
+  <div class="callout"><p>Só entram no arquivo os tokens que os componentes publicados usam. Ao documentar um componente novo, acrescente as variables dele ao arquivo de exportação.</p></div>
+
+  <h2 id="amostra">Amostra de cores</h2>
+  <p>Mude o tema no cabeçalho para ver as cores trocarem.</p>
+  <div class="swatches" set:html={sample.map(swatch).join('')} />
+</DocsLayout>

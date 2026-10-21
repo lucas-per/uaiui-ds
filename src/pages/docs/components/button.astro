@@ -1,0 +1,79 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import Example from '../../../components/Example.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+import PropsTable from '../../../components/PropsTable.astro';
+import css from '../../../styles/components/button.css?raw';
+import { svg } from '../../../data/icons';
+
+const base = `<button class="uai-button" data-type="filled" data-style="primary">Salvar</button>`;
+const types = `<button class="uai-button" data-type="filled" data-style="primary">Primário</button>
+<button class="uai-button" data-type="filled" data-style="secondary">Secundário</button>
+<button class="uai-button" data-type="filled" data-style="danger">Excluir</button>
+<button class="uai-button" data-type="outlined">Outlined</button>
+<button class="uai-button" data-type="ghost">Ghost</button>`;
+const disabled = `<button class="uai-button" data-type="filled" disabled>Desabilitado</button>
+<button class="uai-button" data-type="outlined" disabled>Desabilitado</button>
+<button class="uai-button" data-type="ghost" disabled>Desabilitado</button>`;
+const withIcon = `<button class="uai-button" data-type="filled" data-style="primary">
+  ${svg('check')}Confirmar
+</button>`;
+const iconBtn = `<button class="uai-button uai-icon-button" data-type="outlined" aria-label="Fechar janela">
+  ${svg('x')}
+</button>
+<button class="uai-button uai-icon-button" data-type="filled" data-style="danger" aria-label="Excluir item">
+  ${svg('x')}
+</button>
+<button class="uai-button uai-icon-button" data-type="ghost" aria-label="Fechar aviso">
+  ${svg('x')}
+</button>`;
+const rows = [
+  { name: 'data-type', type: 'filled | outlined | ghost', default: 'filled', description: 'Peso visual. <code>filled</code> tem fundo cheio; <code>outlined</code> fundo da página; <code>ghost</code> sem borda nem sombra.' },
+  { name: 'data-style', type: 'primary | secondary | danger', default: 'primary', description: 'Cor do <code>filled</code>: marca, segunda cor do tema ou ação destrutiva. Não existe em <code>outlined</code> e <code>ghost</code>.' },
+  { name: 'disabled', type: 'boolean', default: 'false', description: 'Estado desabilitado. Use <code>aria-disabled="true"</code> quando o botão precisar continuar na ordem de Tab.' },
+  { name: 'aria-label', type: 'string', description: 'Obrigatório no botão só de ícone. Texto específico: "Fechar janela", não só "Fechar".' },
+];
+---
+<DocsLayout title="Button" description="Dispara uma ação: salvar, exportar, aplicar, abrir um diálogo.">
+  <h1>Button</h1>
+  <p class="lead">Dispara uma ação: salvar, exportar, aplicar, abrir um diálogo.</p>
+
+  <Example title="" code={types} label="Tipos de botão" />
+
+  <h2 id="instalacao">Instalação</h2>
+  <ol>
+    <li>Copie <code>src/styles/tokens.css</code> (veja <a href="/docs/tokens">Tokens e temas</a>) e importe no projeto.</li>
+    <li>Copie o CSS abaixo para <code>button.css</code> e importe.</li>
+  </ol>
+  <CodeBlock code={css} lang="css" standalone />
+
+  <h2 id="uso">Uso</h2>
+  <CodeBlock code={base} standalone />
+  <div class="callout"><p><strong>Quando usar.</strong> <code>filled primary</code>: a ação principal da área, no máximo uma por área. <code>filled secondary</code>: ação principal num contexto da segunda cor do tema. <code>filled danger</code>: ação que apaga ou não dá para desfazer; peça confirmação num modal. <code>outlined</code>: ações secundárias ou frequentes. <code>ghost</code>: ações de baixo peso, como Redefinir e Ajuda.</p></div>
+  <div class="callout"><p><strong>Quando não usar.</strong> Para ir a outra página, use link. Para ligar e desligar uma opção, use toggle button. Para ação só com ícone, use o botão de ícone abaixo.</p></div>
+
+  <h2 id="exemplos">Exemplos</h2>
+  <Example title="Desabilitado" description="Sem sombra, em cinza, e o cursor indica que não dá para clicar." code={disabled} />
+  <Example title="Com ícone" description="O ícone herda a cor do texto e muda de tamanho com a densidade (24, 24 e 20)." code={withIcon} />
+  <Example title="Botão de ícone" description="Quadrado, com a altura do botão (54, 46 e 44). O rótulo vai em aria-label e o ícone é aria-hidden." code={iconBtn} />
+
+  <h2 id="props">Props</h2>
+  <PropsTable rows={rows} caption="Props do button" />
+  <p>Combinação inválida: <code>data-style="secondary"</code> ou <code>"danger"</code> com <code>outlined</code> ou <code>ghost</code>.</p>
+
+  <h2 id="movimento">Movimento e foco</h2>
+  <ul>
+    <li>No hover, o botão sobe 2 px e a sombra vai de 2 para 4 px.</li>
+    <li>No pressed, o botão desce 1 px e a sombra some.</li>
+    <li>Transição de 100 ms; sem transição com <code>prefers-reduced-motion</code>.</li>
+    <li>Anel de foco: 2 px de espessura e 2 px de afastamento (<code>outline</code> e <code>outline-offset</code>).</li>
+  </ul>
+
+  <h2 id="acessibilidade">Acessibilidade</h2>
+  <ul>
+    <li>Use o elemento <code>&lt;button&gt;</code>. Enter e Espaço ativam.</li>
+    <li>Botão só de ícone precisa de <code>aria-label</code> específico, e o ícone leva <code>aria-hidden="true"</code>.</li>
+    <li>Área de toque de pelo menos 44 × 44 px em todas as densidades (altura mínima: 54, 46 e 44 px).</li>
+    <li>O estado nunca depende só de cor: o desabilitado também perde a sombra.</li>
+  </ul>
+</DocsLayout>

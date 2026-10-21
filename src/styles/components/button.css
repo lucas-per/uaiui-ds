@@ -1,0 +1,62 @@
+/* button: type (filled | outlined | ghost) × style (primary | secondary | danger). */
+.uai-button {
+  --_bg: var(--interface-function-primary-normal-background);
+  --_fg: var(--interface-function-primary-normal-txtOn);
+  --_bg-hover: var(--interface-function-primary-action-background);
+  --_fg-hover: var(--interface-function-primary-action-txtOn);
+  --_bg-press: var(--interface-function-primary-active-background);
+  --_fg-press: var(--interface-function-primary-active-txtOn);
+  --_border: var(--button-border);
+
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--button-gap);
+  min-height: var(--button-min-height);
+  padding: var(--button-padding-y) var(--button-padding-x);
+  border: var(--border-width-default) solid var(--_border);
+  border-radius: var(--radius-control);
+  background: var(--_bg); color: var(--_fg);
+  box-shadow: var(--shadow-offset-component) var(--shadow-offset-component) 0 0 var(--button-shadow-color);
+  font: 700 var(--button-label-font-size)/var(--button-label-line-height) "JetBrains Mono", monospace;
+  cursor: pointer; text-decoration: none;
+  transition: background-color var(--motion-duration-press), color var(--motion-duration-press), box-shadow var(--motion-duration-press), transform var(--motion-duration-press);
+}
+.uai-button svg { width: var(--button-icon-size); height: var(--button-icon-size); flex: none; }
+.uai-button:hover { background: var(--_bg-hover); color: var(--_fg-hover); box-shadow: var(--shadow-offset-component-hover) var(--shadow-offset-component-hover) 0 0 var(--button-shadow-color); transform: translateY(-2px); }
+.uai-button:active { background: var(--_bg-press); color: var(--_fg-press); box-shadow: none; transform: translateY(1px); }
+.uai-button:focus-visible { outline: var(--focus-ring-width) solid var(--ui-focus-ring); outline-offset: var(--focus-ring-offset); }
+
+.uai-button[data-style="secondary"] {
+  --_bg: var(--interface-function-secondary-normal-background); --_fg: var(--interface-function-secondary-normal-txtOn);
+  --_bg-hover: var(--interface-function-secondary-action-background); --_fg-hover: var(--interface-function-secondary-action-txtOn);
+  --_bg-press: var(--interface-function-secondary-active-background); --_fg-press: var(--interface-function-secondary-active-txtOn);
+}
+.uai-button[data-style="danger"] {
+  --_bg: var(--interface-function-error-normal-background); --_fg: var(--interface-function-error-normal-txtOn);
+  --_bg-hover: var(--interface-function-error-action-background); --_fg-hover: var(--interface-function-error-action-txtOn);
+  --_bg-press: var(--interface-function-error-active-background); --_fg-press: var(--interface-function-error-active-txtOn);
+}
+.uai-button[data-type="outlined"] {
+  --_bg: var(--button-outlined-normal-background); --_fg: var(--button-outlined-normal-txtOn);
+  --_bg-hover: var(--button-outlined-action-background); --_fg-hover: var(--button-outlined-action-txtOn);
+  --_bg-press: var(--button-outlined-active-background); --_fg-press: var(--button-outlined-active-txtOn);
+}
+.uai-button[data-type="ghost"] {
+  --_bg: var(--interface-function-ghost-normal-background); --_fg: var(--interface-function-ghost-normal-txtOn);
+  --_bg-hover: var(--interface-function-ghost-action-background); --_fg-hover: var(--interface-function-ghost-action-txtOn);
+  --_bg-press: var(--interface-function-ghost-active-background); --_fg-press: var(--interface-function-ghost-active-txtOn);
+  border-color: transparent; box-shadow: none; padding-inline: 0;
+}
+.uai-button[data-type="ghost"]:hover, .uai-button[data-type="ghost"]:active { box-shadow: none; transform: none; }
+.uai-button:disabled, .uai-button[aria-disabled="true"] {
+  background: var(--interface-function-disabled-normal-background); color: var(--interface-function-disabled-normal-txtOn);
+  border-color: var(--interface-function-disabled-normal-border); box-shadow: none; transform: none; cursor: not-allowed;
+}
+.uai-button[data-type="ghost"]:disabled { background: transparent; border-color: transparent; }
+
+/* icon button: mesmo conjunto de cores, quadrado do tamanho mínimo do botão. */
+.uai-icon-button {
+  display: inline-grid; place-items: center;
+  width: var(--icon-button-size); height: var(--icon-button-size); padding: 0;
+}
+.uai-icon-button svg { width: var(--icon-button-icon-size); height: var(--icon-button-icon-size); stroke-width: var(--icon-button-icon-weight); }
+@media (prefers-reduced-motion: reduce) { .uai-button { transition: none; } }

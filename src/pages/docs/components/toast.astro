@@ -1,0 +1,88 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import Example from '../../../components/Example.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+import PropsTable from '../../../components/PropsTable.astro';
+import css from '../../../styles/components/toast.css?raw';
+import { svg } from '../../../data/icons';
+
+type Tone = 'neutral' | 'success' | 'warning' | 'error' | 'info';
+const live = (t: Tone) => (t === 'warning' || t === 'error' ? 'role="alert"' : 'role="status"');
+const toast = (tone: Tone, title: string, msg: string, action?: string) => `<div class="uai-toast" data-tone="${tone}" ${live(tone)}>
+  <div class="uai-toast__bar"></div>
+  <div class="uai-toast__body">
+    ${svg(tone, 'uai-toast__icon')}
+    <div class="uai-toast__content">
+      <p class="uai-toast__title">${title}</p>
+      <p class="uai-toast__message">${msg}</p>${action ? `
+      <button class="uai-button" data-type="outlined">${action}</button>` : ''}
+    </div>
+    <button class="uai-button uai-icon-button" data-type="ghost" data-toast-close aria-label="Fechar aviso">${svg('x')}</button>
+  </div>
+</div>`;
+const tones = [
+  toast('neutral', 'Link copiado', 'O endereço está na área de transferência.'),
+  toast('success', 'Cadastro salvo', 'Seus dados foram atualizados.'),
+  toast('warning', 'Sessão prestes a expirar', 'Você será desconectado em 2 minutos.'),
+  toast('error', 'Falha no envio', 'Não foi possível enviar o arquivo.'),
+  toast('info', 'Nova versão disponível', 'Recarregue a página para usar a versão mais recente.'),
+].join('\n');
+const withAction = toast('success', 'Cadastro salvo', 'Seus dados foram atualizados.', 'Desfazer');
+const alertEx = toast('error', 'Falha no envio', 'Não foi possível enviar o arquivo. Tente de novo.', 'Tentar de novo');
+const region = `<!-- Região de avisos: fica na página desde o início, mesmo vazia -->
+<div class="toast-region" aria-live="polite" aria-atomic="false">
+  <!-- insira aqui os toasts neutral, success e info (role="status") -->
+</div>
+<div class="toast-region" role="alert">
+  <!-- insira aqui os toasts warning e error (role="alert") -->
+</div>`;
+const rows = [
+  { name: 'data-tone', type: 'neutral | success | warning | error | info', default: 'neutral', description: 'Define cor e ícone. Cada tom tem um desenho próprio; a cor nunca é o único sinal.' },
+  { name: 'uai-toast__title', type: 'texto', description: 'Título de 1 a 4 palavras. Sempre presente.' },
+  { name: 'uai-toast__message', type: 'texto', description: 'Mensagem em uma ou duas linhas. Sempre presente.' },
+  { name: 'ação', type: 'button outlined', default: 'ausente', description: 'Opcional, com rótulo de verbo: Desfazer, Tentar de novo.' },
+  { name: 'data-toast-close', type: 'icon button ghost', description: 'Botão de fechar, sempre presente. <code>aria-label="Fechar aviso"</code>.' },
+  { name: 'role', type: 'status | alert', default: 'status', description: '<code>status</code> em neutral, success e info; <code>alert</code> em warning e error.' },
+];
+---
+<DocsLayout title="Toast" description="Aviso curto depois de uma ação ou de um evento; some sozinho.">
+  <h1>Toast</h1>
+  <p class="lead">Aviso curto que aparece depois de uma ação ou de um evento e some sozinho: salvou, falhou, nova versão. Não bloqueia a tela.</p>
+
+  <Example code={withAction} column label="Toast com ação" />
+  <p>Feche o aviso no X: no exemplo, ele volta depois de 2 segundos.</p>
+
+  <h2 id="instalacao">Instalação</h2>
+  <ol>
+    <li>Copie <code>src/styles/tokens.css</code> (veja <a href="/docs/tokens">Tokens e temas</a>) e o CSS do <a href="/docs/components/button">button</a>, usado na ação e no fechar.</li>
+    <li>Copie o CSS abaixo para <code>toast.css</code> e importe.</li>
+  </ol>
+  <CodeBlock code={css} lang="css" standalone />
+
+  <h2 id="uso">Uso</h2>
+  <CodeBlock code={alertEx} standalone />
+  <div class="callout"><p><strong>Quando usar.</strong> Para confirmar o resultado de uma ação ("Cadastro salvo") ou avisar de um evento que não pede resposta imediata, com uma ação opcional ligada ao aviso, como Desfazer ou Tentar de novo.</p></div>
+  <div class="callout"><p><strong>Quando não usar.</strong> Erro de um campo: use o estado <code>error</code> do próprio campo. Mensagem que precisa ficar na página: deixe o texto visível. Decisão que bloqueia a tela: use modal. Dica no hover: tooltip; conteúdo ao clique: popover.</p></div>
+
+  <h2 id="tons">Tons</h2>
+  <Example code={tones} column label="Os cinco tons do toast" />
+  <p>Cada tom usa o fundo mais claro da família (nível 20), borda e barra lateral na cor dela, e um ícone próprio: balão (neutral), check (success), triângulo (warning), quadrado com X (error) e círculo com i (info).</p>
+
+  <h2 id="props">Anatomia</h2>
+  <PropsTable rows={rows} caption="Partes e atributos do toast" />
+
+  <h2 id="acessibilidade">Acessibilidade</h2>
+  <p>Mantenha uma região viva na página desde o início, para o leitor de tela anunciar o aviso quando ele entrar:</p>
+  <CodeBlock code={region} standalone />
+  <ul>
+    <li><code>role="status"</code> (<code>aria-live="polite"</code>) em neutral, success e info; <code>role="alert"</code> em warning e error.</li>
+    <li>Não rouba o foco. A ação precisa ser alcançável pelo teclado.</li>
+    <li>Some sozinho depois de pelo menos 5 s (mais tempo para mensagem longa). Não fecha enquanto o foco ou o ponteiro estiverem sobre ele. Esc fecha o aviso com foco.</li>
+    <li>Com ação, warning ou error, só fecha quando a pessoa fechar.</li>
+    <li>Sempre dá para fechar pelo botão. Nunca use o toast como único lugar de uma informação essencial ou de um erro.</li>
+    <li>Posição: canto inferior, no fim da tela no Desktop; no Mobile, largura total com margem de 16 px. Não cobre a ação principal da página. Vários avisos empilham com 16 px, o mais novo por último.</li>
+    <li>Entrada e saída de 100 ms; sem transição com redução de movimento.</li>
+  </ul>
+  <h3>Contraste</h3>
+  <p>Texto acima de 16:1 em todos os tons, no Claro e no Escuro. Ícone e borda acima de 3:1. A barra lateral do warning no Claro tem 1,8:1, mas é reforço: o ícone e a borda já carregam o sinal.</p>
+</DocsLayout>

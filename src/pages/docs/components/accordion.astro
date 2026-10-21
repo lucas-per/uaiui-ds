@@ -1,0 +1,77 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import Example from '../../../components/Example.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+import PropsTable from '../../../components/PropsTable.astro';
+import css from '../../../styles/components/accordion.css?raw';
+import { svg } from '../../../data/icons';
+
+const item = (id: string, title: string, body: string, open = false, disabled = false) => `<div class="uai-accordion-item">
+  <h3>
+    <button class="uai-accordion-trigger" id="${id}-h" aria-expanded="${open}" aria-controls="${id}-p"${disabled ? ' aria-disabled="true"' : ''}>
+      <span>${title}</span>
+      ${svg('chevron')}
+    </button>
+  </h3>
+  <div class="uai-accordion-panel" id="${id}-p" role="region" aria-labelledby="${id}-h"${open ? '' : ' hidden'}>${body}</div>
+</div>`;
+const basic = `<div class="uai-accordion">
+${item('a1', 'O que é o UaiUI?', 'Um sistema de design com bordas retas, sombras duras e temas por tokens.', true)}
+${item('a2', 'Posso trocar as cores?', 'Sim. Troque os primitivos e os componentes seguem, porque só leem tokens.')}
+${item('a3', 'Funciona no escuro?', 'Sim. Todos os pares de cor foram conferidos nos modos Claro e Escuro.')}
+</div>`;
+const single = item('s1', 'Seção sozinha', 'Um item isolado, sem grupo.', true);
+const disabled = `<div class="uai-accordion">
+${item('d1', 'Seção disponível', 'Conteúdo visível.', true)}
+${item('d2', 'Seção indisponível', 'Este conteúdo não abre.', false, true)}
+</div>`;
+const rows = [
+  { name: 'aria-expanded', type: 'true | false', default: 'false', description: 'No <code>button</code>. Aberto ou fechado se vê pela seta (para baixo fechado, para cima aberto) e pelo painel, nunca só pela cor.' },
+  { name: 'aria-controls', type: 'id', description: 'No <code>button</code>. Aponta para o <code>id</code> do painel.' },
+  { name: 'hidden', type: 'boolean', description: 'No painel fechado: oculta também para leitores de tela.' },
+  { name: 'aria-disabled', type: 'true', description: 'No <code>button</code> desabilitado. Ele continua na ordem de Tab.' },
+  { name: 'h2 … h6', type: 'nível', default: 'h3', description: 'O <code>button</code> fica dentro de um título; escolha o nível conforme a página.' },
+];
+---
+<DocsLayout title="Accordion" description="Esconde conteúdo secundário que a pessoa consulta sob demanda.">
+  <h1>Accordion</h1>
+  <p class="lead">Esconde conteúdo secundário que a pessoa consulta sob demanda: perguntas frequentes, detalhes de um pedido, seções longas de configurações.</p>
+
+  <Example code={basic} column label="Accordion com três itens" />
+
+  <h2 id="instalacao">Instalação</h2>
+  <ol>
+    <li>Copie <code>src/styles/tokens.css</code> (veja <a href="/docs/tokens">Tokens e temas</a>) e importe no projeto.</li>
+    <li>Copie o CSS abaixo para <code>accordion.css</code> e importe.</li>
+    <li>Acrescente o comportamento: alternar <code>aria-expanded</code> no botão e <code>hidden</code> no painel.</li>
+  </ol>
+  <CodeBlock code={css} lang="css" standalone />
+  <CodeBlock lang="js" standalone code={`document.addEventListener('click', (e) => {
+  const t = e.target.closest('.uai-accordion-trigger');
+  if (!t || t.getAttribute('aria-disabled') === 'true') return;
+  const open = t.getAttribute('aria-expanded') !== 'true';
+  t.setAttribute('aria-expanded', String(open));
+  document.getElementById(t.getAttribute('aria-controls')).hidden = !open;
+});`} />
+
+  <h2 id="uso">Uso</h2>
+  <CodeBlock code={single} standalone />
+  <div class="callout"><p><strong>Quando usar.</strong> Para esconder conteúdo secundário. Se todo o conteúdo precisa ser lido junto, deixe aberto e sem accordion.</p></div>
+  <div class="callout"><p><strong>Quando não usar.</strong> Conteúdo essencial ao próximo passo: deixe visível. Alternar painéis do mesmo nível, um por vez: use abas (ainda não existem). Disparar ação: use button. Esconder opções de formulário: veja antes se checkbox ou radio com texto de apoio resolve.</p></div>
+
+  <h2 id="exemplos">Exemplos</h2>
+  <Example title="Item desabilitado" description="Cinza, sem resposta ao hover, e continua na ordem de Tab. O painel de quem usa o componente mantém as cores normais." code={disabled} column />
+
+  <h2 id="props">Atributos</h2>
+  <PropsTable rows={rows} caption="Atributos do accordion" />
+  <p>Itens empilham com espaço entre eles, sem juntar bordas. O grupo (um aberto por vez, ou abrir e fechar todos) ainda não existe como componente.</p>
+
+  <h2 id="acessibilidade">Acessibilidade</h2>
+  <ul>
+    <li>Botão dentro de um título (<code>h2</code> a <code>h6</code>) com <code>aria-expanded</code> e <code>aria-controls</code>. O painel leva <code>role="region"</code> e <code>aria-labelledby</code> apontando para o botão.</li>
+    <li>Teclado: Enter e Espaço abrem e fecham; Tab percorre os cabeçalhos.</li>
+    <li>O cabeçalho inteiro é a área de clique, com a altura mínima do botão.</li>
+    <li>Anel de foco de 2 px, afastado 2 px, em volta do cabeçalho.</li>
+    <li>A cor muda em 100 ms. Se a altura do painel animar, no máximo 200 ms e sem transição com redução de movimento.</li>
+  </ul>
+</DocsLayout>

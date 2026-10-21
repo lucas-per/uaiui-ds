@@ -1,0 +1,22 @@
+---
+import CodeBlock from './CodeBlock.astro';
+interface Props { code: string; title?: string; description?: string; column?: boolean; label?: string }
+const { code, title, description, column = false, label } = Astro.props;
+const id = 'ex-' + Math.random().toString(36).slice(2, 8);
+---
+{title && <h3 id={id + '-t'}>{title}</h3>}
+{description && <p>{description}</p>}
+<div class="example" data-example>
+  <div class="example__bar">
+    <div class="tabs" role="tablist" aria-label={label ?? title ?? 'Exemplo'}>
+      <button class="tab" role="tab" id={id + '-p'} aria-controls={id + '-pp'} aria-selected="true">Preview</button>
+      <button class="tab" role="tab" id={id + '-c'} aria-controls={id + '-cp'} aria-selected="false" tabindex="-1">Código</button>
+    </div>
+  </div>
+  <div role="tabpanel" id={id + '-pp'} aria-labelledby={id + '-p'}>
+    <div class:list={['example__stage', { 'example__stage--col': column }]} set:html={code} />
+  </div>
+  <div role="tabpanel" id={id + '-cp'} aria-labelledby={id + '-c'} hidden>
+    <CodeBlock code={code} />
+  </div>
+</div>

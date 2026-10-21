@@ -1,0 +1,58 @@
+---
+import '../styles/tokens.css';
+import '../styles/site.css';
+import '../styles/components/button.css';
+import '../styles/components/accordion.css';
+import '../styles/components/toast.css';
+import Header from '../components/Header.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Search from '../components/Search.astro';
+import { flat } from '../data/nav';
+
+interface Props { title: string; description?: string; docs?: boolean }
+const { title, description = 'UaiUI: sistema de design com bordas retas, sombras duras e temas por tokens.', docs = true } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const idx = flat.findIndex((i) => i.href === path);
+const prev = idx > 0 ? flat[idx - 1] : undefined;
+const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · UaiUI</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23e7398a'/%3E%3Ctext x='16' y='23' font-size='20' font-family='monospace' font-weight='700' text-anchor='middle' fill='%231a1818'%3EU%3C/text%3E%3C/svg%3E" />
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('uai-theme'), d = localStorage.getItem('uai-density');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+        if (d === 'mobile' || d === 'compact') document.documentElement.dataset.density = d;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip uai-button" data-type="outlined" href="#conteudo">Pular para o conteúdo</a>
+    <Header />
+    {docs ? (
+      <div class="shell">
+        <Sidebar />
+        <main class="content" id="conteudo">
+          <slot />
+          <nav class="pager" aria-label="Páginas anterior e seguinte">
+            {prev ? <a href={prev.href} rel="prev"><small>Anterior</small><strong>{prev.title}</strong></a> : <span />}
+            {next && <a href={next.href} rel="next"><small>Próxima</small><strong>{next.title}</strong></a>}
+          </nav>
+        </main>
+        <nav class="toc" aria-label="Nesta página" data-toc hidden><h2>Nesta página</h2><ul></ul></nav>
+      </div>
+    ) : (
+      <main id="conteudo"><slot /></main>
+    )}
+    <Search />
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>

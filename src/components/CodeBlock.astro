@@ -1,0 +1,9 @@
+---
+import { Code } from 'astro:components';
+interface Props { code: string; lang?: string; standalone?: boolean }
+const { code, lang = 'html', standalone = false } = Astro.props;
+---
+<div class:list={['code', { 'code--standalone': standalone }]}>
+  <button type="button" class="copy" data-copy aria-label="Copiar código">Copiar</button>
+  <Code code={code.trim()} lang={lang} theme="github-dark" wrap={false} tabindex={0} />
+</div>

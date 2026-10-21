@@ -1,0 +1,21 @@
+/* toast: tone (neutral | success | warning | error | info). Barra lateral, ícone, título, mensagem, ação e fechar. */
+.uai-toast {
+  --_bg: var(--toast-neutral-background); --_border: var(--toast-neutral-border);
+  --_bar: var(--toast-neutral-bar); --_icon: var(--toast-neutral-icon);
+  display: flex; box-sizing: border-box; width: var(--toast-width); max-width: 100%;
+  background: var(--_bg); color: var(--toast-txtOn);
+  border: var(--border-width-default) solid var(--_border); border-radius: var(--radius-control);
+  box-shadow: var(--shadow-offset-layout) var(--shadow-offset-layout) 0 0 var(--toast-shadow-color);
+  overflow: hidden;
+}
+.uai-toast[data-tone="success"] { --_bg: var(--toast-success-background); --_border: var(--toast-success-border); --_bar: var(--toast-success-bar); --_icon: var(--toast-success-icon); }
+.uai-toast[data-tone="warning"] { --_bg: var(--toast-warning-background); --_border: var(--toast-warning-border); --_bar: var(--toast-warning-bar); --_icon: var(--toast-warning-icon); }
+.uai-toast[data-tone="error"]   { --_bg: var(--toast-error-background);   --_border: var(--toast-error-border);   --_bar: var(--toast-error-bar);   --_icon: var(--toast-error-icon); }
+.uai-toast[data-tone="info"]    { --_bg: var(--toast-info-background);    --_border: var(--toast-info-border);    --_bar: var(--toast-info-bar);    --_icon: var(--toast-info-icon); }
+.uai-toast__bar { flex: none; width: var(--toast-bar-width); background: var(--_bar); }
+.uai-toast__body { flex: 1; display: flex; align-items: flex-start; gap: var(--toast-gap); padding: var(--toast-padding); min-width: 0; }
+.uai-toast__icon { flex: none; width: var(--toast-icon-size); height: var(--toast-icon-size); fill: none; stroke: var(--_icon); stroke-width: var(--toast-icon-weight); stroke-linecap: square; stroke-linejoin: miter; }
+.uai-toast__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--toast-content-gap); align-items: flex-start; }
+.uai-toast__title { margin: 0; font: 700 var(--toast-font-size)/var(--toast-line-height) "JetBrains Mono", monospace; }
+.uai-toast__message { margin: 0; font: 400 var(--toast-font-size)/var(--toast-line-height) "DM Sans Variable", sans-serif; }
+.uai-toast__content .uai-button { margin-top: var(--size-scale-base); }

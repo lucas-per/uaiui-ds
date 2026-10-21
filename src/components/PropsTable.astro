@@ -1,0 +1,16 @@
+---
+interface Row { name: string; type: string; default?: string; description: string }
+interface Props { rows: Row[]; caption?: string }
+const { rows, caption } = Astro.props;
+---
+<div class="table-wrap" tabindex="0" role="region" aria-label={caption ?? 'Tabela de props'}>
+  <table>
+    {caption && <caption class="sr-only">{caption}</caption>}
+    <thead><tr><th scope="col">Prop</th><th scope="col">Valores</th><th scope="col">Padrão</th><th scope="col">Descrição</th></tr></thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr><td><code>{r.name}</code></td><td><code>{r.type}</code></td><td>{r.default ? <code>{r.default}</code> : '—'}</td><td set:html={r.description} /></tr>
+      ))}
+    </tbody>
+  </table>
+</div>

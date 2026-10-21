@@ -1,0 +1,19 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import { nav } from '../data/nav';
+---
+<DocsLayout title="Sistema de design" docs={false}>
+  <section class="hero">
+    <h1>UaiUI</h1>
+    <p>Sistema de design com bordas retas, sombras duras e temas por tokens. Cada componente tem preview, código e requisitos de acessibilidade.</p>
+    <div class="hero__cta">
+      <a class="uai-button" data-type="filled" data-style="primary" href="/docs">Começar</a>
+      <a class="uai-button" data-type="outlined" href="/docs/components/button">Ver componentes</a>
+    </div>
+  </section>
+  <div class="landing-main">
+    <div class="cards">
+      {nav[1].items.map((c) => <a class="card" href={c.href}><h3>{c.title}</h3><p>{c.description}</p></a>)}
+    </div>
+  </div>
+</DocsLayout>

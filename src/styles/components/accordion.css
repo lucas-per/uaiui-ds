@@ -1,0 +1,31 @@
+/* accordion: botão dentro de um título + painel. Itens empilham com espaço, sem juntar bordas. */
+.uai-accordion-item { display: flex; flex-direction: column; }
+.uai-accordion-item h2, .uai-accordion-item h3, .uai-accordion-item h4 { margin: 0; font: inherit; }
+.uai-accordion-trigger {
+  display: flex; align-items: center; justify-content: space-between; width: 100%; box-sizing: border-box;
+  gap: var(--accordion-header-gap); min-height: var(--accordion-header-min-height);
+  padding: 0 var(--accordion-header-padding-x);
+  border: var(--border-width-default) solid var(--accordion-border); border-radius: var(--radius-control);
+  background: var(--accordion-header-normal-background); color: var(--accordion-header-normal-txtOn);
+  font: 700 var(--accordion-title-font-size)/var(--accordion-title-line-height) "JetBrains Mono", monospace;
+  text-align: left; cursor: pointer;
+  transition: background-color var(--motion-duration-press), color var(--motion-duration-press);
+}
+.uai-accordion-trigger:hover { background: var(--accordion-header-action-background); color: var(--accordion-header-action-txtOn); }
+.uai-accordion-trigger:active { background: var(--accordion-header-active-background); color: var(--accordion-header-active-txtOn); }
+.uai-accordion-trigger:focus-visible { outline: var(--focus-ring-width) solid var(--ui-focus-ring); outline-offset: var(--focus-ring-offset); }
+.uai-accordion-trigger svg { width: var(--accordion-icon-size); height: var(--accordion-icon-size); flex: none; stroke-width: var(--accordion-chevron-weight); fill: none; stroke: currentColor; }
+.uai-accordion-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
+.uai-accordion-trigger[aria-disabled="true"] {
+  background: var(--accordion-disabled-background); color: var(--accordion-disabled-txtOn);
+  border-color: var(--accordion-disabled-border); cursor: not-allowed;
+}
+.uai-accordion-panel {
+  padding: var(--accordion-panel-padding-y) var(--accordion-panel-padding-x);
+  border: var(--border-width-default) solid var(--accordion-border); border-top: 0;
+  background: var(--accordion-panel-background); color: var(--accordion-panel-txt);
+  font: 400 var(--accordion-panel-font-size)/var(--accordion-panel-line-height) "DM Sans Variable", sans-serif;
+}
+.uai-accordion-panel[hidden] { display: none; }
+.uai-accordion { display: flex; flex-direction: column; gap: var(--size-scale-x3); }
+@media (prefers-reduced-motion: reduce) { .uai-accordion-trigger { transition: none; } }
