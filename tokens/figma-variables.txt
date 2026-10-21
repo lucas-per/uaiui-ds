@@ -20,20 +20,20 @@ Dimensões|motion/duration/press|100
 Dimensões|font/family/label|"JetBrains Mono"
 Dimensões|font/family/body|"DM Sans"
 Dimensões|font/weight/label|700
-Primitivos|marca/neutrals/surface/130|#211418|#fffcfd
-Primitivos|marca/neutrals/surface/10|#fffcfd|#1f1518
+Primitivos|marca/neutrals/surface/130|#13191e|#fcfeff
+Primitivos|marca/neutrals/surface/10|#fcfeff|#14191d
 Primitivos|grayscale/surface/70|#818181|#818181
 Primitivos|grayscale/surface/25|#dddddd|#303030
 Primitivos|grayscale/surface/10|#fdfdfd|#181818
-Primitivos|marca/palette/surface/40|#ffcbdc|#5f0032
+Primitivos|marca/palette/surface/40|#b1dbff|#00304f
 Primitivos|marca/palette/txtOn/40|#242121|#fdfdfd
-Primitivos|marca/palette/surface/60|#ff9dc0|#8e004e
+Primitivos|marca/palette/surface/60|#65bcff|#004772
 Primitivos|marca/palette/txtOn/60|#242121|#fdfdfd
-Primitivos|marca/palette/surface/100|#e7398a|#e7398a
-Primitivos|marca/palette/txtOn/100|#1a1818|#1a1818
-Primitivos|marca/palette/surface/120|#c0006b|#fa6aa5
+Primitivos|marca/palette/surface/100|#057abd|#057abd
+Primitivos|marca/palette/txtOn/100|#fdfdfd|#fdfdfd
+Primitivos|marca/palette/surface/120|#006097|#4e9ad5
 Primitivos|marca/palette/txtOn/120|#fdfdfd|#242121
-Primitivos|marca/palette/surface/140|#8e004e|#ff9dc0
+Primitivos|marca/palette/surface/140|#004772|#6fbcf8
 Primitivos|marca/palette/txtOn/140|#fdfdfd|#242121
 Primitivos|apoio/palette/surface/100|#51475c|#51475c
 Primitivos|apoio/palette/txtOn/100|#fdfdfd|#fdfdfd
@@ -185,11 +185,11 @@ Densidade|toast/icon-size|24|24|20
 Densidade|toast/font-size|16|14|14
 Densidade|toast/line-height|24|20|20
 Densidade|toast/icon/weight|3|3|2
-Primitivos|marca/neutrals/surface/25|#ead7dd|#382c30
-Primitivos|marca/neutrals/surface/100|#544549|#c8b9bd
-Primitivos|marca/neutrals/surface/70|#8d7c81|#8b7d81
-Primitivos|marca/neutrals/border/10|#ead7dd|#382c30
-Primitivos|marca/palette/txt/100|#8e004e|#ff9dc0
+Primitivos|marca/neutrals/surface/25|#d6dee6|#2b3135
+Primitivos|marca/neutrals/surface/100|#434a50|#b7bec4
+Primitivos|marca/neutrals/surface/70|#7a8289|#7b8287
+Primitivos|marca/neutrals/border/10|#d6dee6|#2b3135
+Primitivos|marca/palette/txt/100|#004772|#6fbcf8
 Semântica|ui/bg/panel|@marca/neutrals/surface/25
 Semântica|ui/fg/muted|@marca/neutrals/surface/100
 Semântica|ui/border/field|@marca/neutrals/surface/70

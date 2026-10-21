@@ -1,20 +1,20 @@
 /* Gerado por scripts/figma-to-css.mjs a partir de tokens/figma-variables.txt. Não edite à mão. */
 
 :root {
-  --marca-neutrals-surface-130: #211418;
-  --marca-neutrals-surface-10: #fffcfd;
+  --marca-neutrals-surface-130: #13191e;
+  --marca-neutrals-surface-10: #fcfeff;
   --grayscale-surface-70: #818181;
   --grayscale-surface-25: #dddddd;
   --grayscale-surface-10: #fdfdfd;
-  --marca-palette-surface-40: #ffcbdc;
+  --marca-palette-surface-40: #b1dbff;
   --marca-palette-txtOn-40: #242121;
-  --marca-palette-surface-60: #ff9dc0;
+  --marca-palette-surface-60: #65bcff;
   --marca-palette-txtOn-60: #242121;
-  --marca-palette-surface-100: #e7398a;
-  --marca-palette-txtOn-100: #1a1818;
-  --marca-palette-surface-120: #c0006b;
+  --marca-palette-surface-100: #057abd;
+  --marca-palette-txtOn-100: #fdfdfd;
+  --marca-palette-surface-120: #006097;
   --marca-palette-txtOn-120: #fdfdfd;
-  --marca-palette-surface-140: #8e004e;
+  --marca-palette-surface-140: #004772;
   --marca-palette-txtOn-140: #fdfdfd;
   --apoio-palette-surface-100: #51475c;
   --apoio-palette-txtOn-100: #fdfdfd;
@@ -43,11 +43,11 @@
   --info-palette-surface-100: #0274c7;
   --info-palette-border-100: #0660a5;
   --info-palette-txt-100: #024981;
-  --marca-neutrals-surface-25: #ead7dd;
-  --marca-neutrals-surface-100: #544549;
-  --marca-neutrals-surface-70: #8d7c81;
-  --marca-neutrals-border-10: #ead7dd;
-  --marca-palette-txt-100: #8e004e;
+  --marca-neutrals-surface-25: #d6dee6;
+  --marca-neutrals-surface-100: #434a50;
+  --marca-neutrals-surface-70: #7a8289;
+  --marca-neutrals-border-10: #d6dee6;
+  --marca-palette-txt-100: #004772;
   --size-scale-none: 0;
   --size-scale-half: 2px;
   --size-scale-base: 4px;
@@ -201,20 +201,20 @@
 }
 
 :root[data-theme="dark"] {
-  --marca-neutrals-surface-130: #fffcfd;
-  --marca-neutrals-surface-10: #1f1518;
+  --marca-neutrals-surface-130: #fcfeff;
+  --marca-neutrals-surface-10: #14191d;
   --grayscale-surface-70: #818181;
   --grayscale-surface-25: #303030;
   --grayscale-surface-10: #181818;
-  --marca-palette-surface-40: #5f0032;
+  --marca-palette-surface-40: #00304f;
   --marca-palette-txtOn-40: #fdfdfd;
-  --marca-palette-surface-60: #8e004e;
+  --marca-palette-surface-60: #004772;
   --marca-palette-txtOn-60: #fdfdfd;
-  --marca-palette-surface-100: #e7398a;
-  --marca-palette-txtOn-100: #1a1818;
-  --marca-palette-surface-120: #fa6aa5;
+  --marca-palette-surface-100: #057abd;
+  --marca-palette-txtOn-100: #fdfdfd;
+  --marca-palette-surface-120: #4e9ad5;
   --marca-palette-txtOn-120: #242121;
-  --marca-palette-surface-140: #ff9dc0;
+  --marca-palette-surface-140: #6fbcf8;
   --marca-palette-txtOn-140: #242121;
   --apoio-palette-surface-100: #51475c;
   --apoio-palette-txtOn-100: #fdfdfd;
@@ -243,29 +243,29 @@
   --info-palette-surface-100: #0274c7;
   --info-palette-border-100: #51a3f3;
   --info-palette-txt-100: #9ac9fa;
-  --marca-neutrals-surface-25: #382c30;
-  --marca-neutrals-surface-100: #c8b9bd;
-  --marca-neutrals-surface-70: #8b7d81;
-  --marca-neutrals-border-10: #382c30;
-  --marca-palette-txt-100: #ff9dc0;
+  --marca-neutrals-surface-25: #2b3135;
+  --marca-neutrals-surface-100: #b7bec4;
+  --marca-neutrals-surface-70: #7b8287;
+  --marca-neutrals-border-10: #2b3135;
+  --marca-palette-txt-100: #6fbcf8;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --marca-neutrals-surface-130: #fffcfd;
-    --marca-neutrals-surface-10: #1f1518;
+    --marca-neutrals-surface-130: #fcfeff;
+    --marca-neutrals-surface-10: #14191d;
     --grayscale-surface-70: #818181;
     --grayscale-surface-25: #303030;
     --grayscale-surface-10: #181818;
-    --marca-palette-surface-40: #5f0032;
+    --marca-palette-surface-40: #00304f;
     --marca-palette-txtOn-40: #fdfdfd;
-    --marca-palette-surface-60: #8e004e;
+    --marca-palette-surface-60: #004772;
     --marca-palette-txtOn-60: #fdfdfd;
-    --marca-palette-surface-100: #e7398a;
-    --marca-palette-txtOn-100: #1a1818;
-    --marca-palette-surface-120: #fa6aa5;
+    --marca-palette-surface-100: #057abd;
+    --marca-palette-txtOn-100: #fdfdfd;
+    --marca-palette-surface-120: #4e9ad5;
     --marca-palette-txtOn-120: #242121;
-    --marca-palette-surface-140: #ff9dc0;
+    --marca-palette-surface-140: #6fbcf8;
     --marca-palette-txtOn-140: #242121;
     --apoio-palette-surface-100: #51475c;
     --apoio-palette-txtOn-100: #fdfdfd;
@@ -294,11 +294,11 @@
     --info-palette-surface-100: #0274c7;
     --info-palette-border-100: #51a3f3;
     --info-palette-txt-100: #9ac9fa;
-    --marca-neutrals-surface-25: #382c30;
-    --marca-neutrals-surface-100: #c8b9bd;
-    --marca-neutrals-surface-70: #8b7d81;
-    --marca-neutrals-border-10: #382c30;
-    --marca-palette-txt-100: #ff9dc0;
+    --marca-neutrals-surface-25: #2b3135;
+    --marca-neutrals-surface-100: #b7bec4;
+    --marca-neutrals-surface-70: #7b8287;
+    --marca-neutrals-border-10: #2b3135;
+    --marca-palette-txt-100: #6fbcf8;
 }
 }
 
