@@ -19,3 +19,10 @@
 .uai-toast__title { margin: 0; font: var(--font-weight-label) var(--toast-font-size)/var(--toast-line-height) var(--font-family-label), monospace; text-transform: var(--font-transform-label); }
 .uai-toast__message { margin: 0; font: 400 var(--toast-font-size)/var(--toast-line-height) var(--font-family-body), sans-serif; }
 .uai-toast__content .uai-button { margin-top: var(--size-scale-base); }
+
+/* alto contraste: a barra e o ícone precisam de cor de sistema para não sumirem. */
+@media (forced-colors: active) {
+  .uai-toast { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  .uai-toast__bar { forced-color-adjust: none; background: CanvasText; }
+  .uai-toast__icon { stroke: CanvasText; }
+}
