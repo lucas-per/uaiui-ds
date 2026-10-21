@@ -45,6 +45,7 @@ Os tokens valem só dentro do wrapper `.uaiui`; nada vai para o `:root`:
 - Densidade: `data-uaiui-density="mobile|compact"`. Sem atributo, Desktop.
 - `uaiui-ds/tokens.css` é a versão em `:root` (tema e densidade em `<html>`), usada pelo site de documentação.
 - Fontes: os componentes usam `--font-family-label` ("JetBrains Mono", peso `--font-weight-label`) e `--font-family-body` ("DM Sans"). O projeto que consome carrega as duas famílias; o pacote não traz arquivos de fonte.
+- Medidas: os componentes usam rem, então dependem do `font-size` da raiz do site que hospeda. A base de 16 px é o padrão; uma raiz diferente reescala os componentes.
 - `npm run tokens` gera `tokens.css` e `tokens-wrapper.css`. `npm run check` falha se o wrapper tiver seletor fora de `.uaiui`.
 
 ## Estrutura
