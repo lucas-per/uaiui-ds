@@ -61,3 +61,17 @@
 }
 .uai-icon-button svg { width: var(--icon-button-icon-size); height: var(--icon-button-icon-size); stroke-width: var(--icon-button-icon-weight); }
 @media (prefers-reduced-motion: reduce) { .uai-button { transition: none; } }
+
+/* alto contraste: cores de sistema. Tipos (filled/outlined/ghost) continuam distintos; primary/secondary/danger só pelo rótulo. */
+@media (forced-colors: active) {
+  .uai-button { background: ButtonText; color: ButtonFace; border-color: ButtonText; }
+  .uai-button[data-type="outlined"] { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
+  .uai-button[data-type="ghost"] { background: ButtonFace; color: ButtonText; border-color: ButtonFace; }
+  .uai-button:hover, .uai-button:active,
+  .uai-button[data-type="outlined"]:hover, .uai-button[data-type="outlined"]:active,
+  .uai-button[data-type="ghost"]:hover, .uai-button[data-type="ghost"]:active { background: Highlight; color: HighlightText; border-color: Highlight; }
+  .uai-button:focus-visible { outline-color: Highlight; }
+  .uai-button:disabled, .uai-button[aria-disabled="true"],
+  .uai-button[data-type="ghost"]:disabled { background: ButtonFace; color: GrayText; border-color: GrayText; }
+  .uai-button[data-type="ghost"]:disabled { border-color: ButtonFace; }
+}

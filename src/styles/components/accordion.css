@@ -15,6 +15,7 @@
 .uai-accordion-trigger:hover { background: var(--accordion-header-action-background); color: var(--accordion-header-action-txtOn); }
 .uai-accordion-trigger:active { background: var(--accordion-header-active-background); color: var(--accordion-header-active-txtOn); }
 .uai-accordion-trigger:focus-visible { outline: var(--focus-ring-width) solid var(--ui-focus-ring); outline-offset: var(--focus-ring-offset); }
+.uai-accordion-trigger > span { min-width: 0; flex: 1; overflow-wrap: anywhere; }
 .uai-accordion-trigger svg { width: var(--accordion-icon-size); height: var(--accordion-icon-size); flex: none; stroke-width: var(--accordion-chevron-weight); fill: none; stroke: currentColor; }
 .uai-accordion-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
 .uai-accordion-trigger[aria-disabled="true"] {
@@ -30,3 +31,12 @@
 .uai-accordion-panel[hidden] { display: none; }
 .uai-accordion { display: flex; flex-direction: column; gap: var(--size-scale-x3); }
 @media (prefers-reduced-motion: reduce) { .uai-accordion-trigger { transition: none; } }
+
+/* alto contraste: cores de sistema. */
+@media (forced-colors: active) {
+  .uai-accordion-trigger { background: ButtonFace; color: ButtonText; border-color: CanvasText; }
+  .uai-accordion-panel { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  .uai-accordion-trigger:hover, .uai-accordion-trigger:active { background: Highlight; color: HighlightText; }
+  .uai-accordion-trigger:focus-visible { outline-color: Highlight; }
+  .uai-accordion-trigger[aria-disabled="true"] { background: ButtonFace; color: GrayText; border-color: GrayText; }
+}
