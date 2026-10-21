@@ -20,6 +20,7 @@ Dimensões|motion/duration/press|100
 Dimensões|font/family/label|"JetBrains Mono"
 Dimensões|font/family/body|"DM Sans"
 Dimensões|font/weight/label|700
+Dimensões|font/transform/label|uppercase
 Primitivos|marca/neutrals/surface/130|#13191e|#fcfeff
 Primitivos|marca/neutrals/surface/10|#fcfeff|#14191d
 Primitivos|grayscale/surface/70|#818181|#818181

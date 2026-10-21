@@ -8,6 +8,7 @@
   border: var(--border-width-default) solid var(--accordion-border); border-radius: var(--radius-control);
   background: var(--accordion-header-normal-background); color: var(--accordion-header-normal-txtOn);
   font: var(--font-weight-label) var(--accordion-title-font-size)/var(--accordion-title-line-height) var(--font-family-label), monospace;
+  text-transform: var(--font-transform-label);
   text-align: left; cursor: pointer;
   transition: background-color var(--motion-duration-press), color var(--motion-duration-press);
 }

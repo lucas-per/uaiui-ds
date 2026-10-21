@@ -69,6 +69,7 @@
   --font-family-label: "JetBrains Mono";
   --font-family-body: "DM Sans";
   --font-weight-label: 700;
+  --font-transform-label: uppercase;
   --ui-fg-default: var(--marca-neutrals-surface-130);
   --ui-bg-page: var(--marca-neutrals-surface-10);
   --ui-border-strong: var(--ui-fg-default);
