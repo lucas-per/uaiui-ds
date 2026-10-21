@@ -1,5 +1,5 @@
 # Export das variables do Figma ("UaiUI – Design Tokens"). Formato: colecao|nome|valor(es) por modo
-# Primitivos: Claro|Escuro. Semântica: Positiva. Densidade: Desktop|Mobile|Compacto. @nome = alias.
+# Textos (STRING) entre aspas. Primitivos: Claro|Escuro. Semântica: Positiva. Densidade: Desktop|Mobile|Compacto. @nome = alias.
 Escala|size/scale-none|0
 Escala|size/scale-half|2
 Escala|size/scale-base|4
@@ -17,6 +17,9 @@ Dimensões|focus/ring/width|@size/scale-half
 Dimensões|focus/ring/offset|@size/scale-half
 Dimensões|radius/control|@size/scale-none
 Dimensões|motion/duration/press|100
+Dimensões|font/family/label|"JetBrains Mono"
+Dimensões|font/family/body|"DM Sans"
+Dimensões|font/weight/label|700
 Primitivos|marca/neutrals/surface/130|#211418|#fffcfd
 Primitivos|marca/neutrals/surface/10|#fffcfd|#1f1518
 Primitivos|grayscale/surface/70|#818181|#818181

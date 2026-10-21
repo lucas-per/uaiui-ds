@@ -7,6 +7,7 @@ const rows = readFileSync(new URL('../tokens/figma-variables.txt', import.meta.u
 
 const val = (name, v) => {
   if (v.startsWith('@')) return `var(${cssName(v.slice(1))})`;
+  if (/^-?\d+(\.\d+)?$/.test(v) && name.startsWith('font/weight')) return v;
   if (/^-?\d+(\.\d+)?$/.test(v)) return name.includes('duration') ? `${v}ms` : v === '0' ? '0' : `${v}px`;
   return v;
 };
