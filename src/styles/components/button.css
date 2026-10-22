@@ -64,14 +64,16 @@
 .uai-icon-button svg { width: var(--icon-button-icon-size); height: var(--icon-button-icon-size); stroke-width: var(--icon-button-icon-weight); }
 @media (prefers-reduced-motion: reduce) { .uai-button { transition: none; } }
 
-/* alto contraste: cores de sistema. Tipos (filled/outlined/ghost) continuam distintos; primary/secondary/danger só pelo rótulo. */
+/* alto contraste: cores de sistema. Tipos (filled/outlined/ghost) continuam distintos; primary/secondary/danger só pelo rótulo.
+   forced-color-adjust: none evita a placa Canvas que o Chromium pinta atrás do texto quando o fundo é ButtonText; por isso
+   toda cor (fundo, texto, borda, foco, sombra) é definida aqui, em todos os tipos e estados. */
 @media (forced-colors: active) {
-  .uai-button { background: ButtonText; color: ButtonFace; border-color: ButtonText; }
+  .uai-button { forced-color-adjust: none; background: ButtonText; color: ButtonFace; border-color: ButtonText; box-shadow: none; }
   .uai-button[data-type="outlined"] { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
   .uai-button[data-type="ghost"] { background: ButtonFace; color: ButtonText; border-color: ButtonFace; }
   .uai-button:not(:disabled):not([aria-disabled="true"]):hover,
-  .uai-button:not(:disabled):not([aria-disabled="true"]):active { background: Highlight; color: HighlightText; border-color: Highlight; }
-  .uai-button:focus-visible { outline-color: Highlight; }
-  .uai-button:disabled, .uai-button[aria-disabled="true"] { background: ButtonFace; color: GrayText; border-color: GrayText; }
-  .uai-button[data-type="ghost"]:disabled, .uai-button[data-type="ghost"][aria-disabled="true"] { background: ButtonFace; border-color: ButtonFace; }
+  .uai-button:not(:disabled):not([aria-disabled="true"]):active { background: Highlight; color: HighlightText; border-color: Highlight; box-shadow: none; }
+  .uai-button:focus-visible { outline: var(--focus-ring-width) solid Highlight; outline-offset: var(--focus-ring-offset); }
+  .uai-button:disabled, .uai-button[aria-disabled="true"] { background: ButtonFace; color: GrayText; border-color: GrayText; box-shadow: none; }
+  .uai-button[data-type="ghost"]:disabled, .uai-button[data-type="ghost"][aria-disabled="true"] { background: ButtonFace; color: GrayText; border-color: ButtonFace; }
 }
