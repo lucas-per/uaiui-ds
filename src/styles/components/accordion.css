@@ -32,11 +32,11 @@
 .uai-accordion { display: flex; flex-direction: column; gap: var(--size-scale-x3); }
 @media (prefers-reduced-motion: reduce) { .uai-accordion-trigger { transition: none; } }
 
-/* alto contraste: cores de sistema. */
+/* alto contraste: cores de sistema. No gatilho, forced-color-adjust: none evita a placa Canvas atrás do texto sobre Highlight. */
 @media (forced-colors: active) {
-  .uai-accordion-trigger { background: ButtonFace; color: ButtonText; border-color: CanvasText; }
+  .uai-accordion-trigger { forced-color-adjust: none; background: ButtonFace; color: ButtonText; border-color: CanvasText; }
   .uai-accordion-panel { background: Canvas; color: CanvasText; border-color: CanvasText; }
-  .uai-accordion-trigger:hover, .uai-accordion-trigger:active { background: Highlight; color: HighlightText; }
-  .uai-accordion-trigger:focus-visible { outline-color: Highlight; }
+  .uai-accordion-trigger:hover, .uai-accordion-trigger:active { background: Highlight; color: HighlightText; border-color: Highlight; }
+  .uai-accordion-trigger:focus-visible { outline: var(--focus-ring-width) solid Highlight; outline-offset: var(--focus-ring-offset); }
   .uai-accordion-trigger[aria-disabled="true"] { background: ButtonFace; color: GrayText; border-color: GrayText; }
 }
