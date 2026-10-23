@@ -12,7 +12,9 @@
   text-align: left; cursor: pointer;
   transition: background-color var(--motion-duration-press), color var(--motion-duration-press);
 }
-.uai-accordion-trigger:hover { background: var(--accordion-header-action-background); color: var(--accordion-header-action-txtOn); }
+@media (hover: hover) {
+  .uai-accordion-trigger:hover { background: var(--accordion-header-action-background); color: var(--accordion-header-action-txtOn); }
+}
 .uai-accordion-trigger:active { background: var(--accordion-header-active-background); color: var(--accordion-header-active-txtOn); }
 .uai-accordion-trigger:focus-visible { outline: var(--focus-ring-width) solid var(--ui-focus-ring); outline-offset: var(--focus-ring-offset); }
 .uai-accordion-trigger > span { min-width: 0; flex: 1; overflow-wrap: anywhere; }
@@ -32,11 +34,15 @@
 .uai-accordion { display: flex; flex-direction: column; gap: var(--size-scale-x3); }
 @media (prefers-reduced-motion: reduce) { .uai-accordion-trigger { transition: none; } }
 
+/* alto contraste, hover: só com mouse. Fica antes do bloco abaixo para o :hover continuar vindo antes do :active (mesma especificidade). */
+@media (forced-colors: active) and (hover: hover) {
+  .uai-accordion-trigger:hover { background: Highlight; color: HighlightText; border-color: Highlight; }
+}
 /* alto contraste: cores de sistema. No gatilho, forced-color-adjust: none evita a placa Canvas atrás do texto sobre Highlight. */
 @media (forced-colors: active) {
   .uai-accordion-trigger { forced-color-adjust: none; background: ButtonFace; color: ButtonText; border-color: CanvasText; }
   .uai-accordion-panel { background: Canvas; color: CanvasText; border-color: CanvasText; }
-  .uai-accordion-trigger:hover, .uai-accordion-trigger:active { background: Highlight; color: HighlightText; border-color: Highlight; }
+  .uai-accordion-trigger:active { background: Highlight; color: HighlightText; border-color: Highlight; }
   .uai-accordion-trigger:focus-visible { outline: var(--focus-ring-width) solid Highlight; outline-offset: var(--focus-ring-offset); }
   .uai-accordion-trigger[aria-disabled="true"] { background: ButtonFace; color: GrayText; border-color: GrayText; }
 }

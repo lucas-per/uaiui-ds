@@ -11,7 +11,9 @@ html { scroll-padding-top: 88px; color-scheme: light dark; }
 body { margin: 0; background: var(--ui-bg-page); color: var(--ui-fg-default); font: 400 16px/1.6 "DM Sans", sans-serif; }
 h1, h2, h3, h4 { font-family: "JetBrains Mono", monospace; line-height: 1.25; margin: 0; }
 a { color: var(--ui-fg-brand); text-underline-offset: 3px; }
-a:hover { text-decoration-thickness: 2px; }
+@media (hover: hover) {
+  a:hover { text-decoration-thickness: 2px; }
+}
 code, pre, kbd { font-family: "JetBrains Mono", monospace; font-size: 0.875em; }
 :focus-visible { outline: var(--focus-ring-width) solid var(--ui-focus-ring); outline-offset: var(--focus-ring-offset); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -25,7 +27,10 @@ code, pre, kbd { font-family: "JetBrains Mono", monospace; font-size: 0.875em; }
 .brand__mark { display: grid; place-items: center; width: 32px; height: 32px; background: var(--ui-brand-band); border: var(--border-width-default) solid var(--ui-border-strong); box-shadow: 2px 2px 0 var(--ui-shadow-color); color: #1a1818; }
 .site-nav { display: flex; gap: 8px; margin-left: 16px; }
 .site-nav a { padding: 4px 12px; color: var(--ui-fg-default); font: 700 14px/20px "JetBrains Mono", monospace; text-decoration: none; border: var(--border-width-default) solid transparent; }
-.site-nav a:hover, .site-nav a[aria-current="page"] { border-color: var(--ui-border-strong); background: var(--interface-function-ghost-action-background); color: var(--interface-function-ghost-action-txtOn); }
+@media (hover: hover) {
+  .site-nav a:hover { border-color: var(--ui-border-strong); background: var(--interface-function-ghost-action-background); color: var(--interface-function-ghost-action-txtOn); }
+}
+.site-nav a[aria-current="page"] { border-color: var(--ui-border-strong); background: var(--interface-function-ghost-action-background); color: var(--interface-function-ghost-action-txtOn); }
 .header-tools { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 .search-btn { display: inline-flex; align-items: center; gap: 12px; min-width: 220px; padding: 6px 12px; background: var(--ui-bg-page); color: var(--ui-fg-muted); border: var(--border-width-default) solid var(--ui-border-strong); font: 400 14px/20px "DM Sans", sans-serif; cursor: pointer; }
 .search-btn kbd { margin-left: auto; padding: 0 6px; border: var(--border-width-default) solid var(--ui-border-field); font-size: 12px; }
@@ -40,7 +45,9 @@ code, pre, kbd { font-family: "JetBrains Mono", monospace; font-size: 0.875em; }
 .sidebar h2:first-child { margin-top: 0; }
 .sidebar ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .sidebar a { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; color: var(--ui-fg-default); text-decoration: none; border: var(--border-width-default) solid transparent; }
-.sidebar a:hover { border-color: var(--ui-border-strong); background: var(--interface-function-ghost-action-background); color: var(--interface-function-ghost-action-txtOn); }
+@media (hover: hover) {
+  .sidebar a:hover { border-color: var(--ui-border-strong); background: var(--interface-function-ghost-action-background); color: var(--interface-function-ghost-action-txtOn); }
+}
 .sidebar a[aria-current="page"] { border-color: var(--ui-border-strong); background: var(--interface-function-ghost-active-background); color: var(--interface-function-ghost-active-txtOn); font-weight: 600; }
 .badge-novo { padding: 0 6px; font: 700 11px/16px "JetBrains Mono", monospace; background: var(--ui-brand-band); color: #1a1818; border: var(--border-width-default) solid var(--ui-border-strong); }
 .content { padding: 48px 0 96px; min-width: 0; max-width: 820px; }
@@ -57,7 +64,9 @@ code, pre, kbd { font-family: "JetBrains Mono", monospace; font-size: 0.875em; }
 .toc a[aria-current="true"] { border-left-color: var(--ui-border-strong); color: var(--ui-fg-default); font-weight: 600; }
 .pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 64px; }
 .pager a { display: grid; gap: 4px; min-width: 200px; padding: 12px 16px; border: var(--border-width-default) solid var(--ui-border-strong); box-shadow: 4px 4px 0 var(--ui-shadow-color); color: var(--ui-fg-default); text-decoration: none; }
-.pager a:hover { background: var(--interface-function-ghost-action-background); color: var(--interface-function-ghost-action-txtOn); }
+@media (hover: hover) {
+  .pager a:hover { background: var(--interface-function-ghost-action-background); color: var(--interface-function-ghost-action-txtOn); }
+}
 .pager small { color: var(--ui-fg-muted); }
 .pager a:last-child { text-align: right; margin-left: auto; }
 
@@ -75,7 +84,9 @@ code, pre, kbd { font-family: "JetBrains Mono", monospace; font-size: 0.875em; }
 .code { position: relative; background: #17100f; color: #f5ecee; }
 .code pre { margin: 0; padding: 20px 24px; overflow: auto; max-height: 520px; font-size: 13px; line-height: 1.6; background: transparent !important; }
 .copy { position: absolute; top: 8px; right: 8px; padding: 4px 10px; background: #f5ecee; color: #17100f; border: 2px solid #f5ecee; font: 700 12px/16px "JetBrains Mono", monospace; cursor: pointer; }
-.copy:hover { background: #ffcbdc; }
+@media (hover: hover) {
+  .copy:hover { background: #ffcbdc; }
+}
 .code--standalone { border: var(--border-width-default) solid var(--ui-border-strong); box-shadow: 4px 4px 0 var(--ui-shadow-color); margin: 16px 0; }
 
 /* Tabelas */
@@ -89,7 +100,9 @@ tr:last-child td { border-bottom: 0; }
 .callout > :first-child { margin-top: 0; } .callout > :last-child { margin-bottom: 0; }
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin: 24px 0; }
 .card { display: grid; gap: 8px; padding: 20px; color: var(--ui-fg-default); text-decoration: none; border: var(--border-width-default) solid var(--ui-border-strong); box-shadow: 4px 4px 0 var(--ui-shadow-color); background: var(--ui-bg-page); }
-.card:hover { transform: translateY(-2px); box-shadow: 6px 6px 0 var(--ui-shadow-color); }
+@media (hover: hover) {
+  .card:hover { transform: translateY(-2px); box-shadow: 6px 6px 0 var(--ui-shadow-color); }
+}
 .card h3 { margin: 0; } .card p { margin: 0; color: var(--ui-fg-muted); font-size: 14px; }
 .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
 .swatch { display: grid; gap: 4px; font: 12px/16px "JetBrains Mono", monospace; }
