@@ -1,7 +1,7 @@
 {
   "name": "uaiui-ds",
   "type": "module",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "private": true,
   "engines": {
     "node": ">=22.12.0"
@@ -11,7 +11,7 @@
     "dev": "npm run tokens && astro dev",
     "build": "npm run tokens && astro build",
     "preview": "astro preview",
-    "check": "node scripts/check-wrapper.mjs && astro check"
+    "check": "node scripts/check-wrapper.mjs && node scripts/check-hover-media.mjs && astro check"
   },
   "files": [
     "src/styles/tokens.css",

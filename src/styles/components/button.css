@@ -23,7 +23,9 @@
   transition: background-color var(--motion-duration-press), color var(--motion-duration-press), box-shadow var(--motion-duration-press), transform var(--motion-duration-press);
 }
 .uai-button svg { width: var(--button-icon-size); height: var(--button-icon-size); flex: none; }
-.uai-button:hover { background: var(--_bg-hover); color: var(--_fg-hover); box-shadow: var(--shadow-offset-component-hover) var(--shadow-offset-component-hover) 0 0 var(--button-shadow-color); transform: translateY(-2px); }
+@media (hover: hover) {
+  .uai-button:hover { background: var(--_bg-hover); color: var(--_fg-hover); box-shadow: var(--shadow-offset-component-hover) var(--shadow-offset-component-hover) 0 0 var(--button-shadow-color); transform: translateY(-2px); }
+}
 .uai-button:active { background: var(--_bg-press); color: var(--_fg-press); box-shadow: none; transform: translateY(1px); }
 .uai-button:focus-visible { outline: var(--focus-ring-width) solid var(--ui-focus-ring); outline-offset: var(--focus-ring-offset); }
 
@@ -49,7 +51,10 @@
   border-color: transparent; box-shadow: none; padding-inline: var(--button-ghost-padding-x);
   min-width: var(--button-min-height); justify-content: center; text-align: center;
 }
-.uai-button[data-type="ghost"]:hover, .uai-button[data-type="ghost"]:active { box-shadow: none; transform: none; }
+@media (hover: hover) {
+  .uai-button[data-type="ghost"]:hover { box-shadow: none; transform: none; }
+}
+.uai-button[data-type="ghost"]:active { box-shadow: none; transform: none; }
 .uai-button:disabled, .uai-button[aria-disabled="true"] {
   background: var(--interface-function-disabled-normal-background); color: var(--interface-function-disabled-normal-txtOn);
   border-color: var(--interface-function-disabled-normal-border); box-shadow: none; transform: none; cursor: not-allowed;
@@ -64,6 +69,10 @@
 .uai-icon-button svg { width: var(--icon-button-icon-size); height: var(--icon-button-icon-size); stroke-width: var(--icon-button-icon-weight); }
 @media (prefers-reduced-motion: reduce) { .uai-button { transition: none; } }
 
+/* alto contraste, hover: só com mouse. Fica antes do bloco abaixo para o :hover continuar vindo antes do :active (mesma especificidade). */
+@media (forced-colors: active) and (hover: hover) {
+  .uai-button:not(:disabled):not([aria-disabled="true"]):hover { background: Highlight; color: HighlightText; border-color: Highlight; box-shadow: none; }
+}
 /* alto contraste: cores de sistema. Tipos (filled/outlined/ghost) continuam distintos; primary/secondary/danger só pelo rótulo.
    forced-color-adjust: none evita a placa Canvas que o Chromium pinta atrás do texto quando o fundo é ButtonText; por isso
    toda cor (fundo, texto, borda, foco, sombra) é definida aqui, em todos os tipos e estados. */
@@ -71,7 +80,6 @@
   .uai-button { forced-color-adjust: none; background: ButtonText; color: ButtonFace; border-color: ButtonText; box-shadow: none; }
   .uai-button[data-type="outlined"] { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
   .uai-button[data-type="ghost"] { background: ButtonFace; color: ButtonText; border-color: ButtonFace; }
-  .uai-button:not(:disabled):not([aria-disabled="true"]):hover,
   .uai-button:not(:disabled):not([aria-disabled="true"]):active { background: Highlight; color: HighlightText; border-color: Highlight; box-shadow: none; }
   .uai-button:focus-visible { outline: var(--focus-ring-width) solid Highlight; outline-offset: var(--focus-ring-offset); }
   .uai-button:disabled, .uai-button[aria-disabled="true"] { background: ButtonFace; color: GrayText; border-color: GrayText; box-shadow: none; }
