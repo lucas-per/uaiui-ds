@@ -13,12 +13,16 @@
 .uai-toast[data-tone="error"]   { --_bg: var(--toast-error-background);   --_border: var(--toast-error-border);   --_bar: var(--toast-error-bar);   --_icon: var(--toast-error-icon); }
 .uai-toast[data-tone="info"]    { --_bg: var(--toast-info-background);    --_border: var(--toast-info-border);    --_bar: var(--toast-info-bar);    --_icon: var(--toast-info-icon); }
 .uai-toast__bar { flex: none; width: var(--toast-bar-width); background: var(--_bar); }
-.uai-toast__body { flex: 1; display: flex; align-items: flex-start; gap: var(--toast-gap); padding: var(--toast-padding); min-width: 0; }
+.uai-toast__body { flex: 1; display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--toast-gap); padding: var(--toast-padding); min-width: 0; }
 .uai-toast__icon { flex: none; width: var(--toast-icon-size); height: var(--toast-icon-size); fill: none; stroke: var(--_icon); stroke-width: var(--toast-icon-weight); stroke-linecap: square; stroke-linejoin: miter; }
-.uai-toast__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--toast-content-gap); align-items: flex-start; }
+.uai-toast__content { flex: 1 1 4rem; min-width: 0; display: flex; flex-direction: column; gap: var(--toast-content-gap); align-items: flex-start; }
 .uai-toast__title { margin: 0; font: var(--font-weight-label) var(--toast-font-size)/var(--toast-line-height) var(--font-family-label), monospace; text-transform: var(--font-transform-label); overflow-wrap: anywhere; }
 .uai-toast__message { margin: 0; font: 400 var(--toast-font-size)/var(--toast-line-height) var(--font-family-body), sans-serif; overflow-wrap: anywhere; }
 .uai-toast__content .uai-button { margin-top: var(--size-scale-base); max-width: 100%; white-space: normal; text-align: center; }
+
+/* reflow (WCAG 1.4.10): com texto muito ampliado ou em tela estreita, o fechar desce para a linha de baixo, alinhado ao fim.
+   O 4rem do conteúdo é a largura mínima antes de a linha quebrar; a 100% o conteúdo nunca fica tão estreito. */
+.uai-toast__body > .uai-icon-button { margin-inline-start: auto; }
 
 /* entrada: 100 ms só com opacidade. A saída não é animada aqui e fica com quem monta a região de avisos. */
 @keyframes uai-toast-in { from { opacity: 0; } }
