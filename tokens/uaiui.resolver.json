@@ -1,0 +1,75 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/resolver.json",
+  "name": "UaiUI",
+  "version": "2025.10",
+  "description": "Tokens do UaiUI. Semântica tem um só modo (Positiva) e por isso fica no set base, sem modifier.",
+  "sets": {
+    "base": {
+      "description": "Coleções de um modo só.",
+      "sources": [
+        {
+          "$ref": "escala.json"
+        },
+        {
+          "$ref": "dimensoes.json"
+        },
+        {
+          "$ref": "semantica.json"
+        },
+        {
+          "$ref": "componente.json"
+        }
+      ]
+    }
+  },
+  "modifiers": {
+    "tema": {
+      "description": "Coleção Primitivos: cores por tema.",
+      "contexts": {
+        "claro": [
+          {
+            "$ref": "primitivos/claro.json"
+          }
+        ],
+        "escuro": [
+          {
+            "$ref": "primitivos/escuro.json"
+          }
+        ]
+      },
+      "default": "claro"
+    },
+    "densidade": {
+      "description": "Coleção Densidade: tamanhos dos componentes.",
+      "contexts": {
+        "comfortable": [
+          {
+            "$ref": "densidade/comfortable.json"
+          }
+        ],
+        "standard": [
+          {
+            "$ref": "densidade/standard.json"
+          }
+        ],
+        "compact": [
+          {
+            "$ref": "densidade/compact.json"
+          }
+        ]
+      },
+      "default": "comfortable"
+    }
+  },
+  "resolutionOrder": [
+    {
+      "$ref": "#/sets/base"
+    },
+    {
+      "$ref": "#/modifiers/tema"
+    },
+    {
+      "$ref": "#/modifiers/densidade"
+    }
+  ]
+}

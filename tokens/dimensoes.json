@@ -1,0 +1,96 @@
+{
+  "$description": "Dimensões: borda, sombra, raio, anel de foco, movimento e fonte. Coleção \"Dimensões\" do Figma, modo Valor.",
+  "border": {
+    "width": {
+      "default": {
+        "$type": "dimension",
+        "$value": "{size.scale-half}"
+      }
+    }
+  },
+  "shadow": {
+    "offset": {
+      "component": {
+        "$type": "dimension",
+        "$value": "{size.scale-half}"
+      },
+      "component-hover": {
+        "$type": "dimension",
+        "$value": "{size.scale-base}"
+      },
+      "layout": {
+        "$type": "dimension",
+        "$value": "{size.scale-base}"
+      },
+      "pressed": {
+        "$type": "dimension",
+        "$value": "{size.scale-none}"
+      }
+    }
+  },
+  "focus": {
+    "ring": {
+      "width": {
+        "$type": "dimension",
+        "$value": "{size.scale-half}"
+      },
+      "offset": {
+        "$type": "dimension",
+        "$value": "{size.scale-half}"
+      }
+    }
+  },
+  "radius": {
+    "control": {
+      "$type": "dimension",
+      "$value": "{size.scale-none}"
+    }
+  },
+  "motion": {
+    "duration": {
+      "press": {
+        "$type": "duration",
+        "$value": { "value": 100, "unit": "ms" }
+      }
+    }
+  },
+  "font": {
+    "family": {
+      "label": {
+        "$type": "fontFamily",
+        "$value": "JetBrains Mono"
+      },
+      "body": {
+        "$type": "fontFamily",
+        "$value": "DM Sans"
+      }
+    },
+    "weight": {
+      "label": {
+        "$type": "fontWeight",
+        "$value": 700
+      }
+    },
+    "transform": {
+      "label": {
+        "$type": "string",
+        "$value": "uppercase",
+        "$extensions": {
+          "me.lpereira.uaiui": {
+            "nonStandardType": true,
+            "cssProperty": "text-transform",
+            "note": "O DTCG 2025.10 não tem tipo para texto. Extensão UaiUI: o validador aceita \"string\" só com esta marca e só com palavra-chave CSS."
+          }
+        }
+      }
+    }
+  },
+  "button": {
+    "ghost": {
+      "padding-x": {
+        "$type": "dimension",
+        "$value": { "value": 0, "unit": "px" }
+      }
+    }
+  }
+}

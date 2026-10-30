@@ -7,11 +7,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "tokens": "node scripts/figma-to-css.mjs",
+    "tokens": "node scripts/dtcg-to-css.mjs",
     "dev": "npm run tokens && astro dev",
     "build": "npm run tokens && astro build",
     "preview": "astro preview",
-    "check": "node scripts/check-wrapper.mjs && node scripts/check-hover-media.mjs && astro check"
+    "check": "node scripts/dtcg-to-css.mjs --check && node scripts/check-wrapper.mjs && node scripts/check-hover-media.mjs && astro check"
   },
   "files": [
     "src/styles/tokens.css",

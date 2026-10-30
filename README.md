@@ -14,7 +14,7 @@ npm run build    # gera dist/
 
 As variables do Figma ("UaiUI – Design Tokens") são a fonte de verdade.
 
-1. `tokens/figma-variables.txt`: exportação (uma linha por variable, um valor por modo).
+1. `tokens/`: JSON no padrão [Design Tokens 2025.10](https://www.designtokens.org/tr/2025.10/) (DTCG), um arquivo por coleção (`escala`, `dimensoes`, `semantica`, `componente`) e um por modo em `primitivos/` e `densidade/`. `tokens/uaiui.resolver.json` junta os arquivos e define os modos. Até o export do Figma direto para JSON, edite os JSON no repositório.
 2. `npm run tokens` gera `src/styles/tokens.css` e `src/styles/tokens-wrapper.css` (roda sozinho em `dev` e `build`).
 
 Tema: `data-theme="light|dark"` no `<html>` (sem atributo, segue o sistema). Densidade: `data-density="mobile|compact"` (sem atributo, Desktop).
@@ -46,7 +46,7 @@ Os tokens valem só dentro do wrapper `.uaiui`; nada vai para o `:root`:
 - `uaiui-ds/tokens.css` é a versão em `:root` (tema e densidade em `<html>`), usada pelo site de documentação.
 - Fontes: os componentes usam `--font-family-label` ("JetBrains Mono", peso `--font-weight-label`) e `--font-family-body` ("DM Sans"). O projeto que consome carrega as duas famílias; o pacote não traz arquivos de fonte.
 - Medidas: os componentes usam rem, então dependem do `font-size` da raiz do site que hospeda. A base de 16 px é o padrão; uma raiz diferente reescala os componentes.
-- `npm run tokens` gera `tokens.css` e `tokens-wrapper.css`. `npm run check` falha se o wrapper tiver seletor fora de `.uaiui`.
+- `npm run tokens` gera `tokens.css` e `tokens-wrapper.css`. `npm run check` falha se um alias não resolver, se um token não tiver `$type`, se o CSS gerado estiver desatualizado ou se o wrapper tiver seletor fora de `.uaiui`.
 
 ## Estrutura
 
@@ -57,4 +57,4 @@ Os tokens valem só dentro do wrapper `.uaiui`; nada vai para o `:root`:
 
 ## Primeira versão
 
-Accordion, button (com botão de ícone) e toast. Para documentar outro componente: acrescente as variables dele ao arquivo de exportação, crie o CSS, a página e a entrada em `nav.ts`.
+Accordion, button (com botão de ícone) e toast. Para documentar outro componente: acrescente os tokens dele aos JSON em `tokens/`, crie o CSS, a página e a entrada em `nav.ts`.

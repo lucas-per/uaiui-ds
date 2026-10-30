@@ -1,0 +1,252 @@
+{
+  "$description": "Semântica: papéis de interface e níveis de comportamento. Coleção \"Semântica\" do Figma, modo Positiva.",
+  "$type": "color",
+  "ui": {
+    "fg": {
+      "default": {
+        "$value": "{marca.neutrals.surface.130}"
+      },
+      "muted": {
+        "$value": "{marca.neutrals.surface.100}"
+      },
+      "brand": {
+        "$value": "{marca.palette.txt.100}"
+      }
+    },
+    "bg": {
+      "page": {
+        "$value": "{marca.neutrals.surface.10}"
+      },
+      "panel": {
+        "$value": "{marca.neutrals.surface.25}"
+      }
+    },
+    "border": {
+      "strong": {
+        "$value": "{ui.fg.default}"
+      },
+      "field": {
+        "$value": "{marca.neutrals.surface.70}"
+      },
+      "divider": {
+        "$value": "{marca.neutrals.border.10}"
+      }
+    },
+    "shadow": {
+      "color": {
+        "$value": "{ui.fg.default}"
+      }
+    },
+    "focus": {
+      "ring": {
+        "$value": "{ui.fg.default}"
+      }
+    },
+    "brand": {
+      "band": {
+        "$value": "{marca.palette.surface.100}"
+      }
+    }
+  },
+  "interface": {
+    "function": {
+      "disabled": {
+        "normal": {
+          "background": {
+            "$value": "{grayscale.surface.10}"
+          },
+          "border": {
+            "$value": "{grayscale.surface.25}"
+          },
+          "txtOn": {
+            "$value": "{grayscale.surface.70}"
+          }
+        }
+      },
+      "ghost": {
+        "normal": {
+          "background": {
+            "$value": { "colorSpace": "srgb", "components": [0, 0, 0], "alpha": 0, "hex": "#000000" }
+          },
+          "txtOn": {
+            "$value": "{ui.fg.default}"
+          }
+        },
+        "action": {
+          "background": {
+            "$value": "{marca.palette.surface.40}"
+          },
+          "txtOn": {
+            "$value": "{marca.palette.txtOn.40}"
+          }
+        },
+        "active": {
+          "background": {
+            "$value": "{marca.palette.surface.60}"
+          },
+          "txtOn": {
+            "$value": "{marca.palette.txtOn.60}"
+          }
+        }
+      },
+      "primary": {
+        "normal": {
+          "background": {
+            "$value": "{marca.palette.surface.100}"
+          },
+          "txtOn": {
+            "$value": "{marca.palette.txtOn.100}"
+          }
+        },
+        "action": {
+          "background": {
+            "$value": "{marca.palette.surface.120}"
+          },
+          "txtOn": {
+            "$value": "{marca.palette.txtOn.120}"
+          }
+        },
+        "active": {
+          "background": {
+            "$value": "{marca.palette.surface.140}"
+          },
+          "txtOn": {
+            "$value": "{marca.palette.txtOn.140}"
+          }
+        }
+      },
+      "secondary": {
+        "normal": {
+          "background": {
+            "$value": "{apoio.palette.surface.100}"
+          },
+          "txtOn": {
+            "$value": "{apoio.palette.txtOn.100}"
+          }
+        },
+        "action": {
+          "background": {
+            "$value": "{apoio.palette.surface.120}"
+          },
+          "txtOn": {
+            "$value": "{apoio.palette.txtOn.120}"
+          }
+        },
+        "active": {
+          "background": {
+            "$value": "{apoio.palette.surface.140}"
+          },
+          "txtOn": {
+            "$value": "{apoio.palette.txtOn.140}"
+          }
+        }
+      },
+      "error": {
+        "normal": {
+          "background": {
+            "$value": "{error.palette.surface.100}"
+          },
+          "txtOn": {
+            "$value": "{error.palette.txtOn.100}"
+          }
+        },
+        "action": {
+          "background": {
+            "$value": "{error.palette.surface.120}"
+          },
+          "txtOn": {
+            "$value": "{error.palette.txtOn.120}"
+          }
+        },
+        "active": {
+          "background": {
+            "$value": "{error.palette.surface.140}"
+          },
+          "txtOn": {
+            "$value": "{error.palette.txtOn.140}"
+          }
+        }
+      }
+    }
+  },
+  "error": {
+    "behavior": {
+      "lightest": {
+        "surface": {
+          "$value": "{error.palette.surface.20}"
+        }
+      },
+      "normal": {
+        "surface": {
+          "$value": "{error.palette.surface.100}"
+        },
+        "border": {
+          "$value": "{error.palette.border.100}"
+        },
+        "txt": {
+          "$value": "{error.palette.txt.100}"
+        }
+      }
+    }
+  },
+  "success": {
+    "behavior": {
+      "lightest": {
+        "surface": {
+          "$value": "{success.palette.surface.20}"
+        }
+      },
+      "normal": {
+        "surface": {
+          "$value": "{success.palette.surface.100}"
+        },
+        "border": {
+          "$value": "{success.palette.border.100}"
+        },
+        "txt": {
+          "$value": "{success.palette.txt.100}"
+        }
+      }
+    }
+  },
+  "warning": {
+    "behavior": {
+      "lightest": {
+        "surface": {
+          "$value": "{warning.palette.surface.20}"
+        }
+      },
+      "normal": {
+        "surface": {
+          "$value": "{warning.palette.surface.100}"
+        },
+        "border": {
+          "$value": "{warning.palette.border.100}"
+        },
+        "txt": {
+          "$value": "{warning.palette.txt.100}"
+        }
+      }
+    }
+  },
+  "info": {
+    "behavior": {
+      "lightest": {
+        "surface": {
+          "$value": "{info.palette.surface.20}"
+        }
+      },
+      "normal": {
+        "surface": {
+          "$value": "{info.palette.surface.100}"
+        },
+        "border": {
+          "$value": "{info.palette.border.100}"
+        },
+        "txt": {
+          "$value": "{info.palette.txt.100}"
+        }
+      }
+    }
+  }
+}

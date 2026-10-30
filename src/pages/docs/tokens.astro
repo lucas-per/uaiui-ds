@@ -34,10 +34,10 @@ const sample = ['--ui-bg-page', '--ui-bg-panel', '--ui-fg-default', '--ui-fg-mut
 
   <h2 id="atualizar">Atualizar a partir do Figma</h2>
   <ol>
-    <li>Exporte as variables para <code>tokens/figma-variables.txt</code> (uma linha por variable, um valor por modo).</li>
-    <li>Rode <code>npm run tokens</code>. O script gera <code>src/styles/tokens.css</code>.</li>
+    <li>Os tokens ficam em <code>tokens/</code>, em JSON no padrão <a href="https://www.designtokens.org/tr/2025.10/">Design Tokens 2025.10</a>: um arquivo por coleção e um por modo em <code>primitivos/</code> e <code>densidade/</code>. O <code>tokens/uaiui.resolver.json</code> junta os arquivos e define os modos. Até o export do Figma direto para JSON, edite os JSON no repositório.</li>
+    <li>Rode <code>npm run tokens</code>. O script gera <code>src/styles/tokens.css</code>. O <code>npm run check</code> falha se um alias não resolver ou se um token não tiver <code>$type</code>.</li>
   </ol>
-  <div class="callout"><p>Só entram no arquivo os tokens que os componentes publicados usam. Ao documentar um componente novo, acrescente as variables dele ao arquivo de exportação.</p></div>
+  <div class="callout"><p>Só entram no arquivo os tokens que os componentes publicados usam. Ao documentar um componente novo, acrescente os tokens dele aos JSON em <code>tokens/</code>.</p></div>
 
   <h2 id="amostra">Amostra de cores</h2>
   <p>Mude o tema no cabeçalho para ver as cores trocarem.</p>

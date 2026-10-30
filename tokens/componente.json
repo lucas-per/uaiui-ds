@@ -1,0 +1,182 @@
+{
+  "$description": "Componente: um token por parte do componente, apontando para a semântica. Coleção \"Componente\" do Figma, modo Valor.",
+  "$type": "color",
+  "button": {
+    "border": {
+      "$value": "{ui.border.strong}"
+    },
+    "shadow": {
+      "color": {
+        "$value": "{ui.shadow.color}"
+      }
+    },
+    "outlined": {
+      "normal": {
+        "background": {
+          "$value": "{ui.bg.page}"
+        },
+        "txtOn": {
+          "$value": "{ui.fg.default}"
+        }
+      },
+      "action": {
+        "background": {
+          "$value": "{interface.function.ghost.action.background}"
+        },
+        "txtOn": {
+          "$value": "{interface.function.ghost.action.txtOn}"
+        }
+      },
+      "active": {
+        "background": {
+          "$value": "{interface.function.ghost.active.background}"
+        },
+        "txtOn": {
+          "$value": "{interface.function.ghost.active.txtOn}"
+        }
+      }
+    }
+  },
+  "accordion": {
+    "border": {
+      "$value": "{ui.border.strong}"
+    },
+    "panel": {
+      "background": {
+        "$value": "{ui.bg.page}"
+      },
+      "txt": {
+        "$value": "{ui.fg.default}"
+      }
+    },
+    "header": {
+      "normal": {
+        "background": {
+          "$value": "{ui.bg.page}"
+        },
+        "txtOn": {
+          "$value": "{ui.fg.default}"
+        },
+        "icon": {
+          "$value": "{ui.fg.default}"
+        }
+      },
+      "action": {
+        "background": {
+          "$value": "{interface.function.ghost.action.background}"
+        },
+        "txtOn": {
+          "$value": "{interface.function.ghost.action.txtOn}"
+        },
+        "icon": {
+          "$value": "{interface.function.ghost.action.txtOn}"
+        }
+      },
+      "active": {
+        "background": {
+          "$value": "{interface.function.ghost.active.background}"
+        },
+        "txtOn": {
+          "$value": "{interface.function.ghost.active.txtOn}"
+        },
+        "icon": {
+          "$value": "{interface.function.ghost.active.txtOn}"
+        }
+      }
+    },
+    "disabled": {
+      "background": {
+        "$value": "{interface.function.disabled.normal.background}"
+      },
+      "border": {
+        "$value": "{interface.function.disabled.normal.border}"
+      },
+      "txtOn": {
+        "$value": "{interface.function.disabled.normal.txtOn}"
+      },
+      "icon": {
+        "$value": "{interface.function.disabled.normal.txtOn}"
+      }
+    }
+  },
+  "toast": {
+    "txtOn": {
+      "$value": "{ui.fg.default}"
+    },
+    "shadow": {
+      "color": {
+        "$value": "{ui.shadow.color}"
+      }
+    },
+    "neutral": {
+      "background": {
+        "$value": "{ui.bg.page}"
+      },
+      "border": {
+        "$value": "{ui.border.strong}"
+      },
+      "bar": {
+        "$value": "{ui.fg.default}"
+      },
+      "icon": {
+        "$value": "{ui.fg.default}"
+      }
+    },
+    "success": {
+      "background": {
+        "$value": "{success.behavior.lightest.surface}"
+      },
+      "border": {
+        "$value": "{success.behavior.normal.border}"
+      },
+      "bar": {
+        "$value": "{success.behavior.normal.surface}"
+      },
+      "icon": {
+        "$value": "{success.behavior.normal.txt}"
+      }
+    },
+    "warning": {
+      "background": {
+        "$value": "{warning.behavior.lightest.surface}"
+      },
+      "border": {
+        "$value": "{warning.behavior.normal.border}"
+      },
+      "bar": {
+        "$value": "{warning.behavior.normal.surface}"
+      },
+      "icon": {
+        "$value": "{warning.behavior.normal.txt}"
+      }
+    },
+    "error": {
+      "background": {
+        "$value": "{error.behavior.lightest.surface}"
+      },
+      "border": {
+        "$value": "{error.behavior.normal.border}"
+      },
+      "bar": {
+        "$value": "{error.behavior.normal.surface}"
+      },
+      "icon": {
+        "$value": "{error.behavior.normal.txt}"
+      }
+    },
+    "info": {
+      "background": {
+        "$value": "{info.behavior.lightest.surface}"
+      },
+      "border": {
+        "$value": "{info.behavior.normal.border}"
+      },
+      "bar": {
+        "$value": "{info.behavior.normal.surface}"
+      },
+      "icon": {
+        "$value": "{info.behavior.normal.txt}"
+      }
+    }
+  }
+}
