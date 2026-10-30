@@ -21,18 +21,29 @@ Tema: `data-theme="light|dark"` no `<html>` (sem atributo, segue o sistema). Den
 
 ## Usar como dependência
 
-O pacote publica só os tokens e o CSS dos componentes. Instale fixando a versão por tag:
+O pacote publica os tokens (CSS e JSON DTCG) e o CSS dos componentes.
 
 ```bash
-pnpm add github:lucas-per/uaiui-ds#v0.2.0   # ou npm i
+npm i @uaiui/ds
 ```
 
+O uso por tag do GitHub continua funcionando (`npm i github:lucas-per/uaiui-ds#v0.5.0`). Nesse caso, o nome nos imports é o da chave em `dependencies`: `uaiui-ds` nas tags até a v0.4.0, `@uaiui/ds` a partir da v0.5.0.
+
 ```css
-@import 'uaiui-ds/tokens-wrapper.css';
-@import 'uaiui-ds/components/button.css';
-@import 'uaiui-ds/components/accordion.css';
-@import 'uaiui-ds/components/toast.css';
+@import '@uaiui/ds/tokens-wrapper.css';
+@import '@uaiui/ds/components/button.css';
+@import '@uaiui/ds/components/accordion.css';
+@import '@uaiui/ds/components/toast.css';
 ```
+
+Num bundler (Vite, Astro, webpack), o mesmo import vale em JavaScript:
+
+```js
+import '@uaiui/ds/tokens-wrapper.css';
+import '@uaiui/ds/components/button.css';
+```
+
+Os tokens em JSON (padrão DTCG 2025.10) saem em `@uaiui/ds/tokens/*.json`, e o resolver dos modos em `@uaiui/ds/tokens/uaiui.resolver.json`.
 
 Os tokens valem só dentro do wrapper `.uaiui`; nada vai para o `:root`:
 
@@ -43,7 +54,7 @@ Os tokens valem só dentro do wrapper `.uaiui`; nada vai para o `:root`:
 
 - Tema: `data-uaiui-theme="dark"`. Sem atributo vale o claro, sem seguir `prefers-color-scheme`.
 - Densidade: `data-uaiui-density="standard|compact"`. Sem atributo ou com `comfortable`, vale comfortable.
-- `uaiui-ds/tokens.css` é a versão em `:root` (tema e densidade em `<html>`), usada pelo site de documentação.
+- `@uaiui/ds/tokens.css` é a versão em `:root` (tema e densidade em `<html>`), usada pelo site de documentação.
 - Fontes: os componentes usam `--font-family-label` ("JetBrains Mono", peso `--font-weight-label`) e `--font-family-body` ("DM Sans"). O projeto que consome carrega as duas famílias; o pacote não traz arquivos de fonte.
 - Medidas: os componentes usam rem, então dependem do `font-size` da raiz do site que hospeda. A base de 16 px é o padrão; uma raiz diferente reescala os componentes.
 - `npm run tokens` gera `tokens.css` e `tokens-wrapper.css`. `npm run check` falha se um alias não resolver, se um token não tiver `$type`, se o CSS gerado estiver desatualizado ou se o wrapper tiver seletor fora de `.uaiui`.
