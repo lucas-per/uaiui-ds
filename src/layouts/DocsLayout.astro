@@ -30,7 +30,7 @@ const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
       try {
         var t = localStorage.getItem('uai-theme'), d = localStorage.getItem('uai-density');
         if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-        if (d === 'mobile' || d === 'compact') document.documentElement.dataset.density = d;
+        if (d === 'standard' || d === 'compact') document.documentElement.dataset.density = d;
       } catch (e) {}
     </script>
   </head>

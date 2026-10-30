@@ -46,9 +46,9 @@ const rows = [
   { name: 'role', type: 'status | alert', default: 'status', description: '<code>status</code> em neutral, success e info; <code>alert</code> em warning e error.' },
 ];
 ---
-<DocsLayout title="Toast" description="Aviso curto depois de uma ação ou de um evento; some sozinho.">
+<DocsLayout title="Toast" description="Aviso curto que aparece depois de uma ação ou de um evento: salvou, falhou, nova versão. Não bloqueia a tela.">
   <h1>Toast</h1>
-  <p class="lead">Aviso curto que aparece depois de uma ação ou de um evento e some sozinho: salvou, falhou, nova versão. Não bloqueia a tela.</p>
+  <p class="lead">Aviso curto que aparece depois de uma ação ou de um evento: salvou, falhou, nova versão. Não bloqueia a tela.</p>
 
   <Example code={withAction} column label="Toast com ação" />
   <p>Feche o aviso no X: no exemplo, ele volta depois de 2 segundos.</p>
@@ -78,10 +78,9 @@ const rows = [
   <ul>
     <li><code>role="status"</code> (<code>aria-live="polite"</code>) em neutral, success e info; <code>role="alert"</code> em warning e error.</li>
     <li>Não rouba o foco. A ação precisa ser alcançável pelo teclado.</li>
-    <li>Some sozinho depois de pelo menos 5 s (mais tempo para mensagem longa). Não fecha enquanto o foco ou o ponteiro estiverem sobre ele. Esc fecha o aviso com foco.</li>
-    <li>Com ação, warning ou error, só fecha quando a pessoa fechar.</li>
+    <li>Fica na tela até a pessoa fechar. Fechar sozinho é opcional: depois de pelo menos 5 s (mais tempo para mensagem longa), só em aviso sem ação, nos tons neutral, success e info, e com a mesma informação disponível em outro lugar da tela. Não fecha enquanto o foco ou o ponteiro estiverem sobre ele. Esc fecha o aviso com foco.</li>
     <li>Sempre dá para fechar pelo botão. Nunca use o toast como único lugar de uma informação essencial ou de um erro.</li>
-    <li>Posição: canto inferior, no fim da tela no Desktop; no Mobile, largura total com margem de 16 px. Não cobre a ação principal da página. Vários avisos empilham com 16 px, o mais novo por último.</li>
+    <li>Posição: canto superior, no fim da tela em telas largas; em telas estreitas, no topo, com largura total e margem de 16 px. Não cobre a ação principal da página. Vários avisos empilham com 16 px; o mais novo entra no topo da pilha e os anteriores descem.</li>
     <li>Entrada e saída de 100 ms; sem transição com redução de movimento.</li>
     <li>Com texto muito ampliado ou em tela estreita, o botão de fechar desce para a linha de baixo.</li>
   </ul>

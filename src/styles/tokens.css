@@ -304,7 +304,7 @@
 }
 }
 
-:root[data-density="mobile"] {
+:root[data-density="standard"] {
   --button-padding-x: var(--size-scale-x4);
   --button-padding-y: var(--size-scale-x2);
   --button-gap: var(--size-scale-x3);

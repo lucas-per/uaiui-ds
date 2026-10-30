@@ -17,7 +17,7 @@ As variables do Figma ("UaiUI – Design Tokens") são a fonte de verdade.
 1. `tokens/`: JSON no padrão [Design Tokens 2025.10](https://www.designtokens.org/tr/2025.10/) (DTCG), um arquivo por coleção (`escala`, `dimensoes`, `semantica`, `componente`) e um por modo em `primitivos/` e `densidade/`. `tokens/uaiui.resolver.json` junta os arquivos e define os modos. Até o export do Figma direto para JSON, edite os JSON no repositório.
 2. `npm run tokens` gera `src/styles/tokens.css` e `src/styles/tokens-wrapper.css` (roda sozinho em `dev` e `build`).
 
-Tema: `data-theme="light|dark"` no `<html>` (sem atributo, segue o sistema). Densidade: `data-density="mobile|compact"` (sem atributo, Desktop).
+Tema: `data-theme="light|dark"` no `<html>` (sem atributo, segue o sistema). Densidade: `data-density="standard|compact"` (sem atributo ou com `comfortable`, comfortable).
 
 ## Usar como dependência
 
@@ -42,7 +42,7 @@ Os tokens valem só dentro do wrapper `.uaiui`; nada vai para o `:root`:
 ```
 
 - Tema: `data-uaiui-theme="dark"`. Sem atributo vale o claro, sem seguir `prefers-color-scheme`.
-- Densidade: `data-uaiui-density="mobile|compact"`. Sem atributo, Desktop.
+- Densidade: `data-uaiui-density="standard|compact"`. Sem atributo ou com `comfortable`, vale comfortable.
 - `uaiui-ds/tokens.css` é a versão em `:root` (tema e densidade em `<html>`), usada pelo site de documentação.
 - Fontes: os componentes usam `--font-family-label` ("JetBrains Mono", peso `--font-weight-label`) e `--font-family-body` ("DM Sans"). O projeto que consome carrega as duas famílias; o pacote não traz arquivos de fonte.
 - Medidas: os componentes usam rem, então dependem do `font-size` da raiz do site que hospeda. A base de 16 px é o padrão; uma raiz diferente reescala os componentes.

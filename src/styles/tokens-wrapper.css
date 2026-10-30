@@ -1,5 +1,5 @@
 /* Gerado por scripts/dtcg-to-css.mjs a partir de tokens/uaiui.resolver.json. Não edite à mão. */
-/* Tokens escopados no wrapper .uaiui. Tema: data-uaiui-theme="dark" (padrão: claro). Densidade: data-uaiui-density="mobile|compact" (padrão: Desktop). */
+/* Tokens escopados no wrapper .uaiui. Tema: data-uaiui-theme="dark" (padrão: claro). Densidade: data-uaiui-density="standard|compact" (padrão: comfortable). */
 
 .uaiui {
   --size-scale-none: 0;
@@ -253,7 +253,7 @@
   --info-palette-txt-100: #9ac9fa;
 }
 
-.uaiui[data-uaiui-density="mobile"] {
+.uaiui[data-uaiui-density="standard"] {
   --button-padding-x: var(--size-scale-x4);
   --button-padding-y: var(--size-scale-x2);
   --button-gap: var(--size-scale-x3);

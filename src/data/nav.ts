@@ -14,7 +14,7 @@ export const nav: NavGroup[] = [
     items: [
       { title: 'Accordion', href: '/docs/components/accordion', description: 'Esconde conteúdo secundário que a pessoa consulta sob demanda.' },
       { title: 'Button', href: '/docs/components/button', description: 'Dispara uma ação. Três tipos (filled, outlined, ghost) e três estilos.' },
-      { title: 'Toast', href: '/docs/components/toast', description: 'Aviso curto depois de uma ação ou de um evento; some sozinho.', status: 'novo' },
+      { title: 'Toast', href: '/docs/components/toast', description: 'Aviso curto que aparece depois de uma ação ou de um evento: salvou, falhou, nova versão. Não bloqueia a tela.', status: 'novo' },
     ],
   },
 ];

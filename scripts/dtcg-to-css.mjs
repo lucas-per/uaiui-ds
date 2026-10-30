@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 // O contexto padrão não gera bloco: vale sem atributo e também com o atributo explícito, porque nenhuma regra casa.
 const ATTRS = {
   tema: { attr: 'theme', values: { claro: 'light', escuro: 'dark' } },
-  densidade: { attr: 'density', values: { comfortable: 'comfortable', standard: 'mobile', compact: 'compact' } },
+  densidade: { attr: 'density', values: { comfortable: 'comfortable', standard: 'standard', compact: 'compact' } },
 };
 
 // Medidas saem em rem (px ÷ 16) para acompanharem o tamanho de texto do usuário.
@@ -217,7 +217,7 @@ export function build(read, resolverFile = 'uaiui.resolver.json') {
   const W = '.uaiui';
   const wrapper = [
     header,
-    '/* Tokens escopados no wrapper .uaiui. Tema: data-uaiui-theme="dark" (padrão: claro). Densidade: data-uaiui-density="mobile|compact" (padrão: Desktop). */\n',
+    '/* Tokens escopados no wrapper .uaiui. Tema: data-uaiui-theme="dark" (padrão: claro). Densidade: data-uaiui-density="standard|compact" (padrão: comfortable). */\n',
     block(W, rootLines),
     ...variants('tema').map(({ value, lines }) => block(`${W}[data-uaiui-theme="${value}"]`, lines)),
     ...variants('densidade').map(({ value, lines }) => block(`${W}[data-uaiui-density="${value}"]`, lines)),
