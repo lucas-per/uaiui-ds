@@ -17,7 +17,7 @@ const sample = ['--ui-bg-page', '--ui-bg-panel', '--ui-fg-default', '--ui-fg-mut
       <tr><td>Primitivos</td><td>Claro, Escuro</td><td>Paletas por família, papel (surface, txtOn, border, txt) e nível (20 a 180).</td></tr>
       <tr><td>Semântica</td><td>Positiva</td><td>Papéis de interface e níveis de comportamento (lightest, active, normal, action, pressed, darkest).</td></tr>
       <tr><td>Componente</td><td>Valor</td><td>Um token por parte do componente, apontando para a semântica.</td></tr>
-      <tr><td>Densidade</td><td>Desktop, Mobile, Compacto</td><td>Todos os tamanhos dos componentes.</td></tr>
+      <tr><td>Densidade</td><td>comfortable, standard, compact</td><td>Todos os tamanhos dos componentes.</td></tr>
     </tbody>
   </table></div>
   <p>As propriedades CSS seguem o nome da variable com barras trocadas por hífens: <code>button/padding-x</code> vira <code>--button-padding-x</code>.</p>
@@ -29,15 +29,15 @@ const sample = ['--ui-bg-page', '--ui-bg-panel', '--ui-fg-default', '--ui-fg-mut
 <html data-theme="dark" data-density="compact">`} />
   <ul>
     <li><code>data-theme</code>: <code>light</code> ou <code>dark</code>. Sem o atributo, vale <code>prefers-color-scheme</code>.</li>
-    <li><code>data-density</code>: <code>mobile</code> ou <code>compact</code>. Sem o atributo, vale Desktop.</li>
+    <li><code>data-density</code>: <code>standard</code> ou <code>compact</code>. Sem o atributo (ou com <code>comfortable</code>), vale comfortable.</li>
   </ul>
 
   <h2 id="atualizar">Atualizar a partir do Figma</h2>
   <ol>
-    <li>Exporte as variables para <code>tokens/figma-variables.txt</code> (uma linha por variable, um valor por modo).</li>
-    <li>Rode <code>npm run tokens</code>. O script gera <code>src/styles/tokens.css</code>.</li>
+    <li>Os tokens ficam em <code>tokens/</code>, em JSON no padrão <a href="https://www.designtokens.org/tr/2025.10/">Design Tokens 2025.10</a>: um arquivo por coleção e um por modo em <code>primitivos/</code> e <code>densidade/</code>. O <code>tokens/uaiui.resolver.json</code> junta os arquivos e define os modos. Até o export do Figma direto para JSON, edite os JSON no repositório.</li>
+    <li>Rode <code>npm run tokens</code>. O script gera <code>src/styles/tokens.css</code>. O <code>npm run check</code> falha se um alias não resolver ou se um token não tiver <code>$type</code>.</li>
   </ol>
-  <div class="callout"><p>Só entram no arquivo os tokens que os componentes publicados usam. Ao documentar um componente novo, acrescente as variables dele ao arquivo de exportação.</p></div>
+  <div class="callout"><p>Só entram no arquivo os tokens que os componentes publicados usam. Ao documentar um componente novo, acrescente os tokens dele aos JSON em <code>tokens/</code>.</p></div>
 
   <h2 id="amostra">Amostra de cores</h2>
   <p>Mude o tema no cabeçalho para ver as cores trocarem.</p>

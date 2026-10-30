@@ -16,9 +16,10 @@ if (themeSel) {
   });
 }
 if (densSel) {
-  densSel.value = store.get('uai-density') ?? 'desktop';
+  const saved = store.get('uai-density');
+  densSel.value = saved === 'standard' || saved === 'compact' ? saved : 'comfortable';
   densSel.addEventListener('change', () => {
-    if (densSel.value === 'desktop') { delete root.dataset.density; store.del('uai-density'); }
+    if (densSel.value === 'comfortable') { delete root.dataset.density; store.del('uai-density'); }
     else { root.dataset.density = densSel.value; store.set('uai-density', densSel.value); }
   });
 }

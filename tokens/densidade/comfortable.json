@@ -1,0 +1,122 @@
+{
+  "$description": "Densidade, modo comfortable (padrão). Coleção \"Densidade\" do Figma.",
+  "$type": "dimension",
+  "button": {
+    "padding-x": {
+      "$value": "{size.scale-x6}"
+    },
+    "padding-y": {
+      "$value": "{size.scale-x3}"
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "min-height": {
+      "$value": { "value": 54, "unit": "px" }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 20, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "icon": {
+      "size": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "icon-button": {
+    "size": {
+      "$value": "{button.min-height}"
+    },
+    "icon-size": {
+      "$value": "{button.icon.size}"
+    },
+    "icon": {
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    }
+  },
+  "accordion": {
+    "header": {
+      "padding-x": {
+        "$value": "{button.padding-x}"
+      },
+      "gap": {
+        "$value": "{button.gap}"
+      },
+      "min-height": {
+        "$value": "{button.min-height}"
+      }
+    },
+    "title": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "icon": {
+      "size": {
+        "$value": "{button.icon.size}"
+      }
+    },
+    "chevron": {
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    },
+    "panel": {
+      "padding-x": {
+        "$value": "{button.padding-x}"
+      },
+      "padding-y": {
+        "$value": "{size.scale-x4}"
+      },
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "toast": {
+    "width": {
+      "$value": { "value": 400, "unit": "px" }
+    },
+    "padding": {
+      "$value": "{size.scale-x4}"
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "content-gap": {
+      "$value": "{size.scale-base}"
+    },
+    "bar": {
+      "width": {
+        "$value": "{size.scale-x2}"
+      }
+    },
+    "icon-size": {
+      "$value": { "value": 24, "unit": "px" }
+    },
+    "font-size": {
+      "$value": { "value": 16, "unit": "px" }
+    },
+    "line-height": {
+      "$value": { "value": 24, "unit": "px" }
+    },
+    "icon": {
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    }
+  }
+}

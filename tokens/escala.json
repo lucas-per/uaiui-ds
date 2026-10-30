@@ -1,0 +1,30 @@
+{
+  "$description": "Escala: medidas base em px. Coleção \"Escala\" do Figma, modo Valor.",
+  "$type": "dimension",
+  "size": {
+    "scale-none": {
+      "$value": { "value": 0, "unit": "px" }
+    },
+    "scale-half": {
+      "$value": { "value": 2, "unit": "px" }
+    },
+    "scale-base": {
+      "$value": { "value": 4, "unit": "px" }
+    },
+    "scale-x2": {
+      "$value": { "value": 8, "unit": "px" }
+    },
+    "scale-x3": {
+      "$value": { "value": 12, "unit": "px" }
+    },
+    "scale-x4": {
+      "$value": { "value": 16, "unit": "px" }
+    },
+    "scale-x6": {
+      "$value": { "value": 24, "unit": "px" }
+    },
+    "scale-x11": {
+      "$value": { "value": 44, "unit": "px" }
+    }
+  }
+}

@@ -22,9 +22,6 @@ const withIcon = `<button class="uai-button" data-type="filled" data-style="prim
 const iconBtn = `<button class="uai-button uai-icon-button" data-type="outlined" aria-label="Fechar janela">
   ${svg('x')}
 </button>
-<button class="uai-button uai-icon-button" data-type="filled" data-style="danger" aria-label="Excluir item">
-  ${svg('x')}
-</button>
 <button class="uai-button uai-icon-button" data-type="ghost" aria-label="Fechar aviso">
   ${svg('x')}
 </button>`;
@@ -57,6 +54,7 @@ const rows = [
   <Example title="Desabilitado" description="Sem sombra, em cinza, e o cursor indica que não dá para clicar." code={disabled} />
   <Example title="Com ícone" description="O ícone herda a cor do texto e muda de tamanho com a densidade (24, 24 e 20)." code={withIcon} />
   <Example title="Botão de ícone" description="Quadrado, com a altura do botão (54, 46 e 44). O rótulo vai em aria-label e o ícone é aria-hidden." code={iconBtn} />
+  <p>O icon button não tem danger: ação destrutiva precisa de texto; use o button com <code>data-style="danger"</code>.</p>
 
   <h2 id="props">Props</h2>
   <PropsTable rows={rows} caption="Props do button" />
