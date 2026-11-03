@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import type { Config } from '../src/lib/config.ts';
 import { runExport, type Generator } from '../src/lib/pipeline.ts';
-import { counts } from '../src/lib/report.ts';
+import { byteLength, counts, prBody } from '../src/lib/report.ts';
 import { flatten } from '../src/lib/tree.ts';
 import { checkSnapshot, type Snapshot } from '../src/lib/snapshot.ts';
 import { CONFIG_PATH, generator, repoConfig, repoFiles } from './helpers.ts';
@@ -80,7 +80,7 @@ test('snapshot real contra a main do repositório', { skip: skipReal }, () => {
   assert.equal(changed.length, 18);
   for (const id of changed) assert.match(id, /^interface\.function\.(primary|secondary|error)\.(normal|action|active)\.(background|txtOn)$/);
   assert.deepEqual(r.sources, { tabela: 3, escopo: 959, alias: 0, main: 8 });
-  assert.ok(r.warnings.some((w) => w.includes('os 195 valores do modo são iguais (#ffffff)')), r.warnings.join('\n'));
+  assert.ok(r.warnings.includes('Coleção "Semântica": o modo "Negativa" não foi exportado. No Figma, os 195 valores dele são placeholders (#ffffff). Foi exportado só o modo "Positiva".'), r.warnings.join('\n'));
 });
 
 test('snapshot real: as 10 variables sem escopo ficam com o $type da main, sem bloquear', { skip: skipReal }, () => {
@@ -112,16 +112,61 @@ test('snapshot real: as 10 variables sem escopo ficam com o $type da main, sem b
   for (const name of empty) assert.ok(!r.errors.some((e) => e.startsWith(name)), name);
 });
 
-test('snapshot real sem as 6 variables em colisão: o validador passa e o CSS sai', { skip: skipReal }, () => {
+const withoutCollisions = () => {
   const snapshot = realSnapshot();
   const drop = new Set(snapshot.variables.filter((v) => COLLISIONS.some(([token]) => v.name === token)).map((v) => v.id));
   assert.equal(drop.size, 6);
   snapshot.variables = snapshot.variables.filter((v) => !drop.has(v.id));
   for (const c of snapshot.collections) c.variableIds = c.variableIds.filter((id) => !drop.has(id));
+  return snapshot;
+};
+
+test('snapshot real sem as 6 variables em colisão: o validador passa e o CSS sai', { skip: skipReal }, () => {
+  const snapshot = withoutCollisions();
   const config = repoConfig();
   const r = runExport({ snapshot, config, configPath: CONFIG_PATH, main: repoFiles(config), generator });
   assert.deepEqual(r.errors, []);
   assert.deepEqual(counts(r.changes), { added: 765, changed: 18, removed: 0 });
   assert.equal(r.files.size, 9 + Object.keys(config.outputs).length);
   assert.match(r.files.get(config.outputs.root)!, /--modal-scrim-opacity: 0\.6;/);
+});
+
+test('snapshot real sem as colisões: o corpo da PR traz resumo, Avisos, Arquivos e Alterados inteiros e só corta Adicionados', { skip: skipReal }, () => {
+  const config = repoConfig();
+  const r = runExport({ snapshot: withoutCollisions(), config, configPath: CONFIG_PATH, main: repoFiles(config), generator, base: { branch: 'main', sha: '07330af3f3999f84c8307e163b96e2712a9d7717' } });
+  assert.deepEqual(r.errors, []);
+  // Pré-condição: o relatório inteiro não cabe.
+  assert.ok(byteLength(r.report) > 60000, `${byteLength(r.report)} bytes`);
+  const out = prBody(r.reportInput);
+  assert.ok(out.ok);
+  const body = out.body;
+  assert.ok(byteLength(body) <= 60000, `${byteLength(body)} bytes`);
+  // Mesma ordem de seções no relatório e no corpo.
+  const headings = (t: string) => t.split('\n').filter((l) => l.startsWith('#'));
+  const order = ['## Tokens exportados do Figma', '### Avisos', '### Arquivos', '### Alterados (18)', '### Adicionados (765)'];
+  assert.deepEqual(headings(r.report), order);
+  assert.deepEqual(headings(body), order);
+  // Resumo, Avisos, Arquivos e os 18 alterados saem inteiros: o corpo começa com o relatório até a lista de Adicionados.
+  const fixedAndChanged = r.report.slice(0, r.report.indexOf('### Adicionados'));
+  assert.ok(body.startsWith(fixedAndChanged));
+  const section = (t: string, h: string) => t.slice(t.indexOf(h), t.indexOf('\n#', t.indexOf(h) + 1));
+  assert.equal(section(body, '### Avisos'), section(r.report, '### Avisos'));
+  assert.equal(section(body, '### Arquivos'), section(r.report, '### Arquivos'));
+  assert.equal(section(body, '### Arquivos').split('\n').filter((l) => l.startsWith('- ')).length, r.changedFiles.length);
+  assert.ok(section(body, '### Arquivos').includes('- `src/styles/tokens.css`'));
+  assert.equal(section(body, '### Alterados').split('\n').filter((l) => l.startsWith('- ')).length, 18);
+  // O corte só atinge a lista de Adicionados: os primeiros itens dela, depois "+N" e a linha de corte com o N real.
+  const reportItems = section(r.report + '\n#', '### Adicionados').split('\n').filter((l) => l.startsWith('- '));
+  assert.equal(reportItems.length, 765);
+  const rest = body.slice(fixedAndChanged.length).split('\n');
+  assert.deepEqual(rest.slice(0, 2), ['### Adicionados (765)', '']);
+  const shown = rest.slice(2).filter((l) => l.startsWith('- `'));
+  assert.deepEqual(shown, reportItems.slice(0, shown.length));
+  const omitted = 765 - shown.length;
+  assert.ok(omitted > 0);
+  assert.equal(out.omitted, omitted);
+  assert.deepEqual(rest.slice(2 + shown.length), [
+    `- … +${omitted}`, '',
+    `Corpo cortado pelo limite do GitHub (${omitted} itens omitidos). A lista completa está nos arquivos da PR e na tela do plugin.`, '',
+  ]);
 });

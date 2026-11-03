@@ -5,7 +5,7 @@ import { checkAgainstResolver, targets, type Config, type Target } from './confi
 import { colorValue, convertValue } from './convert.ts';
 import { diffTrees, type Change } from './diff.ts';
 import { serialize } from './format.ts';
-import { report } from './report.ts';
+import { report, type ReportInput } from './report.ts';
 import { isAlias, isRGBA, type Snapshot, type SnapshotCollection, type SnapshotVariable } from './snapshot.ts';
 import { buildTree, flatten, type NewToken } from './tree.ts';
 import { ALLOWED, resolveTypes, suggestType, type DtcgType, type TypeSource } from './types.ts';
@@ -50,6 +50,8 @@ export interface ExportResult {
   sources: Record<TypeSource, number>;
   variables: number;
   report: string;
+  /** Entrada do relatório, para montar o corpo da PR (prBody). */
+  reportInput: ReportInput;
   /** Conteúdo do .zip: a pasta de tokens inteira (main + gerados) e as saídas do gerador. */
   zipFiles(): Record<string, string>;
 }
@@ -78,8 +80,9 @@ export function runExport(input: ExportInput): ExportResult {
 
   const finish = (): ExportResult => {
     const changedFiles = [...files].filter(([p, text]) => main.get(p) !== text).map(([p]) => p);
-    const result: ExportResult = {
-      errors, warnings, unresolved, files, changedFiles, changes, sources, variables: variableCount, report: '',
+    const reportInput: ReportInput = { fileName: snapshot.fileName, base: input.base ?? null, changes, sources, warnings, changedFiles };
+    return {
+      errors, warnings, unresolved, files, changedFiles, changes, sources, variables: variableCount, report: report(reportInput), reportInput,
       zipFiles: () => {
         const out: Record<string, string> = {};
         for (const [p, text] of main) if (p.startsWith(dir + '/')) out[p] = text;
@@ -87,8 +90,6 @@ export function runExport(input: ExportInput): ExportResult {
         return out;
       },
     };
-    result.report = report({ fileName: snapshot.fileName, base: input.base ?? null, changes, sources, warnings, changedFiles });
-    return result;
   };
 
   // 1. Arquivo, coleções e modos.
@@ -222,18 +223,25 @@ export function runExport(input: ExportInput): ExportResult {
   }
 
   // 6. Modos ignorados.
+  const quoteList = (xs: string[]) => xs.map((x) => `"${x}"`).reduce((acc, x, i, all) => (i === 0 ? x : `${acc}${i === all.length - 1 ? ' e ' : ', '}${x}`), '');
   for (const [name, col] of Object.entries(config.collections)) {
     const c = cols.get(name)!;
-    const principal = Object.keys(col.modes)[0];
+    const exported = Object.keys(col.modes);
+    const principal = exported[0];
+    const exportedText = exported.length === 1 ? `Foi exportado só o modo "${principal}".` : `Foram exportados os modos ${quoteList(exported)}.`;
     for (const [mode, why] of Object.entries(col.ignoreModes ?? {})) {
       const a = modeId(name, principal), b = modeId(name, mode);
       const inCol = vars.filter((v) => v.collectionId === c.id);
+      const total = inCol.length;
       const diff = inCol.filter((v) => JSON.stringify(v.valuesByMode[a]) !== JSON.stringify(v.valuesByMode[b])).length;
       const distinct = new Set(inCol.map((v) => JSON.stringify(v.valuesByMode[b])));
-      // Todos os valores iguais (ex.: tudo #ffffff) costuma ser placeholder, não um modo de verdade.
-      const same = inCol.length > 1 && distinct.size === 1 ? `; os ${inCol.length} valores do modo são iguais (${describe(inCol[0].valuesByMode[b])})` : '';
-      const reason = why.replace(/[.\s]+$/, '');
-      warnings.push(`Coleção "${name}": modo "${mode}" ignorado (${reason}).${diff ? ` Atenção: ${diff} valor(es) diferente(s) do modo "${principal}"${same}.` : ''}`);
+      const reason = `Motivo na config: "${why.replace(/[.\s]+$/, '')}".`;
+      let detail: string;
+      if (!diff) detail = `${reason} ${total === 1 ? 'O valor dele é igual ao' : 'Os valores dele são iguais aos'} do modo "${principal}".`;
+      // Todos os valores iguais entre si e diferentes do modo principal (ex.: tudo #ffffff): placeholder, não um modo de verdade.
+      else if (total > 1 && distinct.size === 1) detail = `No Figma, os ${total} valores dele são placeholders (${describe(inCol[0].valuesByMode[b])}).`;
+      else detail = `${reason} No Figma, ${diff} dos ${total} valores dele ${diff === 1 ? 'difere' : 'diferem'} do modo "${principal}".`;
+      warnings.push(`Coleção "${name}": o modo "${mode}" não foi exportado. ${detail} ${exportedText}`);
     }
   }
   const removed = new Set(changes.filter((c) => c.kind === 'removed').map((c) => c.id)).size;

@@ -7,7 +7,7 @@ import { show } from './lib/diff.ts';
 import { branchName, createGitHub } from './lib/github.ts';
 import { readMain, type MainState } from './lib/main.ts';
 import { runExport, type ExportResult } from './lib/pipeline.ts';
-import { byToken, counts, fitBody } from './lib/report.ts';
+import { byToken, counts, prBody } from './lib/report.ts';
 import type { Snapshot } from './lib/snapshot.ts';
 import { SOURCES } from './lib/types.ts';
 import { DEFAULT_SETTINGS, type Settings, type ToCode, type ToUi } from './messages.ts';
@@ -233,13 +233,15 @@ function updateButtons() {
   const r = result;
   const ok = !!r && !busy && !r.errors.length;
   const changed = !!r && r.changedFiles.length > 0;
-  $<HTMLButtonElement>('pr').disabled = !(ok && changed && token);
+  const body = r && ok && changed ? prBody(r.reportInput) : null;
+  $<HTMLButtonElement>('pr').disabled = !(ok && changed && token && body?.ok);
   $<HTMLButtonElement>('zip').disabled = !ok;
   $<HTMLButtonElement>('read').disabled = busy;
   $('footerHint').textContent = !r ? 'Leia o Figma e a branch base para ver o diff.'
     : r.errors.length ? `${r.errors.length} erro(s): os botões ficam desativados.`
       : !changed ? 'Sem mudança em relação à branch base.'
-        : !token ? 'Salve um token para abrir a PR.' : `${r.changedFiles.length} arquivo(s) no commit.`;
+        : body && !body.ok ? body.error
+          : !token ? 'Salve um token para abrir a PR.' : `${r.changedFiles.length} arquivo(s) no commit.`;
 }
 
 $('zip').onclick = () => {
@@ -258,6 +260,11 @@ $('pr').onclick = async () => {
     setStatus(`Os campos mudaram desde a leitura (${s.owner}/${s.repo}@${s.base}). Leia de novo antes de abrir a PR.`);
     return;
   }
+  const body = prBody(r.reportInput);
+  if (!body.ok) {
+    setStatus(body.error);
+    return;
+  }
   busy = true;
   updateButtons();
   try {
@@ -274,7 +281,7 @@ $('pr').onclick = async () => {
       files: Object.fromEntries(r.changedFiles.map((p) => [p, r.files.get(p)!])),
       message: `Tokens exportados do Figma\n\nArquivo: ${snapshot.fileName}\n${summary}`,
       title: `Tokens do Figma (${branch.slice('tokens/figma-'.length)})`,
-      body: fitBody(r.report),
+      body: body.body,
     });
     setStatus('');
     $('status').append('PR aberta: ', el('a', { href: pr.url, textContent: pr.url, onclick: (e: Event) => { e.preventDefault(); post({ type: 'open', url: pr.url }); } }));

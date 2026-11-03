@@ -166,7 +166,7 @@ test('modo ignorado com valores diferentes avisa a contagem; arquivo do Figma co
   sem[1].valuesByMode[neg] = { r: 1, g: 1, b: 1, a: 1 };
   const r = run(s);
   assert.deepEqual(r.errors, []);
-  assert.ok(r.warnings.some((w) => /modo "Negativa" ignorado .*Atenção: 2 valor\(es\) diferente\(s\) do modo "Positiva"\./.test(w)), r.warnings.join('\n'));
+  assert.ok(r.warnings.includes(`Coleção "Semântica": o modo "Negativa" não foi exportado. Motivo na config: "Não exportado: no Figma o modo Negativa só tem placeholders (#ffffff); Semântica fica no set base com o modo Positiva". No Figma, 2 dos ${sem.length} valores dele diferem do modo "Positiva". Foi exportado só o modo "Positiva".`), r.warnings.join('\n'));
   assert.ok(r.warnings.includes('O arquivo aberto é "Cópia de tokens", e a config espera "UaiUI – Design Tokens".'));
 });
 
@@ -197,7 +197,7 @@ test('number (escopo OPACITY) passa pelo validador e sai sem unidade no CSS', ()
   assert.match(r2.files.get('src/styles/tokens-wrapper.css')!, /\n {2}--modal-scrim-opacity: 0\.6;\n/);
 });
 
-test('modo ignorado só com placeholder: o aviso conta os diferentes e diz que todos os valores são iguais', () => {
+test('modo ignorado só com placeholder: o aviso diz que os valores são placeholders, sem o motivo da config', () => {
   const s = snapshotFromRepo(config, main);
   const neg = modeOf(s, 'Semântica', 'Negativa');
   const sem = s.variables.filter((v) => v.collectionId === collection(s, 'Semântica').id);
@@ -205,6 +205,32 @@ test('modo ignorado só com placeholder: o aviso conta os diferentes e diz que t
   const r = run(s);
   assert.deepEqual(r.errors, []);
   const w = r.warnings.find((x) => x.startsWith('Coleção "Semântica"'))!;
-  assert.match(w, /^Coleção "Semântica": modo "Negativa" ignorado \(Não exportado: no Figma o modo Negativa só tem placeholders \(#ffffff\); Semântica fica no set base com o modo Positiva\)\. Atenção: \d+ valor\(es\) diferente\(s\) do modo "Positiva"; os \d+ valores do modo são iguais \(#ffffff\)\.$/);
-  assert.match(w, new RegExp(`os ${sem.length} valores`));
+  assert.equal(w, `Coleção "Semântica": o modo "Negativa" não foi exportado. No Figma, os ${sem.length} valores dele são placeholders (#ffffff). Foi exportado só o modo "Positiva".`);
+});
+
+test('modo ignorado numa coleção com 3 modos: lista os modos exportados e usa o singular quando 1 valor difere', () => {
+  const modes = [{ modeId: 'm1', name: 'Confortável' }, { modeId: 'm2', name: 'Padrão' }, { modeId: 'm3', name: 'Compacto' }];
+  const v = (id: string, name: string, values: number[]): SnapshotVariable => ({
+    id, name, collectionId: 'c1', resolvedType: 'FLOAT', scopes: ['GAP'], description: '',
+    valuesByMode: Object.fromEntries(modes.map((m, i) => [m.modeId, values[i]])),
+  });
+  const snapshot: Snapshot = {
+    format: 'figma-variables-snapshot', version: 1, fileName: 'F', exportedAt: '2026-11-03T00:00:00.000Z',
+    collections: [{ id: 'c1', name: 'Densidade', defaultModeId: 'm1', modes, variableIds: ['v1', 'v2', 'v3'] }],
+    variables: [v('v1', 'gap/sm', [8, 6, 8]), v('v2', 'gap/md', [16, 12, 16]), v('v3', 'gap/lg', [24, 20, 30])],
+    external: [],
+  };
+  const cfg = {
+    version: 1, tokensDir: 't', resolver: 'r.json', outputs: { css: 'o.css' }, units: { dimension: 'px', duration: 'ms' },
+    collections: { Densidade: { folder: 'd', modifier: 'densidade', modes: { 'Confortável': 'confortavel', 'Padrão': 'padrao' }, ignoreModes: { Compacto: 'Ainda em revisão' } } },
+  } as unknown as typeof config;
+  const resolver = { version: '2025.10', modifiers: { densidade: { contexts: { confortavel: [{ $ref: 'd/confortavel.json' }], padrao: [{ $ref: 'd/padrao.json' }] }, default: 'confortavel' } } };
+  const fake = { validate: () => ({ errors: [], model: 1 }), toCss: () => ({ css: '' }) };
+  const r = runExport({ snapshot, config: cfg, configPath: 'c.json', main: new Map([['t/r.json', JSON.stringify(resolver)]]), generator: fake });
+  assert.deepEqual(r.errors, []);
+  assert.deepEqual(r.warnings, ['Coleção "Densidade": o modo "Compacto" não foi exportado. Motivo na config: "Ainda em revisão". No Figma, 1 dos 3 valores dele difere do modo "Confortável". Foram exportados os modos "Confortável" e "Padrão".']);
+  // Com 2 valores diferentes do principal, o plural.
+  snapshot.variables[1].valuesByMode.m3 = 10;
+  const r2 = runExport({ snapshot, config: cfg, configPath: 'c.json', main: new Map([['t/r.json', JSON.stringify(resolver)]]), generator: fake });
+  assert.deepEqual(r2.warnings, ['Coleção "Densidade": o modo "Compacto" não foi exportado. Motivo na config: "Ainda em revisão". No Figma, 2 dos 3 valores dele diferem do modo "Confortável". Foram exportados os modos "Confortável" e "Padrão".']);
 });

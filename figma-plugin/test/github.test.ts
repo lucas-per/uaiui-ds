@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { branchName, createGitHub } from '../src/lib/github.ts';
 import { readMain } from '../src/lib/main.ts';
-import { fitBody } from '../src/lib/report.ts';
+import type { Change } from '../src/lib/diff.ts';
+import { byteLength, prBody, report, type ReportInput } from '../src/lib/report.ts';
 import { CONFIG_PATH, repoFiles } from './helpers.ts';
 
 const TOKEN = 'github_pat_TESTE123segredo';
@@ -120,10 +121,34 @@ test('branch que já existe (422) vira erro, sem tentar outra coisa', async () =
   assert.equal(calls.length, 3);
 });
 
+const added = (n: number): Change[] => Array.from({ length: n }, (_, i) => ({
+  id: `token.${i}`, collection: 'C', mode: null, file: 'tokens/c.json', kind: 'added' as const,
+  after: { type: 'dimension', value: { value: i, unit: 'px' } },
+}));
+const reportInput = (changes: Change[], warnings: string[] = []): ReportInput => ({
+  fileName: 'Arquivo', base: null, changes, sources: { tabela: 0, escopo: changes.length, alias: 0, main: 0 }, warnings, changedFiles: ['tokens/c.json'],
+});
+
 test('corpo da PR cabe no limite do GitHub', () => {
-  const body = Array.from({ length: 5000 }, (_, i) => `- \`token.${i}\` adicionado com um valor razoavelmente comprido`).join('\n');
-  const out = fitBody(body);
-  assert.ok(out.length <= 60000);
-  assert.match(out, /relatório cortado: \d+ linhas omitidas/);
-  assert.equal(fitBody('curto'), 'curto');
+  const input = reportInput(added(5000));
+  assert.ok(byteLength(report(input)) > 60000);
+  const out = prBody(input);
+  assert.ok(out.ok);
+  assert.ok(byteLength(out.body) <= 60000);
+  const shown = out.body.split('\n').filter((l) => l.startsWith('- `token.')).length;
+  assert.equal(out.omitted, 5000 - shown);
+  assert.ok(out.body.endsWith(`- … +${5000 - shown}\n\nCorpo cortado pelo limite do GitHub (${5000 - shown} itens omitidos). A lista completa está nos arquivos da PR e na tela do plugin.\n`));
+  // Relatório que cabe sai inteiro, igual ao report().
+  const short = reportInput(added(3));
+  assert.deepEqual(prBody(short), { ok: true, body: report(short), omitted: 0 });
+});
+
+test('corpo da PR: se o resumo, os Avisos e os Arquivos sozinhos passam do limite, recusa abrir a PR e explica', () => {
+  const warnings = Array.from({ length: 700 }, (_, i) => `Aviso ${i}: ${'texto comprido '.repeat(6)}`);
+  const input = reportInput(added(10), warnings);
+  const out = prBody(input);
+  assert.equal(out.ok, false);
+  const fixed = byteLength(report(input).split('### Adicionados')[0].replace(/\n$/, ''));
+  assert.ok(fixed > 60000);
+  assert.deepEqual(out, { ok: false, error: `Não dá para abrir a PR: o resumo, os avisos e a lista de arquivos ocupam ${String(fixed).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} bytes, e o corpo da PR tem limite de 60.000 bytes. Esse bloco não é cortado, para a PR não sair sem os avisos. Use "Baixar .zip" ou reduza os avisos.` });
 });

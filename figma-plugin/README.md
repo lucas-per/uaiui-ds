@@ -37,6 +37,7 @@ O `id` do manifest é um placeholder (`0000000000000000000`), o que basta para p
    - **Avisos**: modo ignorado, coleção fora da config, tokens removidos e nome do arquivo diferente do esperado.
    - **Diff**: adicionados, alterados (antes → depois) e removidos, por token e por modo.
 4. Com erro, **Abrir PR** e **Baixar .zip** ficam desativados. Antes de abrir a PR, o plugin confere se a branch base continua no mesmo commit da leitura. Se ela mudou, o plugin pede para ler de novo.
+5. O corpo da PR traz, nesta ordem, o resumo, os avisos, os arquivos e as listas de alterados, removidos e adicionados. Acima de 60.000 bytes (UTF-8), só as listas são cortadas, com "+N" e uma linha avisando o corte. Se nem o resumo com avisos e arquivos couber, o plugin não abre a PR e explica o motivo.
 
 **Baixar snapshot** salva o JSON bruto das coleções, modos e variables, descrito abaixo. Ele não usa a rede e serve de caso de teste.
 
