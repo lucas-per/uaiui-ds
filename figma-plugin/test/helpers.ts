@@ -35,6 +35,28 @@ export function repoFiles(config = repoConfig()): Map<string, string> {
   return files;
 }
 
+/**
+ * LINHA DE BASE CONGELADA: arquivo de referência test/fixtures/baseline-main-39a38e2.json, com os
+ * tokens/*.json, o resolver e os dois CSS (src/styles/tokens.css e tokens-wrapper.css) do commit 39a38e2,
+ * a main antes da primeira sincronização com o Figma. Os testes que precisam de uma "main" usam esta linha
+ * de base, e não o tokens/ do working tree, para continuarem valendo depois que o tokens/ mudar.
+ *
+ * Para regerar (só de propósito), a partir de um commit <c> escolhido:
+ *   node -e 'const {execSync:x}=require("child_process"); const o={};
+ *     for (const f of x("git ls-tree -r --name-only <c> tokens src/styles/tokens.css src/styles/tokens-wrapper.css",{encoding:"utf8"}).trim().split("\n").sort())
+ *       o[f]=x("git show <c>:"+f,{encoding:"utf8"});
+ *     require("fs").writeFileSync("figma-plugin/test/fixtures/baseline-main-39a38e2.json",JSON.stringify(o,null,1)+"\n")'
+ * e depois atualize, conscientemente, BASELINE_SHA256 e os dois hashes de CSS no teste de integridade
+ * (test/real-sem-colisoes.test.ts). Mudar o gerador de CSS de propósito também exige regerar a baseline:
+ * o CSS dela é a saída do gerador daquele commit.
+ */
+export const BASELINE_SHA256 = 'cbab683cfa3edf8a85323e80cd4e49b7a34e7a784cb767e6848154a1f795a147';
+export function baselineFiles(): Map<string, string> {
+  const files = new Map(Object.entries(JSON.parse(readFileSync(new URL('./fixtures/baseline-main-39a38e2.json', import.meta.url), 'utf8')) as Record<string, string>));
+  files.set(CONFIG_PATH, readFileSync(join(REPO, CONFIG_PATH), 'utf8'));
+  return files;
+}
+
 /** Hex → componente como o Figma guarda (float32 de byte/255). */
 const channel = (hex: string, i: number) => Math.fround(parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16) / 255);
 

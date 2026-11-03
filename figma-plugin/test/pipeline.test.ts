@@ -5,10 +5,10 @@ import { test } from 'node:test';
 import { runExport, type ExportInput } from '../src/lib/pipeline.ts';
 import { counts } from '../src/lib/report.ts';
 import type { Snapshot, SnapshotVariable } from '../src/lib/snapshot.ts';
-import { CONFIG_PATH, collection, generator, modeOf, repoConfig, repoFiles, snapshotFromRepo, variable } from './helpers.ts';
+import { CONFIG_PATH, baselineFiles, collection, generator, modeOf, repoConfig, snapshotFromRepo, variable } from './helpers.ts';
 
 const config = repoConfig();
-const main = repoFiles(config);
+const main = baselineFiles();
 const run = (snapshot: Snapshot, extra: Partial<ExportInput> = {}) =>
   runExport({ snapshot, config, configPath: CONFIG_PATH, main, generator, base: { branch: 'main', sha: '0123456789abcdef' }, ...extra });
 
