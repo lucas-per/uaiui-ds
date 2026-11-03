@@ -1,0 +1,13 @@
+{
+  "name": "Variables to DTCG",
+  "id": "0000000000000000000",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": ["https://api.github.com"],
+    "reasoning": "Reads the token files and the export config from the GitHub repository you set in the plugin, and, only when you click Open PR, creates a branch, one commit and a pull request in that repository. No other network access."
+  }
+}

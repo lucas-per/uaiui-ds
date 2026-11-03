@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font: 12px/1.45 Inter, system-ui, sans-serif;
+    color: var(--figma-color-text, #222); background: var(--figma-color-bg, #fff);
+  }
+  main { padding: 12px 16px 72px; }
+  h1 { font-size: 13px; margin: 0 0 8px; }
+  h2 { font-size: 12px; margin: 16px 0 6px; }
+  details { border: 1px solid var(--figma-color-border, #ddd); border-radius: 6px; padding: 8px 10px; }
+  summary { cursor: pointer; font-weight: 600; }
+  .grid { display: grid; grid-template-columns: 120px 1fr; gap: 6px 8px; align-items: center; margin-top: 8px; }
+  .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  input, select {
+    font: inherit; color: inherit; background: var(--figma-color-bg-secondary, #f5f5f5);
+    border: 1px solid var(--figma-color-border, #ccc); border-radius: 4px; padding: 4px 6px; min-width: 0;
+  }
+  input { width: 100%; }
+  button {
+    font: inherit; border-radius: 6px; padding: 6px 12px; cursor: pointer;
+    border: 1px solid var(--figma-color-border-strong, #888); background: var(--figma-color-bg, #fff); color: inherit;
+  }
+  button.primary { background: var(--figma-color-bg-brand, #0d99ff); border-color: transparent; color: var(--figma-color-text-onbrand, #fff); font-weight: 600; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .hint { color: var(--figma-color-text-secondary, #666); }
+  .box { border-radius: 6px; padding: 8px 10px; margin-top: 8px; }
+  .box ul { margin: 4px 0 0; padding-left: 18px; }
+  .errors { background: var(--figma-color-bg-danger-tertiary, #fde8e8); color: var(--figma-color-text-danger, #a00); }
+  .warnings { background: var(--figma-color-bg-warning-tertiary, #fff4d6); color: var(--figma-color-text-warning, #7a5300); }
+  .ok { background: var(--figma-color-bg-success-tertiary, #e3f7e8); color: var(--figma-color-text-success, #11702c); }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { text-align: left; padding: 3px 6px; border-bottom: 1px solid var(--figma-color-border, #eee); vertical-align: top; }
+  code { font: 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; border-radius: 3px; padding: 0 4px; margin-right: 4px; }
+  .added { background: #d8f5df; color: #11702c; } .changed { background: #fff0c2; color: #7a5300; } .removed { background: #fde0e0; color: #a00; }
+  footer {
+    position: fixed; inset: auto 0 0 0; padding: 10px 16px; display: flex; gap: 8px; align-items: center;
+    background: var(--figma-color-bg, #fff); border-top: 1px solid var(--figma-color-border, #ddd);
+  }
+  footer .hint { margin-left: auto; text-align: right; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Variables → tokens DTCG</h1>
+  <p class="hint" id="file"></p>
+
+  <details id="settings">
+    <summary>Repositório e token</summary>
+    <div class="grid">
+      <label for="owner">Owner</label><input id="owner" autocomplete="off" spellcheck="false">
+      <label for="repo">Repositório</label><input id="repo" autocomplete="off" spellcheck="false">
+      <label for="base">Branch base</label><input id="base" autocomplete="off" spellcheck="false">
+      <label for="configPath">Config</label><input id="configPath" autocomplete="off" spellcheck="false">
+      <label for="token">Token do GitHub</label>
+      <div class="row">
+        <input id="token" type="password" autocomplete="off" spellcheck="false" style="flex:1">
+        <button id="saveToken" type="button">Salvar</button>
+        <button id="clearToken" type="button">Apagar</button>
+      </div>
+      <span></span><span class="hint" id="tokenStatus"></span>
+    </div>
+    <p class="hint">Token fine-grained só deste repositório, com Contents e Pull requests em leitura e escrita. Ele fica no armazenamento local do Figma neste computador; sem token, a leitura funciona em repositório público, mas a PR não.</p>
+  </details>
+
+  <div class="row" style="margin-top:12px">
+    <button id="read" class="primary" type="button">Ler o Figma e a branch base</button>
+    <button id="snapshot" type="button">Baixar snapshot</button>
+  </div>
+  <div id="status" class="hint" style="margin-top:8px" aria-live="polite"></div>
+
+  <div id="errors" class="box errors" hidden><strong>Erros que bloqueiam</strong><ul></ul></div>
+  <div id="types" hidden>
+    <h2>Tipos manuais</h2>
+    <p class="hint">Variables novas cujo tipo a tabela, os escopos e o alias não resolvem. A escolha entra na tabela da config, no mesmo commit da PR.</p>
+    <table><thead><tr><th>Variable</th><th>Figma</th><th>Tipo</th></tr></thead><tbody></tbody></table>
+  </div>
+  <div id="warnings" class="box warnings" hidden><strong>Avisos</strong><ul></ul></div>
+  <div id="summary" hidden></div>
+  <div id="diff" hidden></div>
+</main>
+<footer>
+  <button id="pr" class="primary" type="button" disabled>Abrir PR</button>
+  <button id="zip" type="button" disabled>Baixar .zip</button>
+  <span class="hint" id="footerHint"></span>
+</footer>
+<!--SCRIPT-->
+</body>
+</html>
