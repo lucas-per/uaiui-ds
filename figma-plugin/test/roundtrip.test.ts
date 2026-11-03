@@ -5,15 +5,17 @@ import { test } from 'node:test';
 import { targets } from '../src/lib/config.ts';
 import { serialize } from '../src/lib/format.ts';
 import { runExport } from '../src/lib/pipeline.ts';
-import { CONFIG_PATH, generator, repoConfig, repoFiles, snapshotFromRepo } from './helpers.ts';
+import { CONFIG_PATH, baselineFiles, generator, repoConfig, repoFiles, snapshotFromRepo } from './helpers.ts';
 
 const config = repoConfig();
-const main = repoFiles(config);
+// Teste 1: de propósito, o tokens/ atual. Os demais usam a linha de base congelada (helpers.ts).
+const current = repoFiles(config);
+const main = baselineFiles();
 
 test('serialize(parse(arquivo)) devolve o arquivo nos 9 arquivos de tokens', () => {
   const files = targets(config).map((t) => `${config.tokensDir}/${t.file}`);
   assert.equal(files.length, 9);
-  for (const f of files) assert.equal(serialize(JSON.parse(main.get(f)!)), main.get(f), f);
+  for (const f of files) assert.equal(serialize(JSON.parse(current.get(f)!)), current.get(f), f);
 });
 
 test('snapshot equivalente à main exporta os mesmos 9 arquivos e o mesmo CSS, sem diff', () => {

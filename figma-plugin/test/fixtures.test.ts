@@ -1,14 +1,14 @@
 // Fixtures em arquivo: a sintética (genérica, sem nada do repositório) e o snapshot real, quando existir.
 
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import type { Config } from '../src/lib/config.ts';
 import { runExport, type Generator } from '../src/lib/pipeline.ts';
 import { byteLength, counts, prBody } from '../src/lib/report.ts';
 import { flatten } from '../src/lib/tree.ts';
 import { checkSnapshot, type Snapshot } from '../src/lib/snapshot.ts';
-import { CONFIG_PATH, generator, repoConfig, repoFiles } from './helpers.ts';
+import { CONFIG_PATH, baselineFiles, generator, repoConfig } from './helpers.ts';
 
 const load = (name: string) => JSON.parse(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8')) as Snapshot;
 
@@ -54,7 +54,6 @@ test('fixture sintética: outro repositório, outra config e outro gerador', () 
 
 // O snapshot real do arquivo do Figma (test/fixtures/real.snapshot.json), exportado em 2026-11-03.
 const REAL = new URL('./fixtures/real.snapshot.json', import.meta.url);
-const skipReal = !existsSync(REAL) && 'falta test/fixtures/real.snapshot.json';
 const realSnapshot = () => JSON.parse(readFileSync(REAL, 'utf8')) as Snapshot;
 // Nome que é token e também grupo de outro token: o DTCG não deixa, e o export bloqueia.
 const COLLISIONS: Array<[string, string]> = [
@@ -63,12 +62,12 @@ const COLLISIONS: Array<[string, string]> = [
   ['radio/border', 'radio/border/error'], ['slider/tick', 'slider/tick/gap'],
 ];
 
-test('snapshot real contra a main do repositório', { skip: skipReal }, () => {
+test('snapshot real contra a main do repositório', () => {
   const snapshot = realSnapshot();
   assert.deepEqual(checkSnapshot(snapshot), []);
   assert.equal(snapshot.variables.length, 970);
   const config = repoConfig();
-  const main = repoFiles(config);
+  const main = baselineFiles();
   const r = runExport({ snapshot, config, configPath: CONFIG_PATH, main, generator });
   if (process.env.REPORT) console.log(r.report, '\n', JSON.stringify({ errors: r.errors, unresolved: r.unresolved }, null, 2));
   assert.deepEqual(r.errors, COLLISIONS.map(([token, child]) => `${token}: é token e também grupo de ${child}`));
@@ -83,10 +82,10 @@ test('snapshot real contra a main do repositório', { skip: skipReal }, () => {
   assert.ok(r.warnings.includes('Coleção "Semântica": o modo "Negativa" não foi exportado. No Figma, os 195 valores dele são placeholders (#ffffff). Foi exportado só o modo "Positiva".'), r.warnings.join('\n'));
 });
 
-test('snapshot real: as 10 variables sem escopo ficam com o $type da main, sem bloquear', { skip: skipReal }, () => {
+test('snapshot real: as 10 variables sem escopo ficam com o $type da main, sem bloquear', () => {
   const snapshot = realSnapshot();
   const config = repoConfig();
-  const main = repoFiles(config);
+  const main = baselineFiles();
   const empty = snapshot.variables.filter((v) => v.scopes.length === 0).map((v) => v.name);
   assert.deepEqual(empty, [
     'size/scale-none', 'size/scale-half', 'size/scale-base', 'size/scale-x2', 'size/scale-x3', 'size/scale-x4', 'size/scale-x6', 'size/scale-x11',
@@ -121,19 +120,19 @@ const withoutCollisions = () => {
   return snapshot;
 };
 
-test('snapshot real sem as 6 variables em colisão: o validador passa e o CSS sai', { skip: skipReal }, () => {
+test('snapshot real sem as 6 variables em colisão: o validador passa e o CSS sai', () => {
   const snapshot = withoutCollisions();
   const config = repoConfig();
-  const r = runExport({ snapshot, config, configPath: CONFIG_PATH, main: repoFiles(config), generator });
+  const r = runExport({ snapshot, config, configPath: CONFIG_PATH, main: baselineFiles(), generator });
   assert.deepEqual(r.errors, []);
   assert.deepEqual(counts(r.changes), { added: 765, changed: 18, removed: 0 });
   assert.equal(r.files.size, 9 + Object.keys(config.outputs).length);
   assert.match(r.files.get(config.outputs.root)!, /--modal-scrim-opacity: 0\.6;/);
 });
 
-test('snapshot real sem as colisões: o corpo da PR traz resumo, Avisos, Arquivos e Alterados inteiros e só corta Adicionados', { skip: skipReal }, () => {
+test('snapshot real sem as colisões: o corpo da PR traz resumo, Avisos, Arquivos e Alterados inteiros e só corta Adicionados', () => {
   const config = repoConfig();
-  const r = runExport({ snapshot: withoutCollisions(), config, configPath: CONFIG_PATH, main: repoFiles(config), generator, base: { branch: 'main', sha: '07330af3f3999f84c8307e163b96e2712a9d7717' } });
+  const r = runExport({ snapshot: withoutCollisions(), config, configPath: CONFIG_PATH, main: baselineFiles(), generator, base: { branch: 'main', sha: '07330af3f3999f84c8307e163b96e2712a9d7717' } });
   assert.deepEqual(r.errors, []);
   // Pré-condição: o relatório inteiro não cabe.
   assert.ok(byteLength(r.report) > 60000, `${byteLength(r.report)} bytes`);
