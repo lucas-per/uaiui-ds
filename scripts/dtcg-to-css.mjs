@@ -35,6 +35,8 @@ function selfTest() {
     ['string sem extensão', (f) => { f['base.json'].t = { $type: 'string', $value: 'uppercase' }; }, /só vale com \$extensions/],
     ['valor fora do tipo', (f) => { f['base.json'].size.x4.$value = 16; }, /não é dimension válido/],
     ['hex diferente dos components', (f) => { f['claro.json'].cor.a.$value.hex = '#fefefe'; }, /não é color válido/],
+    ['number válido', (f) => { f['base.json'].ui.opacity = { $type: 'number', $value: 0.6 }; }, null],
+    ['number com unidade', (f) => { f['base.json'].ui.opacity = { $type: 'number', $value: { value: 0.6, unit: 'px' } }; }, /não é number válido/],
     ['contexto sem um token', (f) => { f['escuro.json'].cor.b = { $value: { colorSpace: 'srgb', components: [0, 0, 0], hex: '#000000' } }; }, /cor\.b existe em escuro e falta em claro/],
     ['token em duas camadas', (f) => { f['claro.json'].size = { x4: { $type: 'dimension', $value: px(4) } }; }, /size\.x4: definido em/],
   ];
@@ -45,11 +47,17 @@ function selfTest() {
     const { errors } = build((file) => JSON.stringify(f[file]), 'r.json');
     if (expected ? !errors.some((e) => expected.test(e)) : errors.length) failures.push(`${name}: veio ${JSON.stringify(errors)}`);
   }
+  // number sai sem unidade, e um alias para ele vira var().
+  const f = files();
+  f['base.json'].ui.opacity = { $type: 'number', $value: 0.6 };
+  f['base.json'].ui.scrim = { $type: 'number', $value: '{ui.opacity}' };
+  const out = build((file) => JSON.stringify(f[file]), 'r.json');
+  if (!/  --ui-opacity: 0\.6;\n  --ui-scrim: var\(--ui-opacity\);/.test(out.root ?? '')) failures.push(`number no CSS: veio ${JSON.stringify(out.errors.length ? out.errors : out.root)}`);
   if (failures.length) {
     console.error('autoteste do validador falhou:\n- ' + failures.join('\n- '));
     process.exit(1);
   }
-  return cases.length;
+  return cases.length + 1;
 }
 
 const tokensDir = new URL('../tokens/', import.meta.url);

@@ -180,3 +180,15 @@ test('descrição da variable vira $description e aparece como alteração', () 
   assert.match(r.files.get('tokens/escala.json')!, /"scale-x4": \{\n {6}"\$description": "Base 16\.",\n {6}"\$value"/);
   assert.match(r.report, /`size\.scale-x4` \$description `—` → `Base 16\.`/);
 });
+
+test('number (escopo OPACITY) passa pelo validador e sai sem unidade no CSS', () => {
+  const s = snapshotFromRepo(config, main);
+  addVariable(s, 'Componente', { name: 'modal/scrim/opacity', resolvedType: 'FLOAT', scopes: ['OPACITY'], description: '', valuesByMode: allModes(s, 'Componente', Math.fround(0.6)) });
+  const r = run(s);
+  assert.deepEqual(r.unresolved.map((u) => [u.name, u.suggestion]), [['modal/scrim/opacity', 'number']]);
+  const r2 = run(s, { typeChoices: { 'modal/scrim/opacity': 'number' } });
+  assert.deepEqual(r2.errors, []);
+  assert.match(r2.files.get('tokens/componente.json')!, /"opacity": \{\n {8}"\$type": "number",\n {8}"\$value": 0\.6\n/);
+  assert.match(r2.files.get('src/styles/tokens.css')!, /\n {2}--modal-scrim-opacity: 0\.6;\n/);
+  assert.match(r2.files.get('src/styles/tokens-wrapper.css')!, /\n {2}--modal-scrim-opacity: 0\.6;\n/);
+});

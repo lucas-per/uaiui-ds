@@ -17,7 +17,7 @@ const TOUCH = ['button/min-height', 'icon-button/size', 'chip/min-height', 'chip
 
 // Extensão UaiUI: "string" não é tipo do DTCG; só vale com esta marca em $extensions e com palavra-chave CSS.
 const NS = 'me.lpereira.uaiui';
-const TYPES = ['color', 'dimension', 'duration', 'fontFamily', 'fontWeight', 'string'];
+const TYPES = ['color', 'dimension', 'duration', 'fontFamily', 'fontWeight', 'number', 'string'];
 const WEIGHTS = { thin: 100, hairline: 100, 'extra-light': 200, 'ultra-light': 200, light: 300, normal: 400, regular: 400, book: 400,
   medium: 500, 'semi-bold': 600, 'demi-bold': 600, bold: 700, 'extra-bold': 800, 'ultra-bold': 800, black: 900, heavy: 900, 'extra-black': 950, 'ultra-black': 950 };
 const GENERIC_FONTS = ['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-serif', 'ui-sans-serif', 'ui-monospace', 'ui-rounded', 'math', 'emoji', 'fangsong'];
@@ -129,6 +129,7 @@ export function validate(read, resolverFile = 'uaiui.resolver.json') {
       duration: () => isObj(v) && isNum(v.value) && (v.unit === 'ms' || v.unit === 's'),
       fontFamily: () => (typeof v === 'string' && v) || (Array.isArray(v) && v.length && v.every((f) => typeof f === 'string' && f)),
       fontWeight: () => (isNum(v) && v >= 1 && v <= 1000) || Object.hasOwn(WEIGHTS, v),
+      number: () => isNum(v),
       string: () => typeof v === 'string' && /^[a-z-]+$/.test(v),
     }[t.type];
     if (!ok()) fail(`${at}: $value ${JSON.stringify(v)} não é ${t.type} válido${t.type === 'color' ? ' (srgb, hex de 6 dígitos igual aos components, alpha 0 ou 1)' : ''}`);
@@ -176,6 +177,7 @@ export function toCss({ layers, view, target }) {
       case 'duration': return `${v.value}${v.unit}`;
       case 'fontFamily': return [v].flat().map((f) => (GENERIC_FONTS.includes(f) ? f : `"${f}"`)).join(', ');
       case 'fontWeight': return String(WEIGHTS[v] ?? v);
+      case 'number': return String(v); // sem unidade (opacidade, proporção)
       default: return v;
     }
   };
