@@ -1,0 +1,49 @@
+name: CI
+
+# A lista de comandos dos jobs tem de ficar igual à de scripts/ci.sh (e vice-versa).
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Cancela execuções antigas só em pull_request; em push na main nenhuma é cancelada.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  pacote:
+    name: Pacote uaiui-ds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.21.0
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm pack --dry-run
+
+  plugin:
+    name: Plugin do Figma
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: figma-plugin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.21.0
+          cache: npm
+          cache-dependency-path: figma-plugin/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npx tsc -p .
+      - run: npm run build

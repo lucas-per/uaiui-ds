@@ -37,6 +37,7 @@ Regras permanentes do repositório `lucas-per/uaiui-ds` (pacote `@uaiui/ds`).
 - Rode os comandos de cada pacote que a tarefa tocar, e dos pacotes que dependem dele, cada um na pasta dele (tabela acima).
 - Sempre: sha256 dos CSS gerados (`src/styles/tokens.css` e `tokens-wrapper.css`), lado a lado com os da `origin/main`. Se a tarefa não deve mudar o CSS, têm de ser iguais; se deve, explique a diferença esperada.
 - Sempre: lista exata das diferenças esperadas e, quando houver, medições.
+- Comando único, igual ao CI: `scripts/ci.sh` (`CI_INSTALL=1` também roda `npm ci`).
 - Dependência (exemplo): o plugin embute o gerador no build. Se a tarefa mudar `scripts/lib/tokens-core.mjs` ou `scripts/dtcg-to-css.mjs`, rode também os comandos do plugin e avise no relatório que ele precisa ser recompilado (`npm run build` em `figma-plugin/`).
 
 ## Testes
