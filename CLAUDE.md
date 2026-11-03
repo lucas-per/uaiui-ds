@@ -35,7 +35,7 @@ Regras permanentes do repositório `lucas-per/uaiui-ds` (pacote `@uaiui/ds`).
 - Sempre comando e resultado completos, com hash inteiro, sem truncar.
 - Rode `git fetch origin` antes e compare com `origin/main`.
 - Rode os comandos de cada pacote que a tarefa tocar, e dos pacotes que dependem dele, cada um na pasta dele (tabela acima).
-- Sempre: sha256 dos CSS gerados (`src/styles/tokens.css` e `tokens-wrapper.css`) iguais aos da `origin/main`.
+- Sempre: sha256 dos CSS gerados (`src/styles/tokens.css` e `tokens-wrapper.css`), lado a lado com os da `origin/main`. Se a tarefa não deve mudar o CSS, têm de ser iguais; se deve, explique a diferença esperada.
 - Sempre: lista exata das diferenças esperadas e, quando houver, medições.
 - Dependência (exemplo): o plugin embute o gerador no build. Se a tarefa mudar `scripts/lib/tokens-core.mjs` ou `scripts/dtcg-to-css.mjs`, rode também os comandos do plugin e avise no relatório que ele precisa ser recompilado (`npm run build` em `figma-plugin/`).
 
