@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "figmaFile": "UaiUI – Design Tokens",
+  "tokensDir": "tokens",
+  "resolver": "uaiui.resolver.json",
+  "outputs": {
+    "root": "src/styles/tokens.css",
+    "wrapper": "src/styles/tokens-wrapper.css"
+  },
+  "units": {
+    "dimension": "px",
+    "duration": "ms"
+  },
+  "collections": {
+    "Escala": {
+      "file": "escala.json",
+      "modes": {
+        "Valor": null
+      }
+    },
+    "Dimensões": {
+      "file": "dimensoes.json",
+      "modes": {
+        "Valor": null
+      }
+    },
+    "Semântica": {
+      "file": "semantica.json",
+      "modes": {
+        "Positiva": null
+      },
+      "ignoreModes": {
+        "Negativa": "Não exportado: no Figma o modo Negativa só tem placeholders (#ffffff); Semântica fica no set base com o modo Positiva"
+      }
+    },
+    "Componente": {
+      "file": "componente.json",
+      "modes": {
+        "Valor": null
+      }
+    },
+    "Primitivos": {
+      "folder": "primitivos",
+      "modifier": "tema",
+      "modes": {
+        "Claro": "claro",
+        "Escuro": "escuro"
+      }
+    },
+    "Densidade": {
+      "folder": "densidade",
+      "modifier": "densidade",
+      "modes": {
+        "comfortable": "comfortable",
+        "standard": "standard",
+        "compact": "compact"
+      }
+    }
+  },
+  "types": {
+    "motion/duration/press": "duration",
+    "font/transform/label": "string",
+    "modal/scrim/opacity": "number"
+  },
+  "newTokenExtensions": {
+    "string": {
+      "me.lpereira.uaiui": {
+        "nonStandardType": true
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "figma-variables-to-dtcg",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plugin de desenvolvimento do Figma: exporta variables para tokens DTCG 2025.10 e abre uma PR no GitHub.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "typecheck": "tsc -p .",
+    "test": "node --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.142.0",
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.28.2",
+    "fflate": "^0.8.3",
+    "typescript": "^6.0.3"
+  }
+}
