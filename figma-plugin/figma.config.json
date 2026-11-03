@@ -30,7 +30,7 @@
         "Positiva": null
       },
       "ignoreModes": {
-        "Negativa": "Modo vazio; Semântica fica no set base."
+        "Negativa": "Não exportado: no Figma o modo Negativa só tem placeholders (#ffffff); Semântica fica no set base com o modo Positiva"
       }
     },
     "Componente": {
@@ -59,7 +59,8 @@
   },
   "types": {
     "motion/duration/press": "duration",
-    "font/transform/label": "string"
+    "font/transform/label": "string",
+    "modal/scrim/opacity": "number"
   },
   "newTokenExtensions": {
     "string": {

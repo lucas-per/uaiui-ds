@@ -184,11 +184,27 @@ test('descrição da variable vira $description e aparece como alteração', () 
 test('number (escopo OPACITY) passa pelo validador e sai sem unidade no CSS', () => {
   const s = snapshotFromRepo(config, main);
   addVariable(s, 'Componente', { name: 'modal/scrim/opacity', resolvedType: 'FLOAT', scopes: ['OPACITY'], description: '', valuesByMode: allModes(s, 'Componente', Math.fround(0.6)) });
-  const r = run(s);
+  // Sem a linha na tabela, cai nos tipos manuais com sugestão number.
+  const { ['modal/scrim/opacity']: _, ...types } = config.types;
+  const r = run(s, { config: { ...config, types } });
   assert.deepEqual(r.unresolved.map((u) => [u.name, u.suggestion]), [['modal/scrim/opacity', 'number']]);
-  const r2 = run(s, { typeChoices: { 'modal/scrim/opacity': 'number' } });
+  // Com a config do repositório, resolve pela tabela.
+  const r2 = run(s);
   assert.deepEqual(r2.errors, []);
+  assert.equal(r2.sources.tabela, 3);
   assert.match(r2.files.get('tokens/componente.json')!, /"opacity": \{\n {8}"\$type": "number",\n {8}"\$value": 0\.6\n/);
   assert.match(r2.files.get('src/styles/tokens.css')!, /\n {2}--modal-scrim-opacity: 0\.6;\n/);
   assert.match(r2.files.get('src/styles/tokens-wrapper.css')!, /\n {2}--modal-scrim-opacity: 0\.6;\n/);
+});
+
+test('modo ignorado só com placeholder: o aviso conta os diferentes e diz que todos os valores são iguais', () => {
+  const s = snapshotFromRepo(config, main);
+  const neg = modeOf(s, 'Semântica', 'Negativa');
+  const sem = s.variables.filter((v) => v.collectionId === collection(s, 'Semântica').id);
+  for (const v of sem) v.valuesByMode[neg] = { r: 1, g: 1, b: 1, a: 1 };
+  const r = run(s);
+  assert.deepEqual(r.errors, []);
+  const w = r.warnings.find((x) => x.startsWith('Coleção "Semântica"'))!;
+  assert.match(w, /^Coleção "Semântica": modo "Negativa" ignorado \(Não exportado: no Figma o modo Negativa só tem placeholders \(#ffffff\); Semântica fica no set base com o modo Positiva\)\. Atenção: \d+ valor\(es\) diferente\(s\) do modo "Positiva"; os \d+ valores do modo são iguais \(#ffffff\)\.$/);
+  assert.match(w, new RegExp(`os ${sem.length} valores`));
 });

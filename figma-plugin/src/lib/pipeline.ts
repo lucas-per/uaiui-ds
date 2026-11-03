@@ -2,11 +2,11 @@
 // Nada aqui toca o Figma nem a rede; o gerador de CSS do repositório entra por parâmetro.
 
 import { checkAgainstResolver, targets, type Config, type Target } from './config.ts';
-import { convertValue } from './convert.ts';
+import { colorValue, convertValue } from './convert.ts';
 import { diffTrees, type Change } from './diff.ts';
 import { serialize } from './format.ts';
 import { report } from './report.ts';
-import { isAlias, type Snapshot, type SnapshotCollection, type SnapshotVariable } from './snapshot.ts';
+import { isAlias, isRGBA, type Snapshot, type SnapshotCollection, type SnapshotVariable } from './snapshot.ts';
 import { buildTree, flatten, type NewToken } from './tree.ts';
 import { ALLOWED, resolveTypes, suggestType, type DtcgType, type TypeSource } from './types.ts';
 
@@ -54,6 +54,7 @@ export interface ExportResult {
   zipFiles(): Record<string, string>;
 }
 
+const describe = (v: unknown): string => (isRGBA(v) ? colorValue(v).hex! + (v.a !== 1 ? ` alpha ${v.a}` : '') : isAlias(v) ? `alias ${v.id}` : JSON.stringify(v));
 const SEG_OK = (s: string) => s.length > 0 && !/[.{}]/.test(s) && !s.startsWith('$');
 
 export function runExport(input: ExportInput): ExportResult {
@@ -226,8 +227,13 @@ export function runExport(input: ExportInput): ExportResult {
     const principal = Object.keys(col.modes)[0];
     for (const [mode, why] of Object.entries(col.ignoreModes ?? {})) {
       const a = modeId(name, principal), b = modeId(name, mode);
-      const diff = vars.filter((v) => v.collectionId === c.id && JSON.stringify(v.valuesByMode[a]) !== JSON.stringify(v.valuesByMode[b])).length;
-      warnings.push(`Coleção "${name}": modo "${mode}" ignorado (${why})${diff ? `. Atenção: ${diff} valor(es) diferente(s) do modo "${principal}".` : '.'}`);
+      const inCol = vars.filter((v) => v.collectionId === c.id);
+      const diff = inCol.filter((v) => JSON.stringify(v.valuesByMode[a]) !== JSON.stringify(v.valuesByMode[b])).length;
+      const distinct = new Set(inCol.map((v) => JSON.stringify(v.valuesByMode[b])));
+      // Todos os valores iguais (ex.: tudo #ffffff) costuma ser placeholder, não um modo de verdade.
+      const same = inCol.length > 1 && distinct.size === 1 ? `; os ${inCol.length} valores do modo são iguais (${describe(inCol[0].valuesByMode[b])})` : '';
+      const reason = why.replace(/[.\s]+$/, '');
+      warnings.push(`Coleção "${name}": modo "${mode}" ignorado (${reason}).${diff ? ` Atenção: ${diff} valor(es) diferente(s) do modo "${principal}"${same}.` : ''}`);
     }
   }
   const removed = new Set(changes.filter((c) => c.kind === 'removed').map((c) => c.id)).size;

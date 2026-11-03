@@ -43,7 +43,7 @@ test('o snapshot cobre os 199 tokens (uma variable por token de cada coleção)'
 
 test('aviso do modo ignorado sem valores diferentes', () => {
   const r = runExport({ snapshot: snapshotFromRepo(config, main), config, configPath: CONFIG_PATH, main, generator });
-  assert.ok(r.warnings.some((w) => /modo "Negativa" ignorado \(Modo vazio; Semântica fica no set base\.\)\.$/.test(w)), r.warnings.join('\n'));
+  assert.ok(r.warnings.includes('Coleção "Semântica": modo "Negativa" ignorado (Não exportado: no Figma o modo Negativa só tem placeholders (#ffffff); Semântica fica no set base com o modo Positiva).'), r.warnings.join('\n'));
 });
 
 test('zip: pasta de tokens inteira (9 JSON + resolver) e os dois CSS, sem a config', () => {
