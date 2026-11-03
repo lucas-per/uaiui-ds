@@ -111,6 +111,36 @@ Os arquivos saem com `JSON.stringify` de 2 espaços e `\n` no fim. O `$value` ob
 
 O plugin preserva a ordem dos tokens da main e os metadados de arquivo e de grupo (`$description`, `$type`). Um token novo entra no fim do grupo, na ordem do Figma. Assim, um export sem mudança no Figma gera diff vazio.
 
+## CLI (sem o Figma Desktop)
+
+`cli/export.ts` roda o mesmo `runExport` do plugin a partir de um arquivo de snapshot, lendo e gravando o disco. Não usa rede nem token e não abre PR.
+
+```sh
+cd figma-plugin
+npm install
+npm run export -- <snapshot.json>                         # só mostra o resultado, não grava nada
+npm run export -- <snapshot.json> --write                 # grava tokens/ e os dois CSS
+npm run export -- <snapshot.json> --pr-body corpo.md      # grava o corpo da PR (até 60.000 bytes)
+```
+
+Precisa do Node 22.18+ ou 24, que roda `.ts` direto. Sem instalar nada além do que o plugin já usa.
+
+| Opção | O que faz |
+|---|---|
+| `--write` | Grava só os arquivos que mudam (tokens e CSS). Grava todos ou nenhum, e uma segunda execução não toca em nada. |
+| `--pr-body <arquivo>` | Grava o corpo da PR, o mesmo do plugin: resumo, avisos e arquivos inteiros, listas cortadas com "+N" se passar de 60.000 bytes. Funciona sem `--write`. |
+| `--repo <pasta>` | Raiz do repositório. O padrão é o repositório onde o CLI está. |
+| `--config <caminho>` | Config dentro do repositório. O padrão é `figma-plugin/figma.config.json`. |
+
+Saída padrão: contagens de adicionados, alterados e removidos, tipos por fonte, avisos, erros e a lista de arquivos que mudariam. O detalhe por variable fica no corpo da PR.
+
+Códigos de saída:
+- `0`: ok.
+- `1`: o export tem erros (colisão entre token e grupo, alias quebrado, variable nova sem tipo, erro do validador…). Nada é gravado, nem com `--write` ou `--pr-body`. Para uma variable nova sem tipo, o CLI lista a linha para acrescentar à tabela `types` da config.
+- `2`: uso errado ou entrada inválida (flag desconhecida, arquivo que não existe, snapshot ou config inválidos).
+
+O CLI lê o repositório do disco como se fosse a main. Para gerar uma sincronização, rode numa branch limpa, criada a partir da `origin/main` atualizada: o diff do CLI é contra o que está no disco, e o CLI não olha o git.
+
 ## Formato do snapshot
 
 O snapshot é o que o botão **Baixar snapshot** gera. Ele copia os objetos da API de plugins do Figma (`figma.variables`), com as variables na ordem do painel:
@@ -188,4 +218,5 @@ Os testes rodam no Node, sem o Figma:
 - `test/pipeline.test.ts`: erros, avisos, diff e relatório.
 - `test/github.test.ts`: o cliente do GitHub com fetch falso.
 - `test/units.test.ts`: conversão, tipos, serialização, árvore, config e snapshot.
+- `test/cli.test.ts`: o CLI como processo filho, sempre numa pasta temporária.
 - `test/fixtures.test.ts`: a fixture sintética e, se existir `test/fixtures/real.snapshot.json`, o snapshot real contra a main. Com `REPORT=1 npm test`, ele imprime o relatório.
