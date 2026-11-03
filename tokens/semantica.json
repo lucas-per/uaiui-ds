@@ -46,6 +46,24 @@
       "band": {
         "$value": "{marca.palette.surface.100}"
       }
+    },
+    "inverse": {
+      "action": {
+        "surface": {
+          "$value": "{marca.neutrals.surface.115}"
+        },
+        "txtOn": {
+          "$value": "{marca.neutrals.txtOn.115}"
+        }
+      },
+      "active": {
+        "surface": {
+          "$value": "{marca.neutrals.surface.100}"
+        },
+        "txtOn": {
+          "$value": "{marca.neutrals.txtOn.100}"
+        }
+      }
     }
   },
   "interface": {
@@ -92,78 +110,105 @@
       "primary": {
         "normal": {
           "background": {
-            "$value": "{marca.palette.surface.100}"
+            "$value": "{marca.behavior.normal.surface}"
           },
           "txtOn": {
-            "$value": "{marca.palette.txtOn.100}"
+            "$value": "{marca.behavior.normal.txtOn}"
+          },
+          "border": {
+            "$value": "{marca.behavior.normal.border}"
           }
         },
         "action": {
           "background": {
-            "$value": "{marca.palette.surface.120}"
+            "$value": "{marca.behavior.action.surface}"
           },
           "txtOn": {
-            "$value": "{marca.palette.txtOn.120}"
+            "$value": "{marca.behavior.action.txtOn}"
+          },
+          "border": {
+            "$value": "{marca.behavior.action.border}"
           }
         },
         "active": {
           "background": {
-            "$value": "{marca.palette.surface.140}"
+            "$value": "{marca.behavior.pressed.surface}"
           },
           "txtOn": {
-            "$value": "{marca.palette.txtOn.140}"
+            "$value": "{marca.behavior.pressed.txtOn}"
+          },
+          "border": {
+            "$value": "{marca.behavior.pressed.border}"
           }
         }
       },
       "secondary": {
         "normal": {
           "background": {
-            "$value": "{apoio.palette.surface.100}"
+            "$value": "{apoio.behavior.normal.surface}"
           },
           "txtOn": {
-            "$value": "{apoio.palette.txtOn.100}"
+            "$value": "{apoio.behavior.normal.txtOn}"
+          },
+          "border": {
+            "$value": "{apoio.behavior.normal.border}"
           }
         },
         "action": {
           "background": {
-            "$value": "{apoio.palette.surface.120}"
+            "$value": "{apoio.behavior.action.surface}"
           },
           "txtOn": {
-            "$value": "{apoio.palette.txtOn.120}"
+            "$value": "{apoio.behavior.action.txtOn}"
+          },
+          "border": {
+            "$value": "{apoio.behavior.action.border}"
           }
         },
         "active": {
           "background": {
-            "$value": "{apoio.palette.surface.140}"
+            "$value": "{apoio.behavior.pressed.surface}"
           },
           "txtOn": {
-            "$value": "{apoio.palette.txtOn.140}"
+            "$value": "{apoio.behavior.pressed.txtOn}"
+          },
+          "border": {
+            "$value": "{apoio.behavior.pressed.border}"
           }
         }
       },
       "error": {
         "normal": {
           "background": {
-            "$value": "{error.palette.surface.100}"
+            "$value": "{error.behavior.normal.surface}"
           },
           "txtOn": {
-            "$value": "{error.palette.txtOn.100}"
+            "$value": "{error.behavior.normal.txtOn}"
+          },
+          "border": {
+            "$value": "{error.behavior.normal.border}"
           }
         },
         "action": {
           "background": {
-            "$value": "{error.palette.surface.120}"
+            "$value": "{error.behavior.action.surface}"
           },
           "txtOn": {
-            "$value": "{error.palette.txtOn.120}"
+            "$value": "{error.behavior.action.txtOn}"
+          },
+          "border": {
+            "$value": "{error.behavior.action.border}"
           }
         },
         "active": {
           "background": {
-            "$value": "{error.palette.surface.140}"
+            "$value": "{error.behavior.pressed.surface}"
           },
           "txtOn": {
-            "$value": "{error.palette.txtOn.140}"
+            "$value": "{error.behavior.pressed.txtOn}"
+          },
+          "border": {
+            "$value": "{error.behavior.pressed.border}"
           }
         }
       }
@@ -174,6 +219,15 @@
       "lightest": {
         "surface": {
           "$value": "{error.palette.surface.20}"
+        },
+        "txtOn": {
+          "$value": "{error.palette.txtOn.20}"
+        },
+        "border": {
+          "$value": "{error.palette.border.20}"
+        },
+        "txt": {
+          "$value": "{error.palette.txt.20}"
         }
       },
       "normal": {
@@ -185,6 +239,65 @@
         },
         "txt": {
           "$value": "{error.palette.txt.100}"
+        },
+        "txtOn": {
+          "$value": "{error.palette.txtOn.100}"
+        }
+      },
+      "active": {
+        "surface": {
+          "$value": "{error.palette.surface.60}"
+        },
+        "txtOn": {
+          "$value": "{error.palette.txtOn.60}"
+        },
+        "border": {
+          "$value": "{error.palette.border.60}"
+        },
+        "txt": {
+          "$value": "{error.palette.txt.60}"
+        }
+      },
+      "action": {
+        "surface": {
+          "$value": "{error.palette.surface.120}"
+        },
+        "txtOn": {
+          "$value": "{error.palette.txtOn.120}"
+        },
+        "border": {
+          "$value": "{error.palette.border.120}"
+        },
+        "txt": {
+          "$value": "{error.palette.txt.120}"
+        }
+      },
+      "pressed": {
+        "surface": {
+          "$value": "{error.palette.surface.140}"
+        },
+        "txtOn": {
+          "$value": "{error.palette.txtOn.140}"
+        },
+        "border": {
+          "$value": "{error.palette.border.140}"
+        },
+        "txt": {
+          "$value": "{error.palette.txt.140}"
+        }
+      },
+      "darkest": {
+        "surface": {
+          "$value": "{error.palette.surface.180}"
+        },
+        "txtOn": {
+          "$value": "{error.palette.txtOn.180}"
+        },
+        "border": {
+          "$value": "{error.palette.border.180}"
+        },
+        "txt": {
+          "$value": "{error.palette.txt.180}"
         }
       }
     }
@@ -194,6 +307,15 @@
       "lightest": {
         "surface": {
           "$value": "{success.palette.surface.20}"
+        },
+        "txtOn": {
+          "$value": "{success.palette.txtOn.20}"
+        },
+        "border": {
+          "$value": "{success.palette.border.20}"
+        },
+        "txt": {
+          "$value": "{success.palette.txt.20}"
         }
       },
       "normal": {
@@ -205,6 +327,65 @@
         },
         "txt": {
           "$value": "{success.palette.txt.100}"
+        },
+        "txtOn": {
+          "$value": "{success.palette.txtOn.100}"
+        }
+      },
+      "active": {
+        "surface": {
+          "$value": "{success.palette.surface.60}"
+        },
+        "txtOn": {
+          "$value": "{success.palette.txtOn.60}"
+        },
+        "border": {
+          "$value": "{success.palette.border.60}"
+        },
+        "txt": {
+          "$value": "{success.palette.txt.60}"
+        }
+      },
+      "action": {
+        "surface": {
+          "$value": "{success.palette.surface.120}"
+        },
+        "txtOn": {
+          "$value": "{success.palette.txtOn.120}"
+        },
+        "border": {
+          "$value": "{success.palette.border.120}"
+        },
+        "txt": {
+          "$value": "{success.palette.txt.120}"
+        }
+      },
+      "pressed": {
+        "surface": {
+          "$value": "{success.palette.surface.140}"
+        },
+        "txtOn": {
+          "$value": "{success.palette.txtOn.140}"
+        },
+        "border": {
+          "$value": "{success.palette.border.140}"
+        },
+        "txt": {
+          "$value": "{success.palette.txt.140}"
+        }
+      },
+      "darkest": {
+        "surface": {
+          "$value": "{success.palette.surface.180}"
+        },
+        "txtOn": {
+          "$value": "{success.palette.txtOn.180}"
+        },
+        "border": {
+          "$value": "{success.palette.border.180}"
+        },
+        "txt": {
+          "$value": "{success.palette.txt.180}"
         }
       }
     }
@@ -214,6 +395,15 @@
       "lightest": {
         "surface": {
           "$value": "{warning.palette.surface.20}"
+        },
+        "txtOn": {
+          "$value": "{warning.palette.txtOn.20}"
+        },
+        "border": {
+          "$value": "{warning.palette.border.20}"
+        },
+        "txt": {
+          "$value": "{warning.palette.txt.20}"
         }
       },
       "normal": {
@@ -225,6 +415,65 @@
         },
         "txt": {
           "$value": "{warning.palette.txt.100}"
+        },
+        "txtOn": {
+          "$value": "{warning.palette.txtOn.100}"
+        }
+      },
+      "active": {
+        "surface": {
+          "$value": "{warning.palette.surface.60}"
+        },
+        "txtOn": {
+          "$value": "{warning.palette.txtOn.60}"
+        },
+        "border": {
+          "$value": "{warning.palette.border.60}"
+        },
+        "txt": {
+          "$value": "{warning.palette.txt.60}"
+        }
+      },
+      "action": {
+        "surface": {
+          "$value": "{warning.palette.surface.120}"
+        },
+        "txtOn": {
+          "$value": "{warning.palette.txtOn.120}"
+        },
+        "border": {
+          "$value": "{warning.palette.border.120}"
+        },
+        "txt": {
+          "$value": "{warning.palette.txt.120}"
+        }
+      },
+      "pressed": {
+        "surface": {
+          "$value": "{warning.palette.surface.140}"
+        },
+        "txtOn": {
+          "$value": "{warning.palette.txtOn.140}"
+        },
+        "border": {
+          "$value": "{warning.palette.border.140}"
+        },
+        "txt": {
+          "$value": "{warning.palette.txt.140}"
+        }
+      },
+      "darkest": {
+        "surface": {
+          "$value": "{warning.palette.surface.180}"
+        },
+        "txtOn": {
+          "$value": "{warning.palette.txtOn.180}"
+        },
+        "border": {
+          "$value": "{warning.palette.border.180}"
+        },
+        "txt": {
+          "$value": "{warning.palette.txt.180}"
         }
       }
     }
@@ -234,6 +483,15 @@
       "lightest": {
         "surface": {
           "$value": "{info.palette.surface.20}"
+        },
+        "txtOn": {
+          "$value": "{info.palette.txtOn.20}"
+        },
+        "border": {
+          "$value": "{info.palette.border.20}"
+        },
+        "txt": {
+          "$value": "{info.palette.txt.20}"
         }
       },
       "normal": {
@@ -245,6 +503,241 @@
         },
         "txt": {
           "$value": "{info.palette.txt.100}"
+        },
+        "txtOn": {
+          "$value": "{info.palette.txtOn.100}"
+        }
+      },
+      "active": {
+        "surface": {
+          "$value": "{info.palette.surface.60}"
+        },
+        "txtOn": {
+          "$value": "{info.palette.txtOn.60}"
+        },
+        "border": {
+          "$value": "{info.palette.border.60}"
+        },
+        "txt": {
+          "$value": "{info.palette.txt.60}"
+        }
+      },
+      "action": {
+        "surface": {
+          "$value": "{info.palette.surface.120}"
+        },
+        "txtOn": {
+          "$value": "{info.palette.txtOn.120}"
+        },
+        "border": {
+          "$value": "{info.palette.border.120}"
+        },
+        "txt": {
+          "$value": "{info.palette.txt.120}"
+        }
+      },
+      "pressed": {
+        "surface": {
+          "$value": "{info.palette.surface.140}"
+        },
+        "txtOn": {
+          "$value": "{info.palette.txtOn.140}"
+        },
+        "border": {
+          "$value": "{info.palette.border.140}"
+        },
+        "txt": {
+          "$value": "{info.palette.txt.140}"
+        }
+      },
+      "darkest": {
+        "surface": {
+          "$value": "{info.palette.surface.180}"
+        },
+        "txtOn": {
+          "$value": "{info.palette.txtOn.180}"
+        },
+        "border": {
+          "$value": "{info.palette.border.180}"
+        },
+        "txt": {
+          "$value": "{info.palette.txt.180}"
+        }
+      }
+    }
+  },
+  "marca": {
+    "behavior": {
+      "lightest": {
+        "surface": {
+          "$value": "{marca.palette.surface.20}"
+        },
+        "txtOn": {
+          "$value": "{marca.palette.txtOn.20}"
+        },
+        "border": {
+          "$value": "{marca.palette.border.20}"
+        },
+        "txt": {
+          "$value": "{marca.palette.txt.20}"
+        }
+      },
+      "active": {
+        "surface": {
+          "$value": "{marca.palette.surface.60}"
+        },
+        "txtOn": {
+          "$value": "{marca.palette.txtOn.60}"
+        },
+        "border": {
+          "$value": "{marca.palette.border.60}"
+        },
+        "txt": {
+          "$value": "{marca.palette.txt.60}"
+        }
+      },
+      "normal": {
+        "surface": {
+          "$value": "{marca.palette.surface.100}"
+        },
+        "txtOn": {
+          "$value": "{marca.palette.txtOn.100}"
+        },
+        "border": {
+          "$value": "{marca.palette.border.100}"
+        },
+        "txt": {
+          "$value": "{marca.palette.txt.100}"
+        }
+      },
+      "action": {
+        "surface": {
+          "$value": "{marca.palette.surface.120}"
+        },
+        "txtOn": {
+          "$value": "{marca.palette.txtOn.120}"
+        },
+        "border": {
+          "$value": "{marca.palette.border.120}"
+        },
+        "txt": {
+          "$value": "{marca.palette.txt.120}"
+        }
+      },
+      "pressed": {
+        "surface": {
+          "$value": "{marca.palette.surface.140}"
+        },
+        "txtOn": {
+          "$value": "{marca.palette.txtOn.140}"
+        },
+        "border": {
+          "$value": "{marca.palette.border.140}"
+        },
+        "txt": {
+          "$value": "{marca.palette.txt.140}"
+        }
+      },
+      "darkest": {
+        "surface": {
+          "$value": "{marca.palette.surface.180}"
+        },
+        "txtOn": {
+          "$value": "{marca.palette.txtOn.180}"
+        },
+        "border": {
+          "$value": "{marca.palette.border.180}"
+        },
+        "txt": {
+          "$value": "{marca.palette.txt.180}"
+        }
+      }
+    }
+  },
+  "apoio": {
+    "behavior": {
+      "lightest": {
+        "surface": {
+          "$value": "{apoio.palette.surface.20}"
+        },
+        "txtOn": {
+          "$value": "{apoio.palette.txtOn.20}"
+        },
+        "border": {
+          "$value": "{apoio.palette.border.20}"
+        },
+        "txt": {
+          "$value": "{apoio.palette.txt.20}"
+        }
+      },
+      "active": {
+        "surface": {
+          "$value": "{apoio.palette.surface.60}"
+        },
+        "txtOn": {
+          "$value": "{apoio.palette.txtOn.60}"
+        },
+        "border": {
+          "$value": "{apoio.palette.border.60}"
+        },
+        "txt": {
+          "$value": "{apoio.palette.txt.60}"
+        }
+      },
+      "normal": {
+        "surface": {
+          "$value": "{apoio.palette.surface.100}"
+        },
+        "txtOn": {
+          "$value": "{apoio.palette.txtOn.100}"
+        },
+        "border": {
+          "$value": "{apoio.palette.border.100}"
+        },
+        "txt": {
+          "$value": "{apoio.palette.txt.100}"
+        }
+      },
+      "action": {
+        "surface": {
+          "$value": "{apoio.palette.surface.120}"
+        },
+        "txtOn": {
+          "$value": "{apoio.palette.txtOn.120}"
+        },
+        "border": {
+          "$value": "{apoio.palette.border.120}"
+        },
+        "txt": {
+          "$value": "{apoio.palette.txt.120}"
+        }
+      },
+      "pressed": {
+        "surface": {
+          "$value": "{apoio.palette.surface.140}"
+        },
+        "txtOn": {
+          "$value": "{apoio.palette.txtOn.140}"
+        },
+        "border": {
+          "$value": "{apoio.palette.border.140}"
+        },
+        "txt": {
+          "$value": "{apoio.palette.txt.140}"
+        }
+      },
+      "darkest": {
+        "surface": {
+          "$value": "{apoio.palette.surface.180}"
+        },
+        "txtOn": {
+          "$value": "{apoio.palette.txtOn.180}"
+        },
+        "border": {
+          "$value": "{apoio.palette.border.180}"
+        },
+        "txt": {
+          "$value": "{apoio.palette.txt.180}"
         }
       }
     }
