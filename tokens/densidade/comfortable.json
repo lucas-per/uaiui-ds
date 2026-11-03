@@ -118,5 +118,585 @@
         "$value": { "value": 3, "unit": "px" }
       }
     }
+  },
+  "tag": {
+    "padding-x": {
+      "$value": "{size.scale-x2}"
+    },
+    "padding-y": {
+      "$value": "{size.scale-base}"
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 16, "unit": "px" }
+      }
+    }
+  },
+  "text-field": {
+    "padding-x": {
+      "$value": "{size.scale-x4}"
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "min-height": {
+      "$value": "{button.min-height}"
+    },
+    "stack-gap": {
+      "$value": "{size.scale-x2}"
+    },
+    "message": {
+      "gap": {
+        "$value": "{size.scale-x2}"
+      },
+      "font-size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 20, "unit": "px" }
+      }
+    },
+    "input": {
+      "font-size": {
+        "$value": { "value": 18, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 18, "unit": "px" }
+      }
+    },
+    "icon": {
+      "size": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "toggle": {
+    "track": {
+      "width": {
+        "$value": { "value": 44, "unit": "px" }
+      },
+      "height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "thumb": {
+      "size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "inset": {
+        "$value": "{size.scale-half}"
+      }
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "min-height": {
+      "$value": "{button.min-height}"
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "slider": {
+    "track": {
+      "height": {
+        "$value": { "value": 12, "unit": "px" }
+      }
+    },
+    "thumb": {
+      "size": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "control": {
+      "min-height": {
+        "$value": "{button.min-height}"
+      },
+      "padding-y": {
+        "$value": { "value": 15, "unit": "px" }
+      }
+    },
+    "stack-gap": {
+      "$value": "{size.scale-none}"
+    },
+    "header": {
+      "gap": {
+        "$value": "{size.scale-x2}"
+      }
+    },
+    "tick": {
+      "height": {
+        "$value": { "value": 8, "unit": "px" }
+      },
+      "gap": {
+        "$value": "{size.scale-base}"
+      },
+      "inset": {
+        "$value": { "value": 12, "unit": "px" }
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 18, "unit": "px" }
+      }
+    }
+  },
+  "checkbox": {
+    "box": {
+      "size": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "mark": {
+      "size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "min-height": {
+      "$value": "{button.min-height}"
+    },
+    "padding-y": {
+      "$value": { "value": 15, "unit": "px" }
+    },
+    "content": {
+      "padding-top": {
+        "$value": { "value": 0, "unit": "px" }
+      }
+    },
+    "description": {
+      "gap": {
+        "$value": "{size.scale-half}"
+      },
+      "font-size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 20, "unit": "px" }
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "radio": {
+    "box": {
+      "size": {
+        "$value": { "value": 24, "unit": "px" }
+      },
+      "radius": {
+        "$value": { "value": 12, "unit": "px" }
+      }
+    },
+    "dot": {
+      "size": {
+        "$value": { "value": 10, "unit": "px" }
+      }
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "min-height": {
+      "$value": "{button.min-height}"
+    },
+    "padding-y": {
+      "$value": { "value": 15, "unit": "px" }
+    },
+    "content": {
+      "padding-top": {
+        "$value": { "value": 0, "unit": "px" }
+      }
+    },
+    "description": {
+      "gap": {
+        "$value": "{size.scale-half}"
+      },
+      "font-size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 20, "unit": "px" }
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "badge": {
+    "min-size": {
+      "$value": { "value": 24, "unit": "px" }
+    },
+    "dot": {
+      "size": {
+        "$value": { "value": 12, "unit": "px" }
+      }
+    },
+    "padding-x": {
+      "$value": "{size.scale-base}"
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 16, "unit": "px" }
+      }
+    }
+  },
+  "chip": {
+    "padding-x": {
+      "$value": "{size.scale-x4}"
+    },
+    "gap": {
+      "$value": "{size.scale-x2}"
+    },
+    "min-height": {
+      "$value": "{size.scale-x11}"
+    },
+    "icon": {
+      "size": {
+        "$value": { "value": 20, "unit": "px" }
+      }
+    },
+    "check": {
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "chip-removable": {
+    "padding-x": {
+      "$value": "{size.scale-x4}"
+    },
+    "min-height": {
+      "$value": "{size.scale-x11}"
+    },
+    "remove": {
+      "size": {
+        "$value": "{size.scale-x11}"
+      }
+    },
+    "icon": {
+      "size": {
+        "$value": { "value": 20, "unit": "px" }
+      },
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "combobox": {
+    "padding-x": {
+      "$value": "{size.scale-x4}"
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "min-height": {
+      "$value": "{button.min-height}"
+    },
+    "stack-gap": {
+      "$value": "{size.scale-x2}"
+    },
+    "panel": {
+      "offset": {
+        "$value": "{size.scale-x2}"
+      }
+    },
+    "input": {
+      "font-size": {
+        "$value": { "value": 18, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 18, "unit": "px" }
+      }
+    },
+    "icon": {
+      "size": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "chevron": {
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    },
+    "message": {
+      "gap": {
+        "$value": "{size.scale-x2}"
+      },
+      "font-size": {
+        "$value": { "value": 14, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 20, "unit": "px" }
+      }
+    }
+  },
+  "combobox-option": {
+    "min-height": {
+      "$value": "{size.scale-x11}"
+    },
+    "padding-x": {
+      "$value": "{size.scale-x4}"
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 18, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "icon": {
+      "size": {
+        "$value": { "value": 20, "unit": "px" }
+      }
+    },
+    "check": {
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    },
+    "bar": {
+      "width": {
+        "$value": "{size.scale-base}"
+      }
+    },
+    "padding-y": {
+      "$value": "{size.scale-x2}"
+    }
+  },
+  "menu-item": {
+    "min-height": {
+      "$value": "{size.scale-x11}"
+    },
+    "padding-x": {
+      "$value": "{size.scale-x4}"
+    },
+    "padding-y": {
+      "$value": "{size.scale-x2}"
+    },
+    "gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 18, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "icon": {
+      "size": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "bar": {
+      "width": {
+        "$value": "{size.scale-base}"
+      }
+    }
+  },
+  "dropdown-menu": {
+    "width": {
+      "$value": { "value": 240, "unit": "px" }
+    },
+    "separator": {
+      "margin": {
+        "$value": "{size.scale-x2}"
+      }
+    }
+  },
+  "popover": {
+    "width": {
+      "$value": { "value": 320, "unit": "px" }
+    },
+    "padding": {
+      "$value": "{size.scale-x6}"
+    },
+    "stack-gap": {
+      "$value": "{size.scale-x2}"
+    },
+    "arrow": {
+      "height": {
+        "$value": "{size.scale-x2}"
+      },
+      "offset": {
+        "$value": "{size.scale-x4}"
+      }
+    },
+    "title": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    },
+    "body": {
+      "font-size": {
+        "$value": { "value": 18, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "tooltip": {
+    "padding-x": {
+      "$value": "{size.scale-x3}"
+    },
+    "padding-y": {
+      "$value": "{size.scale-x2}"
+    },
+    "max-width": {
+      "$value": { "value": 280, "unit": "px" }
+    },
+    "arrow": {
+      "height": {
+        "$value": "{size.scale-x2}"
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "modal": {
+    "width": {
+      "$value": { "value": 560, "unit": "px" }
+    },
+    "padding": {
+      "$value": "{size.scale-x6}"
+    },
+    "stack-gap": {
+      "$value": "{size.scale-x4}"
+    },
+    "actions-gap": {
+      "$value": "{size.scale-x3}"
+    },
+    "title": {
+      "font-size": {
+        "$value": { "value": 24, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 32, "unit": "px" }
+      }
+    },
+    "body": {
+      "font-size": {
+        "$value": { "value": 18, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "progress-step": {
+    "width": {
+      "$value": { "value": 160, "unit": "px" }
+    },
+    "max-width": {
+      "$value": { "value": 160, "unit": "px" }
+    },
+    "marker": {
+      "size": {
+        "$value": { "value": 32, "unit": "px" }
+      }
+    },
+    "gap": {
+      "$value": "{size.scale-x2}"
+    },
+    "label-gap": {
+      "$value": "{size.scale-x2}"
+    },
+    "icon-size": {
+      "$value": { "value": 24, "unit": "px" }
+    },
+    "check": {
+      "weight": {
+        "$value": { "value": 3, "unit": "px" }
+      }
+    },
+    "label": {
+      "font-size": {
+        "$value": { "value": 16, "unit": "px" }
+      },
+      "line-height": {
+        "$value": { "value": 24, "unit": "px" }
+      }
+    }
+  },
+  "progress-indicator": {
+    "width": {
+      "$value": { "value": 640, "unit": "px" }
+    }
   }
 }

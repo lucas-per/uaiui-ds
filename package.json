@@ -1,6 +1,6 @@
 {
   "name": "@uaiui/ds",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "UaiUI design system: DTCG design tokens and accessible, framework-agnostic CSS components.",
   "license": "MIT",
   "author": "Lucas Pereira",
