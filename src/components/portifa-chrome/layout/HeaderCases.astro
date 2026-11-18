@@ -1,0 +1,236 @@
+---
+// ADAPTAÇÃO UaiUI: decisão 5, lista fixa no lugar de astro:content; os cases são páginas de lpereira.me, nunca a página atual.
+import { menuCases } from '../utils/cases';
+
+/*
+  "Cases" do cabeçalho desktop (Figma 728:369): disclosure com os cases
+  publicados, na ordem da Home (a mesma fonte do menu mobile, que não muda).
+  Não é uma macro-seção (navigation.ts): o menu mobile lista os cases no
+  grupo próprio dele.
+
+  <details>/<summary> e não <button>: sem JavaScript o conteúdo continua
+  acessível (abre e fecha com clique, Enter e Espaço; o navegador expõe o
+  summary como botão com o estado expandido/recolhido). O script abaixo só
+  acrescenta o Esc (com o foco de volta ao summary), o clique fora, a saída do
+  foco e o fechamento ao voltar do cache do histórico. Abre só por clique ou
+  teclado, nunca por hover.
+*/
+const items = menuCases.map((item) => ({ ...item, current: undefined as 'page' | 'true' | undefined }));
+const triggerCurrent = items.some((item) => item.current) ? 'true' : undefined;
+---
+
+<details class="header-cases" data-header-cases>
+  <summary class="header-cases__trigger clickable-menu-cases" aria-current={triggerCurrent}>
+    <span class="header-cases__label text-label-md">Cases</span>
+    <!-- chevron-down.svg (assets/icons/case) em linha, para herdar a cor -->
+    <svg class="header-cases__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <path d="M11.7471 17L20.4941 7.15918L19 5.83105L11.7471 13.9902L4.49414 5.83105L3 7.15918L11.7471 17Z" fill="currentColor"/>
+    </svg>
+  </summary>
+  <ul class="header-cases__panel" role="list">
+    {items.map((item) => (
+      <li>
+        <a
+          href={item.href}
+          class={`header-cases__link clickable-link-internal-case-${item.key}`}
+          aria-current={item.current}
+        >
+          <span class="header-cases__text text-label-md">{item.label}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</details>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('[data-header-cases]').forEach((details) => {
+    const summary = details.querySelector('summary');
+    if (!summary) return;
+
+    const close = (returnFocus: boolean) => {
+      if (!details.open) return;
+      details.open = false;
+      if (returnFocus) summary.focus();
+    };
+
+    details.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !details.open) return;
+      event.preventDefault();
+      close(true);
+    });
+
+    // Clique fora (inclusive em área sem foco, que não dispara focusout).
+    document.addEventListener('click', (event) => {
+      if (!details.contains(event.target as Node)) close(false);
+    });
+
+    // Tab para fora do conjunto. Sem relatedTarget (a janela perdeu o foco)
+    // o painel fica como está.
+    details.addEventListener('focusout', (event) => {
+      const next = event.relatedTarget as Node | null;
+      if (next && !details.contains(next)) close(false);
+    });
+
+    // Abaixo de 888px o cabeçalho desktop some (vale o mobile, HeaderMobile.astro).
+    window.matchMedia('(max-width: 887px)').addEventListener('change', (event) => {
+      if (event.matches) close(false);
+    });
+
+    // Voltar pelo histórico pode trazer a página do cache com o painel aberto.
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) close(false);
+    });
+  });
+</script>
+
+<style>
+  .header-cases {
+    position: relative;
+  }
+
+  /* Gatilho (Figma clickable-cases, 88x24): o texto do link-button-desktop e a
+     seta de 20px, 8px entre eles. Mesma caixa do HeaderLink (2px + 20px + 2px)
+     e a mesma área de clique de 44px, que cresce sem mudar o layout. */
+  .header-cases__trigger {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--scale-x2);
+    padding: var(--scale-half) 0;
+    color: var(--text-label-accent);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .header-cases__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .header-cases__trigger::before {
+    content: '';
+    position: absolute;
+    inset: -10px 0;
+  }
+
+  .header-cases__label {
+    position: relative;
+    white-space: nowrap;
+  }
+
+  /* Sublinhado do pressed e da página atual, como no HeaderLink (Figma 605:866). */
+  .header-cases__label::after,
+  .header-cases__text::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: var(--scale-half);
+    background-color: currentColor;
+    opacity: 0;
+  }
+
+  .header-cases__chevron {
+    display: block;
+    flex-shrink: 0;
+    color: var(--icon-accent);
+  }
+
+  /* Aberto: seta para cima (Figma icon-chevron-up). Troca de estado, sem animação. */
+  .header-cases[open] .header-cases__chevron {
+    transform: rotate(180deg);
+  }
+
+  .header-cases__trigger:active,
+  .header-cases__trigger[aria-current] {
+    color: var(--text-body-accent-strong);
+  }
+
+  .header-cases__trigger:active .header-cases__label::after,
+  .header-cases__trigger[aria-current] .header-cases__label::after {
+    opacity: 1;
+  }
+
+  .header-cases__trigger:focus-visible {
+    outline: 2px solid var(--border-focus-strong);
+    outline-offset: 2px;
+  }
+
+  /* Painel (Figma dropdown-cases): alinhado pela esquerda do gatilho, 16px
+     abaixo dele, largura pelo conteúdo. Fica por cima dos elementos sticky da
+     página (menu lateral dos cases e da UaiUI). */
+  .header-cases__panel {
+    position: absolute;
+    top: calc(100% + var(--scale-x4));
+    left: 0;
+    z-index: 20;
+    box-sizing: border-box;
+    width: max-content;
+    margin: 0;
+    padding: var(--scale-x2) 0;
+    border: 2px solid var(--border-accent-subtle);
+    background-color: var(--surface-bg-off-white-primary);
+    box-shadow: var(--shadow-layout-accent);
+    list-style: none;
+  }
+
+  /* Itens: linhas de 44px (10px + 24px + 10px), 16px nas laterais. */
+  .header-cases__link {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: var(--scale-x11);
+    padding: 0 var(--scale-x4);
+    color: var(--text-label-accent);
+    text-decoration: none;
+  }
+
+  .header-cases__text {
+    position: relative;
+    padding: var(--scale-half) 0;
+    /* Com o texto ampliado, se o painel não couber, o nome quebra dentro dele. */
+    overflow-wrap: anywhere;
+  }
+
+  .header-cases__link[aria-current] {
+    color: var(--text-body-accent-strong);
+  }
+
+  .header-cases__link[aria-current] .header-cases__text::after {
+    opacity: 1;
+  }
+
+  /* Hover só com mouse. Texto em blue/6 sobre blue-2 (4,63:1): o blue/5 daria 3,19:1. */
+  @media (hover: hover) {
+    .header-cases__trigger:hover {
+      color: var(--text-body-accent-strong);
+    }
+
+    .header-cases__link:hover {
+      background-color: var(--surface-bg-accent-medium);
+      color: var(--text-body-accent-strong);
+    }
+  }
+
+  /* O anel fica por dentro do item: por fora ele cairia sobre a borda do painel. */
+  .header-cases__link:focus-visible {
+    outline: 2px solid var(--border-focus-strong);
+    outline-offset: -2px;
+  }
+
+  /* Cores forçadas: a borda do painel continua (a sombra some); o hover ganha
+     as cores de sistema, senão o fundo dele desapareceria. */
+  @media (forced-colors: active) {
+    .header-cases__panel {
+      border-color: CanvasText;
+    }
+  }
+
+  @media (forced-colors: active) and (hover: hover) {
+    .header-cases__link:hover {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+</style>
+

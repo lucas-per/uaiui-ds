@@ -1,0 +1,234 @@
+---
+import Button from '../ui/Button.astro';
+import Divider from '../ui/Divider.astro';
+import ContactIcon from '../ui/ContactIcon.astro';
+import { siteVersion } from '../config/version';
+import { contactLinks, copyrightHolder, copyrightYear } from '../config/contact';
+
+const dividerLines = Array.from({ length: 4 });
+---
+
+<footer class="site-footer">
+  <!-- divider-trail (Figma desktop 452:938 / mobile 275:1149): faixa vermelha entre o conteúdo e o rodapé, em todas as páginas -->
+  <Divider height="7px" color="var(--surface-bg-tertiary-strong)" />
+  <div class="site-footer__buttons">
+    <!-- col-dividers, node 305:437 -->
+    <div class="site-footer__dividers site-footer__dividers--edge" aria-hidden="true">
+      {dividerLines.map(() => <div class="site-footer__divider-line" />)}
+    </div>
+    <div class="site-footer__buttons-content">
+      <div class="site-footer__dividers site-footer__dividers--fixed" aria-hidden="true">
+        {dividerLines.map(() => <div class="site-footer__divider-line" />)}
+      </div>
+      {contactLinks.map((link, index) => (
+        <Fragment>
+          {index > 0 && (
+            <div class="site-footer__dividers" aria-hidden="true">
+              {dividerLines.map(() => <div class="site-footer__divider-line" />)}
+            </div>
+          )}
+          <Button
+            href={link.href}
+            variant="outline-primary"
+            size="sm"
+            external={link.external}
+            download={link.download}
+            ariaLabel={link.ariaLabelWithText ? link.ariaLabel : undefined}
+            class={link.className}
+          >
+            {link.label}
+            <Fragment slot="icon">
+              <ContactIcon name={link.footerIcon} />
+            </Fragment>
+          </Button>
+        </Fragment>
+      ))}
+      <div class="site-footer__dividers site-footer__dividers--fixed" aria-hidden="true">
+        {dividerLines.map(() => <div class="site-footer__divider-line" />)}
+      </div>
+    </div>
+    <!-- col-dividers, node 305:449 -->
+    <div class="site-footer__dividers site-footer__dividers--edge" aria-hidden="true">
+      {dividerLines.map(() => <div class="site-footer__divider-line" />)}
+    </div>
+  </div>
+  <div class="site-footer__inner">
+    <!-- ADAPTAÇÃO UaiUI: A6, siteVersion traz a versão do @uaiui/ds (config/version.ts), no lugar da versão do site do Portifa. -->
+    <p class="site-footer__copyright text-body-caption">&copy; {copyrightYear} {copyrightHolder} &middot; {siteVersion}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    width: 100%;
+    background-color: var(--surface-bg-tertiary-subtle);
+  }
+
+  .site-footer__inner {
+    box-sizing: border-box;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--scale-x20);
+  }
+
+  /* Full-bleed: ao contrário de .site-footer__inner, essa row precisa
+     esticar borda a borda da viewport (não só até 1440px) pra que os
+     dois blocos de dividers decorativos das pontas (col-dividers,
+     nodes 305:437/305:449) preencham o espaço sobrando em telas
+     largas — o Figma foi desenhado só em 1440px fixo e não previa
+     esse comportamento. */
+  .site-footer__buttons {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    /* Sem gap aqui: o espaçamento entre botões/dividers vive só dentro
+       de .site-footer__buttons-content (que tem o próprio gap) — um
+       gap nesta linha externa reservaria espaço extra ao redor dos
+       blocos de dividers das pontas mesmo quando eles encolhem a
+       largura zero, deslocando a zona de conteúdo pra fora do
+       alinhamento com o resto da página em telas ≤1440px. */
+    padding: var(--scale-x4) 0;
+    border-bottom: 3px solid var(--border-primary-subtle);
+  }
+
+  /* Zona de conteúdo central: mesmo max-width/box-sizing/centralização
+     de site-header__inner, site-footer__inner e hero__inner, mas sem
+     padding horizontal — o respiro aqui vem dos dois dividers fixos
+     de 64px (.site-footer__dividers--fixed, no início/fim desta lista
+     de filhos) somados ao gap:24px da própria linha
+     (64+24=88, o mesmo valor do padding que substituem). flex-basis
+     1440px (em vez de só max-width) garante que ela ocupe exatamente
+     esse espaço e ceda o resto para os blocos de dividers das pontas
+     full-bleed (node 305:437/305:449) crescerem. */
+  .site-footer__buttons-content {
+    flex: 0 1 1440px;
+    box-sizing: border-box;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--scale-x6);
+  }
+
+  .site-footer__dividers {
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--scale-x2);
+  }
+
+  /* Blocos das pontas: preenchem o espaço entre a borda real da
+     viewport e a zona de conteúdo (0 em telas ≤1440px, crescem acima
+     disso). min-width:0 evita que o conteúdo mínimo do flex item
+     impeça o encolhimento até zero. */
+  .site-footer__dividers--edge {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* Dividers fixos no início/fim da zona de conteúdo (substituem o
+     padding horizontal removido) — largura fixa, não participam do
+     crescimento/encolhimento como os das pontas full-bleed nem do
+     preenchimento variável dos dividers do meio. */
+  .site-footer__dividers--fixed {
+    flex: 0 0 64px;
+  }
+
+  .site-footer__divider-line {
+    height: 3px;
+    background-color: var(--surface-bg-secondary-strong);
+  }
+
+  .site-footer__copyright {
+    text-align: center;
+    padding: var(--scale-base) 0;
+    color: var(--text-body-neutral-medium);
+    text-transform: uppercase;
+  }
+
+  /* 768 a 959px: a linha única (64 + 4 botões + 64 + 8 gaps = 942px) não cabe
+     e estourava a largura do documento. Os botões passam a duas linhas de
+     dois (e-mail + LinkedIn, GitHub + CV), numa grade de 3 colunas
+     (botão, divisores, botão). Os dois divisores fixos das pontas e o
+     divisor entre os pares saem; o respiro lateral vira o padding (88px, o
+     mesmo que os dois divisores fixos + gap davam). A coluna da esquerda
+     alinha à esquerda e a da direita à direita do bloco. */
+  @media (min-width: 768px) and (max-width: 959px) {
+    /* Texto ampliado: colunas minmax(0, auto) (a grade pode encolher abaixo do
+       tamanho natural dos botões; a 100% elas ficam no tamanho natural, igual
+       a antes), rótulo com quebra (o e-mail, sem espaço, passa a quebrar em
+       duas linhas só quando não cabe) e respiro lateral min(88px, 11,5vw):
+       11,5vw de 768px já é 88,3px, então a 100% o valor é sempre o token; com
+       o rem dobrado (176px) ele cai para 11,5vw. Fora da escala de 4 só com
+       texto ampliado (mesmo critério da 1.4.2). */
+    .site-footer__buttons-content {
+      display: grid;
+      grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
+      row-gap: var(--scale-x4);
+      padding: 0 min(var(--scale-x20), 11.5vw);
+    }
+
+    .site-footer__buttons-content :global(.button__label) {
+      overflow-wrap: anywhere;
+    }
+
+    .site-footer__buttons-content > :first-child,
+    .site-footer__buttons-content > :last-child,
+    .site-footer__buttons-content > :nth-child(5) {
+      display: none;
+    }
+
+    .site-footer__buttons-content > :nth-child(4),
+    .site-footer__buttons-content > :nth-child(8) {
+      justify-self: end;
+    }
+  }
+
+  /* A partir de 992px, com texto ampliado: a linha de 4 botões (64px de
+     divisor, 4 botões e 64px de divisor, com 8 gaps) não cabe e os botões
+     descem para uma segunda linha em vez de passar da página. O ponto é
+     992px porque, a 100%, a linha pede 971px (192 de gaps, 128 de divisores
+     fixos e 651 de botões) mais 17px de barra de rolagem = 988px: com
+     flex-wrap desde 960px a linha quebraria já a 100% (o rodapé de 960px
+     passa de 122 para 174px). De 960 a 991px fica como antes (limite
+     aceito; backlog dos breakpoints em rem).
+     Os dois divisores fixos das pontas saem do fluxo (absolutos, nas
+     bordas, centrados na altura) e viram padding de 64px + gap, o mesmo
+     espaço de antes (88px a 100%): assim a segunda linha de botões alinha
+     com a primeira, em vez de começar na borda da janela. */
+  @media (min-width: 992px) {
+    .site-footer__buttons-content {
+      position: relative;
+      flex-wrap: wrap;
+      row-gap: var(--scale-x4);
+      padding-inline: calc(64px + var(--scale-x6));
+    }
+
+    .site-footer__dividers--fixed {
+      position: absolute;
+      inset-block: 0;
+      width: 64px;
+      height: fit-content;
+      margin-block: auto;
+    }
+
+    .site-footer__dividers--fixed:first-child {
+      inset-inline-start: 0;
+    }
+
+    .site-footer__dividers--fixed:last-child {
+      inset-inline-end: 0;
+    }
+  }
+
+  /* No mobile, o footer vira o layout próprio de FooterMobile.astro
+     (Figma: footer-mobile, node 254:1006) — não é este componente
+     encolhendo, então ele só some abaixo do breakpoint. */
+  @media (max-width: 767px) {
+    .site-footer {
+      display: none;
+    }
+  }
+</style>
+

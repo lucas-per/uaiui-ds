@@ -1,0 +1,192 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'filled-accent' | 'outline-accent' | 'outline-primary' | 'ghost-accent';
+  /** Referência tipográfica do label: 'md' (Desktop/Label/MD, scale-x5) ou 'sm' (Mobile/Label/MD, scale-x4) */
+  size?: 'sm' | 'md';
+  external?: boolean;
+  download?: boolean;
+  class?: string;
+  /** Sobrescreve o nome acessível quando o texto visível (slot) é uma
+      versão curta/abreviada que sozinha não comunica a ação completa. */
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'filled-accent',
+  size = 'md',
+  external = false,
+  download = false,
+  class: className,
+  ariaLabel,
+} = Astro.props;
+const Tag = href ? 'a' : 'button';
+const hasLeadingIcon = Astro.slots.has('leading-icon');
+const hasIcon = Astro.slots.has('icon');
+---
+
+<Tag
+  class={['button', `button--${variant}`, `button--${size}`, className].filter(Boolean).join(' ')}
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+  download={download ? true : undefined}
+  type={href ? undefined : 'button'}
+  aria-label={ariaLabel}
+>
+  {hasLeadingIcon && (
+    <span class="button__icon">
+      <slot name="leading-icon" />
+    </span>
+  )}
+  <span class={`button__label text-label-${size}`}><slot /></span>
+  {hasIcon && (
+    <span class="button__icon">
+      <slot name="icon" />
+    </span>
+  )}
+</Tag>
+
+<style>
+  /*
+    Um ::after separado pra sombra (com o corpo do botão recebendo o
+    transform) parece a solução óbvia, mas introduz uma costura de subpixel
+    entre duas caixas renderizadas independentemente — um fiapo do fundo da
+    página aparecia entre a borda e a sombra mesmo com as duas caixas
+    matematicamente idênticas (ver histórico do bug). Border e box-shadow
+    ficam de volta no mesmo elemento (sem costura possível, mesma operação
+    de pintura) e em vez de mover o elemento, compensamos o offset do
+    box-shadow na mesma medida do deslocamento: como transform desloca o
+    elemento inteiro (incluindo sua própria sombra) em bloco, aumentar o
+    offset da sombra pelo valor exato do translate do hover cancela esse
+    deslocamento e a sombra acaba renderizada exatamente na mesma posição
+    de tela de antes — só o corpo visualmente "sobe". Ver design-notes.md,
+    "Padrão de interação — botões".
+  */
+  .button {
+    display: inline-flex;
+    align-self: flex-start; /* nunca esticar em containers flex/grid do chamador */
+    align-items: center;
+    justify-content: center;
+    gap: var(--scale-x3);
+    padding: var(--scale-x3) var(--scale-x6);
+    border-width: 3px;
+    border-style: solid;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  .button__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  /* Mesma altura do ícone (24px) pra botões sem ícone (ex: "Sobre mim")
+     ficarem com a mesma altura total dos que têm ícone (ex: "Contato"),
+     em vez de encolher pra altura da linha do texto sozinho. */
+  .button__label {
+    display: flex;
+    align-items: center;
+    min-height: 24px;
+  }
+
+  .button--filled-accent {
+    background-color: var(--button-bg-accent-filled-regular);
+    border-color: var(--button-border-neutral-strong);
+    color: var(--text-label-neutral-1);
+    box-shadow: var(--shadow-comp-neutral);
+  }
+
+  @media (hover: hover) {
+    .button--filled-accent:hover {
+      box-shadow: var(--shadow-comp-neutral-hover);
+    }
+  }
+
+  .button--outline-accent {
+    background-color: var(--button-bg-accent-outline-regular);
+    border-color: var(--button-border-accent-strong);
+    color: var(--text-label-accent);
+    box-shadow: var(--shadow-comp-accent);
+  }
+
+  @media (hover: hover) {
+    .button--outline-accent:hover {
+      box-shadow: var(--shadow-comp-accent-hover);
+    }
+  }
+
+  .button--outline-primary {
+    background-color: var(--button-bg-primary-outline-regular);
+    border-color: var(--button-border-primary-strong);
+    color: var(--text-label-primary);
+    box-shadow: var(--shadow-comp-primary);
+  }
+
+  @media (hover: hover) {
+    .button--outline-primary:hover {
+      box-shadow: var(--shadow-comp-primary-hover);
+    }
+  }
+
+  .button--ghost-accent {
+    background-color: transparent;
+    border-color: var(--button-border-neutral-invisible);
+    color: var(--text-label-accent);
+    padding: var(--scale-x3) var(--scale-none);
+  }
+
+  /* size="sm" (Mobile/Label/MD) também troca o padding — o token de fonte
+     sozinho não muda a altura do botão pro valor de mobile (46px). */
+  .button--sm {
+    padding: var(--scale-x2) var(--scale-x4);
+  }
+
+  /* Hover só com mouse: no toque ficaria preso no último botão tocado. */
+  @media (hover: hover) {
+    .button:hover {
+      transform: translate(-2px, -2px);
+    }
+  }
+
+  .button:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+
+  .button:focus-visible {
+    outline: 2px solid var(--border-focus-strong);
+    outline-offset: 2px;
+  }
+
+  /*
+    No mobile (<768px), todo botão usa o "perfil" visual do size="sm"
+    (padding + label 16px) independente da prop `size` recebida — é o que
+    o Figma mostra em mobile-home/mobile-case pros botões que no desktop
+    usam size="md" (ex: "Ler case", "Voltar", "Ir para o topo").
+  */
+  @media (max-width: 767px) {
+    .button {
+      padding: var(--scale-x2) var(--scale-x4);
+    }
+
+    .button__label.text-label-md {
+      font-size: var(--scale-x4);
+    }
+
+    /* Label de 16px deixa de ser "texto grande" (WCAG): blue/5 sobre o
+       fundo da página dá 4,47:1, então os botões accent usam blue/6 aqui.
+       No desktop o label é 20px bold e segue em blue/5. */
+    .button--outline-accent,
+    .button--ghost-accent {
+      color: var(--text-body-accent-strong);
+    }
+  }
+</style>
+

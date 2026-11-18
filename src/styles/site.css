@@ -19,10 +19,13 @@ code, pre, kbd { font-family: "JetBrains Mono", monospace; font-size: 0.875em; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .skip { position: absolute; left: 8px; top: -60px; z-index: 100; }
 .skip:focus { top: 8px; }
+/* ADAPTAÇÃO UaiUI (A8): o skip link leva ao <main tabindex="-1">; o outline global do docs não deve aparecer no <main> focado por programa. Só main[tabindex="-1"]. */
+main[tabindex="-1"]:focus { outline: none; }
 
 /* Cabeçalho */
-.site-header { position: sticky; top: 0; z-index: 20; background: var(--ui-bg-page); border-bottom: var(--border-width-default) solid var(--ui-border-strong); }
-.site-header__in { display: flex; align-items: center; gap: 16px; max-width: 1440px; margin: 0 auto; padding: 12px 24px; }
+/* ADAPTAÇÃO UaiUI: z-index 5 (era 20, decisão 4): abaixo do chrome (cabeçalho mobile 10, painel Cases do desktop 20), para o menu e o painel ficarem sobre este cabeçalho em todas as larguras. */
+.docs-header { position: sticky; top: 0; z-index: 5; background: var(--ui-bg-page); border-bottom: var(--border-width-default) solid var(--ui-border-strong); }
+.docs-header__in { display: flex; align-items: center; gap: 16px; max-width: 1440px; margin: 0 auto; padding: 12px 24px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; font: 700 20px/1 "JetBrains Mono", monospace; color: var(--ui-fg-default); text-decoration: none; }
 .brand__mark { display: grid; place-items: center; width: 32px; height: 32px; background: var(--ui-brand-band); border: var(--border-width-default) solid var(--ui-border-strong); box-shadow: 2px 2px 0 var(--ui-shadow-color); color: #1a1818; }
 .site-nav { display: flex; gap: 8px; margin-left: 16px; }
@@ -134,7 +137,7 @@ tr:last-child td { border-bottom: 0; }
   .site-nav, .tool-select span { display: none; }
   .search-btn { min-width: 0; } .search-btn span, .search-btn kbd { display: none; }
   .content > h1 { font-size: 28px; }
-  .site-header__in { padding: 8px 12px; gap: 8px; }
+  .docs-header__in { padding: 8px 12px; gap: 8px; }
   .header-tools { gap: 6px; }
   .tool-select select { max-width: 96px; padding: 6px 4px; font-size: 13px; }
   .brand { font-size: 17px; gap: 8px; }

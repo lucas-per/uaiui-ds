@@ -1,0 +1,41 @@
+/*
+  Classes de texto do chrome, copiadas de styles/tokens/typography.css do Portifa
+  (a0e8583): só .text-label-md, .text-label-sm e .text-body-caption.
+
+  ADAPTAÇÃO UaiUI: A3, escopadas nos quatro contêineres com :where() (a especificidade continua a da classe, como no Portifa). Não vêm o typography.css inteiro nem nada do BaseLayout além dos quatro componentes.
+*/
+:where(.site-header, .site-header-mobile, .site-footer, .site-footer-mobile) .text-body-caption {
+  font-family: var(--font-family-body);
+  font-weight: var(--weight-500);
+  font-size: var(--scale-x3);
+  line-height: var(--line-height-regular);
+  letter-spacing: var(--letter-spacing-comfortable);
+  margin: 0;
+}
+
+:where(.site-header, .site-header-mobile, .site-footer, .site-footer-mobile) .text-label-md {
+  font-family: var(--font-family-label);
+  font-weight: var(--weight-700);
+  font-size: var(--scale-x5);
+  line-height: var(--line-height-none);
+  letter-spacing: var(--letter-spacing-regular);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+:where(.site-header, .site-header-mobile, .site-footer, .site-footer-mobile) .text-label-sm {
+  font-family: var(--font-family-label);
+  font-weight: var(--weight-700);
+  font-size: var(--scale-x4);
+  line-height: var(--line-height-none);
+  letter-spacing: var(--letter-spacing-regular);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Escala tipográfica mobile (<768px) do Portifa, só a regra do .text-label-sm. */
+@media (max-width: 767px) {
+  :where(.site-header, .site-header-mobile, .site-footer, .site-footer-mobile) .text-label-sm {
+    font-size: var(--scale-x3);
+  }
+}

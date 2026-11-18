@@ -1,0 +1,114 @@
+---
+interface Props {
+  href: string;
+  /** Texto visível. */
+  text: string;
+  /** Nome acessível, quando o texto visível é uma versão curta ou o nome expande o texto. */
+  ariaLabel?: string;
+  /** "page" ou "true" quando o link aponta para a página atual. */
+  current?: 'page' | 'true';
+  /** 'md' = Desktop/Label/MD (20px, 24px de altura); 'sm' = Mobile/Label/MD (16px, 44px de altura). */
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { href, text, ariaLabel, current, size = 'md', class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  class={['header-link', `header-link--${size}`, className].filter(Boolean).join(' ')}
+  aria-label={ariaLabel}
+  aria-current={current}
+>
+  <span class="header-link__text text-label-md">{text}</span>
+</a>
+
+<style>
+  /* Figma link-button-desktop (605:861) e link-button-mobile (605:1825).
+     A caixa clicável é a do componente: 24px de altura no desktop
+     (2px + 20px + 2px) e 44px no mobile (14px + 16px + 14px). */
+  .header-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--scale-half) 0;
+    color: var(--text-label-accent);
+    text-decoration: none;
+  }
+
+  /* No desktop o link tem 24px de altura (Figma); a área de clique cresce
+     10px para cima e para baixo, sem mudar o layout, e chega aos 44px. */
+  .header-link--md {
+    position: relative;
+  }
+
+  .header-link--md::before {
+    content: '';
+    position: absolute;
+    inset: -10px 0;
+  }
+
+  .header-link--sm {
+    padding: 0.875rem 0; /* 14px: Figma size/scale-x3_5, sem token na escala */
+    /* 16px bold fica abaixo de "texto grande" e blue/5 dá 4,47:1: mesmo
+       ajuste dos botões accent do mobile (Button.astro). */
+    color: var(--text-body-accent-strong);
+  }
+
+  .header-link__text {
+    position: relative;
+    white-space: nowrap;
+  }
+
+  /* Mobile/Label/MD (16px). O .text-label-sm global cai para 12px no mobile,
+     então o texto usa o md e o tamanho vem daqui. */
+  .header-link--sm .header-link__text {
+    font-size: var(--scale-x4);
+  }
+
+  /* Sublinhado do pressed (Figma 605:866): 2px na cor do texto, logo abaixo
+     da linha. */
+  .header-link__text::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: var(--scale-half);
+    background-color: currentColor;
+    opacity: 0;
+  }
+
+  /* Hover só com mouse: no toque a cor ficaria presa depois do toque. */
+  @media (hover: hover) {
+    .header-link:hover {
+      color: var(--text-body-accent-strong);
+    }
+  }
+
+  .header-link:active,
+  .header-link[aria-current] {
+    color: var(--text-body-accent-strong);
+  }
+
+  .header-link:active .header-link__text::after,
+  .header-link[aria-current] .header-link__text::after {
+    opacity: 1;
+  }
+
+  /* link-button-mobile (Figma, 2026-10-21): no mobile a cor do regular já é a
+     do hover, então o hover sublinha, como o pressed. Só em aparelhos com
+     hover, para o sublinhado não ficar preso depois do toque. */
+  @media (hover: hover) {
+    .header-link--sm:hover .header-link__text::after {
+      opacity: 1;
+    }
+  }
+
+  .header-link:focus-visible {
+    outline: 2px solid var(--border-focus-strong);
+    outline-offset: 2px;
+  }
+</style>
+

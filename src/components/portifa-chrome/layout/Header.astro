@@ -1,0 +1,195 @@
+---
+import Button from '../ui/Button.astro';
+import logo from '../../../assets/icons/logo.svg';
+import logoReduced from '../../../assets/icons/logo-reduced.svg';
+import HeaderLink from './HeaderLink.astro';
+import HeaderCases from './HeaderCases.astro';
+// ADAPTAÇÃO UaiUI: o item "UaiUI DS" tem aria-current fixo (decisão 2); getAriaCurrent não serve para a raiz "/".
+import { getHeaderCurrent, getHeaderSections } from '../config/navigation';
+import { getHeaderLinkText } from '../utils/header-link';
+import ContactIcon from '../ui/ContactIcon.astro';
+import { getContact } from '../config/contact';
+
+const sections = getHeaderSections();
+const email = getContact('email');
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <!-- ADAPTAÇÃO UaiUI: A4, todo href do chrome é URL absoluta de lpereira.me. -->
+    <a href="https://lpereira.me/" class="site-header__logo clickable-link-internal-home">
+      <img
+        class="site-header__logo-full"
+        src={logo.src}
+        width="308"
+        height="58"
+        alt="Lucas Pereira"
+      />
+      <img
+        class="site-header__logo-reduced"
+        src={logoReduced.src}
+        width="54"
+        height="46"
+        alt="Lucas Pereira"
+      />
+    </a>
+    <div class="site-header__actions">
+      <div class="site-header__pages">
+        <!-- Ordem do Figma 728:369: Cases, UaiUI DS, Paletaria. -->
+        <HeaderCases />
+        {sections.map((section) => {
+          const { text, ariaLabel } = getHeaderLinkText(section, false);
+          return (
+            <HeaderLink
+              href={section.path}
+              text={text}
+              ariaLabel={ariaLabel}
+              current={getHeaderCurrent(Astro.url.pathname, section)}
+              class={`clickable-link-internal-${section.key}`}
+            />
+          );
+        })}
+      </div>
+      <div class="site-header__cta">
+        <!-- ADAPTAÇÃO UaiUI: A4, URL absoluta. -->
+        <Button href="https://lpereira.me/#sobre-mim" variant="outline-accent" class="clickable-anchor-aboutme">
+          Sobre mim
+        </Button>
+        <Button href={email.href} variant="filled-accent" class="clickable-mailto-header">
+          Contato
+          <Fragment slot="icon">
+            <ContactIcon name="mail" />
+          </Fragment>
+        </Button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    width: 100%;
+    /* ADAPTAÇÃO UaiUI: A1, no Portifa o fundo vem do body; no docs o body segue o tema da UaiUI e o logo completo (#3B2F40) sumiria no escuro. */
+    background-color: var(--surface-bg-off-white-primary);
+    border-bottom: 5px solid var(--border-accent-strong);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Mínimo entre o logo e as ações; o space-between reparte o resto, então
+       a distância só cai abaixo do que 32px dariam nas pontas de cada faixa
+       (888 a ~896px e 1304 a ~1310px, com barra de rolagem de 15px). Com
+       Cases, UaiUI DS e Paletaria o cabeçalho precisa de 882px (logo
+       reduzido) e 1296px (logo completo) com 32px aqui; com 16px, de 866px e
+       1280px, e é essa conta que fecha nos pontos de troca (ver abaixo). */
+    gap: var(--scale-x4);
+    /* Texto ampliado (200%): os gaps, o padding e os botões crescem em rem e
+       o logo não, então logo e ações não cabem na mesma linha. Só quebra
+       quando falta espaço: a 100% a conta de cima (866px e 1280px) fecha e
+       nada muda de lugar. Linha 1 o logo, linha 2 as ações. */
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    max-width: 1440px;
+    margin: 0 auto;
+    /* Tablet: o Figma só tem 1440 e 360. Aqui o padding lateral acompanha o
+       do mobile, senão o cabeçalho não cabe em 888px. */
+    padding: var(--scale-x8) var(--scale-x5);
+  }
+
+  .site-header__logo {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .site-header__logo-full {
+    display: none;
+  }
+
+  /* Figma row-btns (605:1165 e 728:407): 56px entre os links e os botões.
+     Abaixo do ponto de quebra do logo completo (tablet, sem frame no Figma),
+     32px: com Cases, UaiUI DS e Paletaria, 56px não caberiam em 888px. */
+  .site-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--scale-x8);
+    /* Com texto ampliado e quebra de linha, 16px entre as linhas (os 32px de
+       cima são só entre colunas). */
+    row-gap: var(--scale-x4);
+    align-items: center;
+  }
+
+  .site-header__pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--scale-x8);
+    row-gap: var(--scale-x4);
+    align-items: center;
+  }
+
+  /* Figma row-cta (605:1042): 32px entre "Sobre mim" e "Contato". */
+  .site-header__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--scale-x8);
+    row-gap: var(--scale-x4);
+    align-items: center;
+  }
+
+  /* O botão não quebra o texto: sem isso, a 200% o flex o espreme e "Sobre
+     mim" vira 3 linhas. Quem quebra é a linha (flex-wrap acima). */
+  .site-header__cta :global(.button) {
+    white-space: nowrap;
+  }
+
+  /* Padding de 88px (Figma 98:398) a partir de 1184px, como o corpo, o rodapé
+     e a UaiUI (uaiui-docs.css): a borda do logo acompanha a do conteúdo. Com o
+     logo reduzido 54px, ações 756px (ver abaixo) e o gap de 16px, o cabeçalho
+     precisa de 54 + 756 + 16 + 2 x 88 = 1002px, mais 15px da barra = 1017px;
+     em 1184px sobram 167px. */
+  @media (min-width: 1184px) {
+    .site-header__inner {
+      padding: var(--scale-x8) var(--scale-x20);
+    }
+  }
+
+  /* Logo completo e 56px entre links e botões (Figma 98:398 e 728:369) a
+     partir de 1304px. Medido (site 1.5.0): logo 308px, ações 780px (Cases 88 +
+     32 + UaiUI DS 96 + 32 + Paletaria 108, 56px, Sobre mim 162 + 32 + Contato
+     174), padding de 2 x 88px: 1264px mais o gap de 16px = 1280px, mais 15px
+     da barra de rolagem = 1295px. 1304px deixa a mesma folga de antes (o ponto
+     era 1184px para 1176 + 15 = 1191, 7px abaixo; aqui 1296 + 15 = 1311, 7px
+     abaixo). Abaixo disso, logo reduzido (o do mobile) e 32px entre links e
+     botões; de 888 a 1183px, padding de 20px. */
+  @media (min-width: 1304px) {
+    .site-header__actions {
+      gap: var(--scale-x14);
+    }
+
+    .site-header__logo-full {
+      display: block;
+    }
+
+    .site-header__logo-reduced {
+      display: none;
+    }
+  }
+
+  /* No mobile, o header vira o layout próprio de HeaderMobile.astro
+     (Figma: header-mobile, node 254:1007) — não é este componente
+     encolhendo, então ele só some abaixo do breakpoint. O ponto é do
+     cabeçalho, não do corpo (que segue com 767/768px): logo reduzido 54px,
+     ações 756px (Cases 88 + 32 + 96 + 32 + 108, 32px, 162 + 32 + 174),
+     padding de 2 x 20px: 850px mais o gap de 16px = 866px, mais 15px da barra
+     = 881px. 888px deixa a mesma folga de antes (o ponto era 768px para 762 +
+     15 = 777, 9px abaixo; aqui 882 + 15 = 897, 9px abaixo). Entre 768 e 887px
+     vale o cabeçalho mobile, que é sticky: ver os ajustes da faixa em
+     SideMenu.astro, uaiui-docs.css, paletaria/index.astro e index.astro. */
+  @media (max-width: 887px) {
+    .site-header {
+      display: none;
+    }
+  }
+</style>
+

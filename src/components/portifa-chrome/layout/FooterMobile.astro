@@ -1,0 +1,92 @@
+---
+import Button from '../ui/Button.astro';
+import Divider from '../ui/Divider.astro';
+import ContactIcon from '../ui/ContactIcon.astro';
+import { siteVersion } from '../config/version';
+import { contactLinks, copyrightHolder, copyrightYear } from '../config/contact';
+
+const dividerLines = Array.from({ length: 2 });
+---
+
+<footer class="site-footer-mobile">
+  <!-- divider-trail (Figma desktop 452:938 / mobile 275:1149): faixa vermelha entre o conteúdo e o rodapé, em todas as páginas -->
+  <Divider height="7px" color="var(--surface-bg-tertiary-strong)" />
+  <div class="site-footer-mobile__buttons">
+    {contactLinks.map((link) => (
+      <Fragment>
+        <div class="site-footer-mobile__dividers" aria-hidden="true">
+          {dividerLines.map(() => <div class="site-footer-mobile__divider-line" />)}
+        </div>
+        <Button
+          href={link.href}
+          variant="outline-primary"
+          size="sm"
+          external={link.external}
+          download={link.download}
+          ariaLabel={link.ariaLabelWithText ? link.ariaLabel : undefined}
+          class={`site-footer-mobile__button ${link.className}`}
+        >
+          {link.label}
+          <Fragment slot="icon">
+            <ContactIcon name={link.footerIcon} />
+          </Fragment>
+        </Button>
+      </Fragment>
+    ))}
+    <div class="site-footer-mobile__dividers" aria-hidden="true">
+      {dividerLines.map(() => <div class="site-footer-mobile__divider-line" />)}
+    </div>
+  </div>
+  <!-- ADAPTAÇÃO UaiUI: A6, siteVersion traz a versão do @uaiui/ds (config/version.ts), no lugar da versão do site do Portifa. -->
+  <p class="site-footer-mobile__copyright text-body-caption">&copy; {copyrightYear} {copyrightHolder} &middot; {siteVersion}</p>
+</footer>
+
+<style>
+  .site-footer-mobile {
+    display: none;
+    flex-direction: column;
+    background-color: var(--surface-bg-tertiary-subtle);
+  }
+
+  .site-footer-mobile__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--scale-x5);
+    padding: var(--scale-x5) var(--scale-x4);
+    border-bottom: 3px solid var(--border-primary-subtle);
+  }
+
+  .site-footer-mobile__dividers {
+    display: flex;
+    flex-direction: column;
+    gap: var(--scale-x2);
+  }
+
+  .site-footer-mobile__divider-line {
+    height: 3px;
+    background-color: var(--surface-bg-secondary-strong);
+  }
+
+  .site-footer-mobile__copyright {
+    text-align: center;
+    padding: var(--scale-base) 0;
+    color: var(--text-body-neutral-medium);
+    text-transform: uppercase;
+  }
+
+  /* Botões ocupam a largura toda, empilhados (Figma, col-core-buttons) —
+     Button.astro por padrão fica align-self: flex-start pra nunca
+     esticar em containers flex, mas aqui é exatamente o comportamento
+     que queremos. */
+  .site-footer-mobile :global(.site-footer-mobile__button) {
+    align-self: stretch;
+    justify-content: center;
+  }
+
+  @media (max-width: 767px) {
+    .site-footer-mobile {
+      display: flex;
+    }
+  }
+</style>
+

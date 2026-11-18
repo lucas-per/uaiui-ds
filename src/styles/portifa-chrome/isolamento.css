@@ -1,0 +1,25 @@
+/*
+  Isolamento do chrome (cabeçalho e rodapé do Portifa) das regras globais do docs.
+
+  ADAPTAÇÃO UaiUI: as regras globais de src/styles/site.css que atingem
+  elementos do chrome foram medidas no navegador (cada uma desativada e o estilo
+  calculado e a posição de cada elemento comparados). Só uma muda o visual:
+
+  - `:focus-visible { outline: var(--focus-ring-width) solid var(--ui-focus-ring) }`
+    chega aos links do logo, que não têm :focus-visible próprio (no Portifa vale
+    o anel padrão do navegador). A cor do anel do docs segue o tema e, no escuro,
+    fica quase branca sobre o fundo sempre claro do chrome: o foco some.
+    O `revert` devolve o anel do navegador, como no Portifa.
+
+  Sem efeito visual (medido, não neutralizado): `*, ::before, ::after
+  { box-sizing }` (nenhuma posição ou tamanho muda), `a { color; text-underline-offset }`
+  (os links do chrome ou não têm texto ou têm text-decoration: none) e a herança
+  de `body`/`html` (font, color, line-height: todo texto do chrome tem a própria).
+
+  O seletor :is() tem especificidade (0,2,0): vence o :focus-visible global do
+  docs (0,1,0) e perde para os :focus-visible do próprio chrome ((0,3,0)).
+*/
+:is(.site-header, .site-header-mobile, .site-footer, .site-footer-mobile) :focus-visible {
+  outline: revert;
+  outline-offset: revert;
+}

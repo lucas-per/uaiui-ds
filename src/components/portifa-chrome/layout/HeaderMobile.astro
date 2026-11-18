@@ -1,0 +1,257 @@
+---
+import logoReduced from '../../../assets/icons/logo-reduced.svg';
+import ContactIcon from '../ui/ContactIcon.astro';
+import HeaderMobileMenu from './HeaderMobileMenu.astro';
+import { getContact } from '../config/contact';
+
+const email = getContact('email');
+const menuId = 'site-menu-mobile';
+---
+
+<header class="site-header-mobile">
+  <div class="site-header-mobile__bar">
+    <div class="site-header-mobile__core">
+      <!-- ADAPTAÇÃO UaiUI: A4, URL absoluta. -->
+      <a href="https://lpereira.me/" class="site-header-mobile__logo clickable-link-internal-home">
+        <img src={logoReduced.src} width="54" height="46" alt="Lucas Pereira" />
+      </a>
+      <!-- row-cta (Figma 254:1007): e-mail e depois menu, 16px entre eles, o menu
+           na extrema direita (a ordem do DOM é a visual, e o Tab a segue). Os
+           links de seção (UaiUI DS, Paletaria) saíram da barra e vivem no menu. -->
+      <div class="site-header-mobile__cta-row">
+        <a
+          href={email.href}
+          class="site-header-mobile__cta clickable-mailto-header"
+          aria-label={email.ariaLabel}
+        >
+          <ContactIcon name="mail" />
+        </a>
+        <button
+          type="button"
+          class="site-header-mobile__menu clickable-menu"
+          aria-expanded="false"
+          aria-controls={menuId}
+          aria-label="Abrir menu"
+          data-menu-toggle
+        >
+          <!-- ico-out-menu (675:441) e ico-out-close (675:445) -->
+          <svg class="site-header-mobile__menu-icon site-header-mobile__menu-icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 5H22V7H2V5ZM2 11H22V13H2V11ZM2 17H22V19H2V17Z" fill="currentColor"/>
+          </svg>
+          <svg class="site-header-mobile__menu-icon site-header-mobile__menu-icon--close" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.4 4L12 10.6L18.6 4L20 5.4L13.4 12L20 18.6L18.6 20L12 13.4L5.4 20L4 18.6L10.6 12L4 5.4L5.4 4Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="site-header-mobile__divider"></div>
+  </div>
+  <HeaderMobileMenu id={menuId} />
+</header>
+
+<script>
+  // Menu do cabeçalho mobile: painel de tela cheia. Abre e fecha por `hidden`,
+  // sem depender de animação, e deixa o resto da página `inert` enquanto está
+  // aberto (o painel cobre a página; sem isso o Tab iria para o conteúdo
+  // escondido). Não prende o foco: depois do último item o Tab sai da página.
+  // Fecha com Esc (o foco volta ao botão), ao escolher um link, quando a tela
+  // passa para o cabeçalho desktop e quando a página volta do cache do histórico.
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const panel = toggle && document.getElementById(toggle.getAttribute('aria-controls')!);
+  const header = toggle?.closest<HTMLElement>('.site-header-mobile');
+
+  if (toggle && panel && header) {
+    let inerted: HTMLElement[] = [];
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      header.toggleAttribute('data-menu-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+
+      inerted.forEach((element) => (element.inert = false));
+      inerted = [];
+      if (open) {
+        inerted = Array.from(document.body.children).filter(
+          (element): element is HTMLElement =>
+            element instanceof HTMLElement &&
+            !element.contains(header) &&
+            !['SCRIPT', 'STYLE'].includes(element.tagName) &&
+            !element.inert,
+        );
+        inerted.forEach((element) => (element.inert = true));
+      }
+    };
+
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+
+    document.addEventListener('keydown', (event) => {
+      // Com um diálogo modal aberto (a busca do UaiUI), o Esc é dele.
+      if (event.key !== 'Escape' || panel.hidden || event.defaultPrevented) return;
+      if (document.querySelector('dialog[open]')) return;
+      setOpen(false);
+      toggle.focus();
+    });
+
+    panel.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+
+    window.matchMedia('(min-width: 888px)').addEventListener('change', (event) => {
+      if (event.matches) setOpen(false);
+    });
+
+    // Voltar pelo histórico pode trazer a página do cache com o menu aberto.
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) setOpen(false);
+    });
+  }
+</script>
+
+<style>
+  .site-header-mobile {
+    display: none;
+    flex-direction: column;
+    background-color: var(--surface-bg-off-white-primary);
+    /* ADAPTAÇÃO UaiUI: decisão 3 (muda o A9), o cabeçalho mobile não é sticky no docs: o docs já tem cabeçalho sticky de 64px, e os dois somariam 147px fixos no topo (WCAG 2.4.11 e 1.4.10). position: relative serve de containing block do painel do menu (absolute). */
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Com o menu aberto a barra tem 62px e a sombra do X cai 3px para fora dela,
+     onde está o painel (position: absolute, pintado depois de uma barra sem
+     posição). position + z-index fazem a barra pintar acima do painel, e a
+     sombra aparece inteira, como no Figma 695:990. Só a ordem de pintura. */
+  .site-header-mobile__bar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--scale-x4);
+    padding-top: var(--scale-x4);
+  }
+
+  .site-header-mobile__core {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Com o texto a 200% em 320px logo e botões não cabem numa linha: o
+       bloco quebra e os botões descem, em vez de estourar a largura. */
+    flex-wrap: wrap;
+    row-gap: var(--scale-x4);
+    min-height: var(--header-mobile-core);
+    padding: 0 var(--scale-x5);
+  }
+
+  .site-header-mobile__logo {
+    display: inline-flex;
+  }
+
+  .site-header-mobile__cta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--scale-x4);
+  }
+
+  .site-header-mobile__divider {
+    height: var(--header-mobile-divider);
+    background-color: var(--surface-bg-accent-strong);
+  }
+
+  /* Menu aberto (Figma 695:990): a barra fica só com o logo e o X (62px, sem o
+     e-mail nem o divisor de 5px e o gap acima dele). display: none tira o
+     e-mail do Tab e da árvore de acessibilidade; ao fechar, tudo volta. */
+  .site-header-mobile[data-menu-open] .site-header-mobile__bar {
+    gap: 0;
+  }
+
+  .site-header-mobile[data-menu-open] .site-header-mobile__divider,
+  .site-header-mobile[data-menu-open] .site-header-mobile__cta {
+    display: none;
+  }
+
+  /* Mesmo visual do button--filled-accent (Button.astro), só que sem
+     label — o header mobile mostra apenas o ícone (Figma, node 605:1704,
+     78 x 46), então em vez de reaproveitar o componente Button (que
+     sempre renderiza um span de label, mesmo vazio, e introduziria um
+     gap indesejado) replico as mesmas tokens aqui. */
+  .site-header-mobile__cta,
+  .site-header-mobile__menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--scale-x2) var(--scale-x6);
+    border: 3px solid var(--button-border-neutral-strong);
+    background-color: var(--button-bg-accent-filled-regular);
+    color: var(--text-label-neutral-1);
+    box-shadow: var(--shadow-comp-neutral);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  /* button-menu (Figma 675:520): fechado é o outline-primary do site, 46x46
+     (8 + 24 + 8 e borda de 3px); aberto vira o filled-primary com o X. */
+  .site-header-mobile__menu {
+    padding: var(--scale-x2);
+    border-color: var(--button-border-primary-strong);
+    background-color: var(--button-bg-primary-outline-regular);
+    color: var(--text-label-primary);
+    box-shadow: var(--shadow-comp-primary);
+    cursor: pointer;
+  }
+
+  .site-header-mobile__menu[aria-expanded='true'] {
+    border-color: var(--button-border-neutral-strong);
+    background-color: var(--button-bg-primary-filled-regular);
+    color: var(--text-label-neutral-1);
+    box-shadow: var(--shadow-comp-neutral);
+  }
+
+  .site-header-mobile__menu-icon--close,
+  .site-header-mobile__menu[aria-expanded='true'] .site-header-mobile__menu-icon--open {
+    display: none;
+  }
+
+  .site-header-mobile__menu[aria-expanded='true'] .site-header-mobile__menu-icon--close {
+    display: block;
+  }
+
+  /* Hover só com mouse: no toque o navegador deixa o :hover preso no último
+     elemento tocado. Fica antes do :active, que precisa vencê-lo. */
+  @media (hover: hover) {
+    .site-header-mobile__cta:hover {
+      box-shadow: var(--shadow-comp-neutral-hover);
+      transform: translate(-2px, -2px);
+    }
+
+    .site-header-mobile__menu:hover {
+      box-shadow: var(--shadow-comp-primary-hover);
+      transform: translate(-2px, -2px);
+    }
+
+    .site-header-mobile__menu[aria-expanded='true']:hover {
+      box-shadow: var(--shadow-comp-neutral-hover);
+    }
+  }
+
+  .site-header-mobile__cta:active,
+  .site-header-mobile__menu:active,
+  .site-header-mobile__menu[aria-expanded='true']:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+
+  .site-header-mobile__cta:focus-visible,
+  .site-header-mobile__menu:focus-visible {
+    outline: 2px solid var(--border-focus-strong);
+    outline-offset: 2px;
+  }
+
+  /* Até 887px: o ponto é o do cabeçalho desktop (a conta está em Header.astro),
+     não o 767/768px do corpo. */
+  @media (max-width: 887px) {
+    .site-header-mobile {
+      display: flex;
+    }
+  }
+</style>
+
