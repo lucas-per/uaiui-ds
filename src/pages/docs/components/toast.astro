@@ -8,8 +8,7 @@ import css from '../../../styles/components/toast.css?raw';
 import { svg } from '../../../data/icons';
 
 type Tone = 'neutral' | 'success' | 'warning' | 'error' | 'info';
-const live = (t: Tone) => (t === 'warning' || t === 'error' ? 'role="alert"' : 'role="status"');
-const toast = (tone: Tone, title: string, msg: string, action?: string) => `<div class="uai-toast" data-tone="${tone}" ${live(tone)}>
+const toast = (tone: Tone, title: string, msg: string, action?: string) => `<div class="uai-toast" data-tone="${tone}">
   <div class="uai-toast__bar"></div>
   <div class="uai-toast__body">
     ${svg(tone, 'uai-toast__icon')}
@@ -30,12 +29,12 @@ const tones = [
 ].join('\n');
 const withAction = toast('success', 'Cadastro salvo', 'Seus dados foram atualizados.', 'Desfazer');
 const alertEx = toast('error', 'Falha no envio', 'Não foi possível enviar o arquivo. Tente de novo.', 'Tentar de novo');
-const region = `<!-- Região de avisos: fica na página desde o início, mesmo vazia -->
+const region = `<!-- Regiões de avisos: ficam na página desde o início, mesmo vazias -->
 <div class="toast-region" aria-live="polite" aria-atomic="false">
-  <!-- insira aqui os toasts neutral, success e info (role="status") -->
+  <!-- avisos comuns: insira aqui os toasts neutral, success e info -->
 </div>
 <div class="toast-region" role="alert">
-  <!-- insira aqui os toasts warning e error (role="alert") -->
+  <!-- erros e urgências: insira aqui os toasts warning e error -->
 </div>`;
 const rows = [
   { name: 'data-tone', type: 'neutral | success | warning | error | info', default: 'neutral', description: 'Define cor e ícone. Cada tom tem um desenho próprio; a cor nunca é o único sinal.' },
@@ -43,7 +42,6 @@ const rows = [
   { name: 'uai-toast__message', type: 'texto', description: 'Mensagem em uma ou duas linhas. Sempre presente.' },
   { name: 'ação', type: 'button outlined', default: 'ausente', description: 'Opcional, com rótulo de verbo: Desfazer, Tentar de novo.' },
   { name: 'data-toast-close', type: 'icon button ghost', description: 'Botão de fechar, sempre presente. <code>aria-label="Fechar aviso"</code>.' },
-  { name: 'role', type: 'status | alert', default: 'status', description: '<code>status</code> em neutral, success e info; <code>alert</code> em warning e error.' },
 ];
 ---
 <DocsLayout title="Toast" description="Aviso curto que aparece depois de uma ação ou de um evento: salvou, falhou, nova versão. Não bloqueia a tela.">
@@ -51,13 +49,13 @@ const rows = [
   <p class="lead">Aviso curto que aparece depois de uma ação ou de um evento: salvou, falhou, nova versão. Não bloqueia a tela.</p>
 
   <Example code={withAction} column label="Toast com ação" />
-  <p>Feche o aviso no X: no exemplo, ele volta depois de 2 segundos.</p>
+  <p>Feche o aviso no X: no exemplo, ele volta depois de 2 segundos. Os exemplos desta página ficam fora das regiões de aviso e não são anunciados pelo leitor de tela: são só demonstração visual.</p>
 
   <h2 id="instalacao">Instalação</h2>
-  <ol>
-    <li>Copie <code>src/styles/tokens.css</code> (veja <a href={withBase("/docs/tokens")}>Tokens e temas</a>) e o CSS do <a href={withBase("/docs/components/button")}>button</a>, usado na ação e no fechar.</li>
-    <li>Copie o CSS abaixo para <code>toast.css</code> e importe.</li>
-  </ol>
+  <p>Instale o pacote e importe os tokens (veja <a href={withBase("/docs#instalacao")}>Instalação</a>). Depois, importe o CSS do toast e o do <a href={withBase("/docs/components/button")}>button</a>, usado na ação e no fechar:</p>
+  <CodeBlock lang="css" standalone code={`@import '@uaiui/ds/components/button.css';
+@import '@uaiui/ds/components/toast.css';`} />
+  <p><strong>Sem npm ou sem bundler:</strong> copie o CSS do button e o CSS abaixo para <code>toast.css</code> e ligue os arquivos no projeto.</p>
   <CodeBlock code={css} lang="css" standalone />
 
   <h2 id="uso">Uso</h2>
@@ -73,15 +71,16 @@ const rows = [
   <PropsTable rows={rows} caption="Partes e atributos do toast" />
 
   <h2 id="acessibilidade">Acessibilidade</h2>
-  <p>Mantenha uma região viva na página desde o início, para o leitor de tela anunciar o aviso quando ele entrar:</p>
+  <p>Mantenha duas regiões na página desde o início, vazias. O leitor de tela anuncia o aviso quando ele entra numa delas:</p>
   <CodeBlock code={region} standalone />
   <ul>
-    <li><code>role="status"</code> (<code>aria-live="polite"</code>) em neutral, success e info; <code>role="alert"</code> em warning e error.</li>
+    <li>O anúncio é da região, não do toast: não ponha <code>role</code> nem <code>aria-live</code> em cada aviso. Use <code>aria-live="polite"</code> para avisos comuns (neutral, success e info) e <code>role="alert"</code> para erros e urgências (error e warning). Um aviso inserido numa região é anunciado; um que já estava na página, não.</li>
     <li>Não rouba o foco. A ação precisa ser alcançável pelo teclado.</li>
-    <li>Fica na tela até a pessoa fechar. Fechar sozinho é opcional: depois de pelo menos 5 s (mais tempo para mensagem longa), só em aviso sem ação, nos tons neutral, success e info, e com a mesma informação disponível em outro lugar da tela. Não fecha enquanto o foco ou o ponteiro estiverem sobre ele. Esc fecha o aviso com foco.</li>
+    <li>Fica na tela até a pessoa fechar. Fechar sozinho é opcional: depois de pelo menos 5 s (mais tempo para mensagem longa), só em aviso sem ação, nos tons neutral, success e info, e com a mesma informação disponível em outro lugar da tela. Não fecha enquanto o foco ou o ponteiro estiverem sobre ele.</li>
+    <li>Esc é requisito de quem integra: o CSS e o exemplo desta página não fecham o aviso com Esc (só o clique em <code>[data-toast-close]</code> fecha). Se o aviso tem foco, trate a tecla Esc no seu código e feche-o como o clique faria.</li>
     <li>Sempre dá para fechar pelo botão. Nunca use o toast como único lugar de uma informação essencial ou de um erro.</li>
     <li>Posição: canto superior, no fim da tela em telas largas; em telas estreitas, no topo, com largura total e margem de 16 px. Não cobre a ação principal da página. Vários avisos empilham com 16 px; o mais novo entra no topo da pilha e os anteriores descem.</li>
-    <li>Entrada e saída de 100 ms; sem transição com redução de movimento.</li>
+    <li>Entrada de 100 ms só com opacidade; a saída não é animada pelo CSS; sem transição com redução de movimento.</li>
     <li>Com texto muito ampliado ou em tela estreita, o botão de fechar desce para a linha de baixo.</li>
   </ul>
   <h3>Contraste</h3>
