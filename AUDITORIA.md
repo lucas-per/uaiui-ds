@@ -105,12 +105,14 @@ Ordem: gravidade, depois área. Medições e tabelas de apoio na seção 3.
 - **Evidência:** `tokens.astro:40`: "Só entram no arquivo os tokens que os componentes publicados usam" (hoje o arquivo tem 970 tokens e 1.894 variáveis). `tokens.astro:37` e `README.md:17`: "Até o export do Figma direto para JSON, edite os JSON no repositório" (o plugin e o CLI já exportam; edição à mão será sobrescrita). `README.md:69-71` e `tokens.astro:40`: "acrescente os tokens dele aos JSON" (os tokens de 19 componentes já existem).
 - **Impacto:** Quem contribui edita o JSON à mão e perde a mudança na próxima sincronização; quem lê espera um CSS enxuto.
 - **Recomendação:** Reescrever as três passagens: o Figma é a origem, `npm run export` (plugin/CLI) gera `tokens/` e CSS.
+- **Status:** **Resolvido no site em 2026-11-18** (`tokens.astro`: passo do export e callout dos tokens). Os trechos do `README.md` continuam pendentes (seção 6).
 
 ### D-02 · Média · Documentação · esforço P: As páginas de componente mandam copiar arquivos e não citam o pacote npm nem o wrapper
 
 - **Evidência:** `button.astro:43-44`, `accordion.astro:45-46`, `toast.astro:58-59` ("Copie `src/styles/tokens.css`…"). O `README.md:22-60` documenta `npm i @uaiui/ds`, `tokens-wrapper.css` e `data-uaiui-*`. Teste de consumo (tarball instalado numa pasta limpa): os 10 subcaminhos testados (tokens, wrapper, 3 componentes, resolver e JSONs) resolvem; com `tokens-wrapper.css` dentro de `.uaiui` o botão sai com #057abd e 54 px, e fora do wrapper sem estilo (como o README diz).
 - **Impacto:** Quem segue o site copia 87,8 kB de tokens (ver P-01) e perde o escopo do wrapper.
 - **Recomendação:** Seção "Instalação" única: npm + wrapper primeiro, cópia como alternativa.
+- **Status:** **Resolvido em 2026-11-18.** Seção "Instalação" única em Introdução (`npm i @uaiui/ds`, `tokens-wrapper.css` com a classe `uaiui` e `data-uaiui-*`, cópia manual como alternativa); as páginas de componente apontam para ela.
 
 ### K-02 · Média · Tokens · esforço M: Semântica/Negativa: 195 variáveis, todas #ffffff
 
@@ -219,18 +221,21 @@ Ordem: gravidade, depois área. Medições e tabelas de apoio na seção 3.
 - **Evidência:** `toast.astro:81`; `site.ts:77-84` só trata clique em `[data-toast-close]`. Chromium: com foco no botão de fechar, Esc não fecha (`hidden` continua `false`).
 - **Impacto:** Quem copia o comportamento do exemplo não ganha o Esc descrito.
 - **Recomendação:** Implementar no exemplo ou marcar como requisito de quem integra.
+- **Status:** **Resolvido em 2026-11-18.** O Esc fica documentado como requisito de quem integra, na página do Toast; o exemplo não o implementa.
 
 ### D-04 · Baixa · Documentação · esforço P: Números e versões pontuais
 
 - **Evidência:** `README.md:30` usa `#v0.5.0` no exemplo (a versão é 0.6.0). `tokens.astro:17`: "nível (20 a 180)", mas neutrals e grayscale vão de 10 a 130. `tokens.astro:16`: Dimensões sem a tipografia (4 tokens `font-*`). `README.md:60` não cita o `check-hover-media`.
 - **Impacto:** Pequeno.
 - **Recomendação:** Corrigir os quatro trechos.
+- **Status:** **Resolvido no site em 2026-11-18** (`tokens.astro`: níveis "20 a 180 nas paletas; 10 a 130 nos neutros e no grayscale" e tipografia em Dimensões). `README.md:30` e `README.md:60` continuam pendentes (seção 6).
 
 ### D-05 · Baixa · Documentação · esforço P: `homepage` e `base` do Astro apontam para endereços diferentes
 
 - **Evidência:** `package.json:11`: `https://lpereira.me/projetos/uaiui/`; `astro.config.mjs:4-6`: `site: https://lpereira.me`, `base: /uaiui` e o comentário "Publicado como subcaminho do portifa: https://lpereira.me/uaiui". `curl -L`: as duas URLs respondem 200; `/projetos/uaiui/` entrega uma página "Introdução · UaiUI DS" com `lang="pt"` (este repositório gera `lang="pt-BR"` e título "· UaiUI"), e `/uaiui/` entrega a home do Portifa.
 - **Impacto:** Não sei qual build está publicada nem de onde (não verificado): pode haver um site em produção diferente deste código.
 - **Recomendação:** Confirmar com o chat do Site onde e como o site é publicado e alinhar `homepage`, `base` e o comentário.
+- **Status:** **Resolvido no site em 2026-11-18:** `site: https://uaiui.lpereira.me`, sem `base`, canonical em cada página. O `homepage` do `package.json` continua pendente (seção 6).
 
 ### K-05 · Baixa · Tokens · esforço P: 4 tokens de ícone do accordion nunca são lidos
 
@@ -665,6 +670,19 @@ Cada tabela lista as `var(--…)` que o CSS publicado do componente lê (`src/st
 - **Site publicado:** `lpereira.me/uaiui/` e `lpereira.me/projetos/uaiui/` respondem 200 com conteúdo que não corresponde a esta build; não sei onde nem como o site é publicado (D-05).
 - **`npm run dev`:** só rodei `npm run build` (e `astro build` duas vezes para a P-06).
 - **Desempenho** (Lighthouse, tempo de carga) e **impressão:** fora do pedido.
+
+## 6. Pendências para o próximo release
+
+Itens que a PR de publicação do site não podia tocar (arquivos fora do escopo dela):
+
+- `README.md:17`: "Até o export do Figma direto para JSON, edite os JSON no repositório" (D-01).
+- `README.md:30`: `#v0.5.0` no exemplo de tag; a versão é 0.6.0 (D-04).
+- `README.md:60`: a lista de verificações do `npm run check` não cita o `check-hover-media` (D-04).
+- `README.md:69-71`: "acrescente os tokens dele aos JSON em `tokens/`" (D-01).
+- `package.json:11` (`homepage`): ainda `https://lpereira.me/projetos/uaiui/`; deve apontar para `https://uaiui.lpereira.me/` (D-05).
+- `package.json` (`engines.node`): `>=22.12.0`, mas o Astro instalado (7.4.1) exige `>=22.22.0`. O site é publicado com o Node de `.node-version` (24.21.0).
+- Sitemap: não existe; exigiria uma dependência nova (`@astrojs/sitemap`).
+- CI sem build do site (P-04): o CI não roda `npm run build`, então um erro de build do site só aparece na Cloudflare.
 
 ## Apêndice: como reproduzir
 

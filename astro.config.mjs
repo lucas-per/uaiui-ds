@@ -1,8 +1,7 @@
 import { defineConfig } from 'astro/config';
 
-// Publicado como subcaminho do portifa: https://lpereira.me/uaiui
+// Site próprio, publicado na raiz de https://uaiui.lpereira.me (sem subcaminho).
 export default defineConfig({
-  site: 'https://lpereira.me',
-  base: '/uaiui',
+  site: 'https://uaiui.lpereira.me',
   server: { port: 4321 },
 });

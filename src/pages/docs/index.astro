@@ -1,6 +1,7 @@
 ---
 import { withBase } from '../../data/url';
 import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
 import { nav } from '../../data/nav';
 const comps = nav[1].items;
 ---
@@ -15,6 +16,24 @@ const comps = nav[1].items;
     <li><strong>Cor nunca é o único sinal.</strong> Estados e tons também mudam forma, ícone ou texto.</li>
     <li><strong>Forma fixa.</strong> Borda de 2 px, raio zero e sombra reta de 2 a 4 px.</li>
   </ul>
+
+  <h2 id="instalacao">Instalação</h2>
+  <CodeBlock lang="js" standalone code={`npm i @uaiui/ds`} />
+  <p>O pacote não tem import raiz (<code>@uaiui/ds</code>): importe sempre por subcaminho. Importe os tokens e o CSS dos componentes que for usar:</p>
+  <CodeBlock lang="css" standalone code={`@import '@uaiui/ds/tokens-wrapper.css';
+@import '@uaiui/ds/components/button.css';
+@import '@uaiui/ds/components/accordion.css';
+@import '@uaiui/ds/components/toast.css';`} />
+  <p>O <code>@import</code> pelo nome do pacote só funciona com bundler (Vite, Astro, webpack e semelhantes); o navegador não resolve o nome.</p>
+  <p>Os tokens de <code>tokens-wrapper.css</code> valem só dentro de um elemento com a classe <code>uaiui</code>:</p>
+  <CodeBlock lang="html" standalone code={`<div class="uaiui" data-uaiui-theme="dark" data-uaiui-density="compact">…</div>`} />
+  <ul>
+    <li><code>data-uaiui-theme="dark"</code>: tema escuro. Sem o atributo, vale o claro (não segue o sistema).</li>
+    <li><code>data-uaiui-density="standard"</code> ou <code>"compact"</code>: sem o atributo, vale comfortable.</li>
+  </ul>
+  <p>O pacote também traz <code>@uaiui/ds/tokens.css</code> (tokens no <code>:root</code>, com <code>data-theme</code> e <code>data-density</code> no <code>&lt;html&gt;</code>, como neste site; veja <a href={withBase("/docs/tokens")}>Tokens e temas</a>) e <code>@uaiui/ds/tokens/*</code> (JSON DTCG e o resolver dos modos).</p>
+  <p>Os componentes usam as fontes JetBrains Mono (rótulos) e DM Sans (texto). O pacote não traz os arquivos de fonte: carregue as duas no seu projeto.</p>
+  <p><strong>Sem npm ou sem bundler:</strong> copie <code>src/styles/tokens-wrapper.css</code> (ou <code>tokens.css</code>) e o CSS de cada componente do repositório <a href="https://github.com/lucas-per/uaiui-ds">https://github.com/lucas-per/uaiui-ds</a>, e ligue os arquivos com <code>&lt;link rel="stylesheet"&gt;</code>.</p>
 
   <h2 id="componentes">Componentes</h2>
   <div class="cards">

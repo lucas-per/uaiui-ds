@@ -16,6 +16,7 @@ const { title, description = 'UaiUI: sistema de design com bordas retas, sombras
 const path = stripBase(Astro.url.pathname);
 const idx = flat.findIndex((i) => i.href === path);
 const prev = idx > 0 ? flat[idx - 1] : undefined;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
 ---
 <!doctype html>
@@ -25,6 +26,7 @@ const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} · UaiUI</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23e7398a'/%3E%3Ctext x='16' y='23' font-size='20' font-family='monospace' font-weight='700' text-anchor='middle' fill='%231a1818'%3EU%3C/text%3E%3C/svg%3E" />
     <script is:inline>
       try {

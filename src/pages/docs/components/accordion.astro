@@ -41,12 +41,11 @@ const rows = [
   <Example code={basic} column label="Accordion com três itens" />
 
   <h2 id="instalacao">Instalação</h2>
-  <ol>
-    <li>Copie <code>src/styles/tokens.css</code> (veja <a href={withBase("/docs/tokens")}>Tokens e temas</a>) e importe no projeto.</li>
-    <li>Copie o CSS abaixo para <code>accordion.css</code> e importe.</li>
-    <li>Acrescente o comportamento: alternar <code>aria-expanded</code> no botão e <code>hidden</code> no painel.</li>
-  </ol>
+  <p>Instale o pacote e importe os tokens (veja <a href={withBase("/docs#instalacao")}>Instalação</a>). Depois, importe o CSS do componente:</p>
+  <CodeBlock lang="css" standalone code={`@import '@uaiui/ds/components/accordion.css';`} />
+  <p><strong>Sem npm ou sem bundler:</strong> copie o CSS abaixo para <code>accordion.css</code> e ligue o arquivo no projeto.</p>
   <CodeBlock code={css} lang="css" standalone />
+  <p>O comportamento é seu: alterne <code>aria-expanded</code> no botão e <code>hidden</code> no painel, como no código abaixo.</p>
   <CodeBlock lang="js" standalone code={`document.addEventListener('click', (e) => {
   const t = e.target.closest('.uai-accordion-trigger');
   if (!t || t.getAttribute('aria-disabled') === 'true') return;
