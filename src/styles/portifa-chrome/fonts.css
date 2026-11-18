@@ -1,0 +1,33 @@
+/*
+  Fontes do chrome (cabeçalho e rodapé do Portifa), de src/styles/tokens/fonts.css
+  do Portifa (a0e8583). Só DM Sans (variável; peso 500 no copyright) e JetBrains
+  Mono 700 (rótulos). Plus Jakarta Sans é de títulos e não vem.
+
+  ADAPTAÇÃO UaiUI: A7 e decisão 1, o docs já declara DM Sans e JetBrains Mono
+  (@fontsource, em site.css) com os mesmos nomes. Para o chrome não mexer nas
+  fontes do docs, as famílias daqui têm nome próprio: "Portifa DM Sans" e
+  "Portifa JetBrains Mono". As variáveis --font-family-* (tokens.css) apontam
+  para elas, com fallback genérico.
+
+  Licenças (as duas são SIL Open Font License 1.1, confirmadas nos repositórios
+  oficiais; texto em src/assets/fonts/):
+  - DM Sans: Copyright 2014 The DM Sans Project Authors
+    (https://github.com/googlefonts/dm-fonts), OFL-DM-Sans.txt.
+  - JetBrains Mono: Copyright 2020 The JetBrains Mono Project Authors
+    (https://github.com/JetBrains/JetBrainsMono), OFL-JetBrains-Mono.txt.
+*/
+@font-face {
+  font-family: 'Portifa DM Sans';
+  src: url('../../assets/fonts/dm-sans-variable.woff2') format('woff2-variations');
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Portifa JetBrains Mono';
+  src: url('../../assets/fonts/jetbrains-mono-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

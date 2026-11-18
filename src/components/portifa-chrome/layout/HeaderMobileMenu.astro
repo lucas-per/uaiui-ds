@@ -1,0 +1,253 @@
+---
+import Divider from '../ui/Divider.astro';
+import ContactIcon from '../ui/ContactIcon.astro';
+import HeaderLink from './HeaderLink.astro';
+// ADAPTAÇÃO UaiUI: decisão 2, aria-current fixo no item "UaiUI DS".
+import { getHeaderCurrent, getHeaderSections } from '../config/navigation';
+import { copyrightYear, menuFooterLinks } from '../config/contact';
+import { siteVersion } from '../config/version';
+import { getHeaderLinkText } from '../utils/header-link';
+// ADAPTAÇÃO UaiUI: decisão 5, lista fixa de cases.
+import { menuCases } from '../utils/cases';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const cases = menuCases;
+const sections = getHeaderSections();
+const casesLabelId = `${id}-cases`;
+const projectsLabelId = `${id}-projetos`;
+---
+
+<!-- header-mobile-menu (Figma 695:953): painel de tela cheia abaixo da barra.
+     O botão do cabeçalho alterna `hidden` e o `inert` do resto da página;
+     fechado, nada aqui entra na ordem do Tab. -->
+<div id={id} class="site-menu-mobile" hidden>
+  <nav class="site-menu-mobile__links" aria-label="Menu do site">
+    <div class="site-menu-mobile__group">
+      <p id={casesLabelId} class="site-menu-mobile__label text-label-sm">Cases</p>
+      <ul role="list" aria-labelledby={casesLabelId}>
+        {cases.map((item) => (
+          <li>
+            <HeaderLink
+              href={item.href}
+              text={item.label}
+              current={undefined}
+              size="sm"
+              class={`site-menu-mobile__link clickable-link-internal-case-${item.key}`}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+    <!-- divider de 156x3px, a partir da borda da tela (fora do padding dos grupos) -->
+    <Divider width="156px" class="site-menu-mobile__divider" />
+    <div class="site-menu-mobile__group site-menu-mobile__group--projects">
+      <p id={projectsLabelId} class="site-menu-mobile__label text-label-sm">Projetos</p>
+      <ul role="list" aria-labelledby={projectsLabelId}>
+        {sections.map((section) => {
+          const { text, ariaLabel } = getHeaderLinkText(section, true);
+          return (
+            <li>
+              <HeaderLink
+                href={section.path}
+                text={text}
+                ariaLabel={ariaLabel}
+                current={getHeaderCurrent(Astro.url.pathname, section)}
+                size="sm"
+                class={`site-menu-mobile__link clickable-link-internal-${section.key}`}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </nav>
+  <!-- divider-trail, a mesma faixa de 7px do rodapé -->
+  <Divider height="7px" color="var(--surface-bg-tertiary-strong)" class="site-menu-mobile__trail" />
+  <!-- row-mini-footer: links e ano vêm de config/contact.ts e a versão de config/version.ts -->
+  <div class="site-menu-mobile__footer">
+    <ul class="site-menu-mobile__icons" role="list">
+      {menuFooterLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class={`site-menu-mobile__icon-button ${link.className}`}
+            aria-label={link.ariaLabel}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener noreferrer' : undefined}
+          >
+            <ContactIcon name={link.menuIcon} />
+          </a>
+        </li>
+      ))}
+    </ul>
+    <!-- ADAPTAÇÃO UaiUI: A6, siteVersion traz a versão do @uaiui/ds (config/version.ts). -->
+    <p class="site-menu-mobile__copyright text-body-caption">&copy; {copyrightYear} &middot; {siteVersion}</p>
+  </div>
+</div>
+
+<style>
+  /* Fora do fluxo, logo abaixo da barra do cabeçalho sticky: o painel não
+     aumenta a página nem deixa vazio sob a barra, qualquer que seja a altura
+     dela (83px fechada, 62px aberta, mais alta com o texto ampliado). A altura
+     é a da tela menos a da barra (100% é a altura do cabeçalho, que é a barra);
+     o 100vh é o recurso para quem não tem dvh. Em telas baixas e com o texto
+     ampliado o painel rola sozinho. */
+  .site-menu-mobile {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100%);
+    height: calc(100dvh - 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--surface-bg-off-white-primary);
+  }
+
+  .site-menu-mobile[hidden] {
+    display: none;
+  }
+
+  /* Com o conteúdo maior que a tela, nada encolhe: o painel rola. */
+  .site-menu-mobile > :global(*) {
+    flex-shrink: 0;
+  }
+
+  /* col-links: 40px em cima e embaixo e 24px entre os grupos e o divisor. Sem
+     padding lateral: o divisor começa na borda; o de 20px é de cada grupo. Ocupa
+     o que sobra da altura, e o mini-rodapé fica colado embaixo. */
+  .site-menu-mobile__links {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    gap: var(--scale-x6);
+    padding: var(--scale-x10) 0;
+  }
+
+  .site-menu-mobile__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--scale-x2);
+    padding: 0 var(--scale-x5);
+  }
+
+  /* Figma: 14px (scale-x3_5); aqui 16px, o múltiplo de 4 mais próximo (decisão do Lucas). */
+  .site-menu-mobile__group--projects {
+    padding-top: var(--scale-x4);
+  }
+
+  .site-menu-mobile__group ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Mobile/Label/SM: 12px bold, caixa alta (o .text-label-sm já vira 12px no mobile) */
+  .site-menu-mobile__label {
+    color: var(--text-label-primary);
+  }
+
+  /* Link de 44px (link-button-mobile, via HeaderLink size="sm") na largura
+     toda da linha, como no Figma: o alvo é a linha, não só o texto. */
+  .site-menu-mobile :global(.site-menu-mobile__link) {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  /* O HeaderLink não quebra linha (nowrap); no menu, com o texto ampliado, o
+     nome do case não cabe numa linha e estourava o painel. O link continua com
+     no mínimo 44px e cresce com a segunda linha. */
+  .site-menu-mobile :global(.site-menu-mobile__link .header-link__text) {
+    white-space: normal;
+  }
+
+  /* row-mini-footer: botões à esquerda e o © à direita, na mesma linha, sobre o
+     tertiary/subtle (o mesmo fundo dos rodapés). O © ocupa o que sobra. */
+  .site-menu-mobile__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--scale-x2);
+    padding: var(--scale-x4);
+    background-color: var(--surface-bg-tertiary-subtle);
+  }
+
+  /* Com o texto ampliado (o padding é em rem), os botões e o © quebram linha
+     em vez de estourar; no tamanho normal fica tudo numa linha só. */
+  .site-menu-mobile__icons {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 0 1 auto;
+    min-width: 0;
+    gap: var(--scale-x2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Botão de ícone outline-primary do site (46x46: 8 + 24 + 8 e borda de 3px),
+     com as mesmas tokens e interação do Button.astro. Sem o componente pelo
+     mesmo motivo do botão de e-mail do cabeçalho: ele sempre tem rótulo. */
+  .site-menu-mobile__icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--scale-x2);
+    border: 3px solid var(--button-border-primary-strong);
+    background-color: var(--button-bg-primary-outline-regular);
+    color: var(--text-label-primary);
+    box-shadow: var(--shadow-comp-primary);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  /* Hover só com mouse (no toque ficaria preso); antes do :active, que o vence. */
+  @media (hover: hover) {
+    .site-menu-mobile__icon-button:hover {
+      box-shadow: var(--shadow-comp-primary-hover);
+      transform: translate(-2px, -2px);
+    }
+  }
+
+  .site-menu-mobile__icon-button:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+
+  .site-menu-mobile__icon-button:focus-visible {
+    outline: 2px solid var(--border-focus-strong);
+    outline-offset: 2px;
+  }
+
+  /* Na linha dos botões se cabe inteiro; senão desce para a linha de baixo, em
+     vez de ficar espremido e passar da largura. */
+  .site-menu-mobile__copyright {
+    flex: 1 1 auto;
+    color: var(--text-body-primary-strong);
+    text-align: right;
+    text-transform: uppercase;
+  }
+
+  /* Em alto contraste o fundo dos divisores é trocado pelo da página e eles
+     somem: o divisor curto e o divider-trail do menu usam a cor do texto. A cor
+     vem de estilo em linha do Divider, por isso o !important. */
+  @media (forced-colors: active) {
+    .site-menu-mobile :global(.site-menu-mobile__divider),
+    .site-menu-mobile :global(.site-menu-mobile__trail) {
+      forced-color-adjust: none;
+      background-color: CanvasText !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-menu-mobile__icon-button {
+      transition: none;
+    }
+  }
+</style>
+

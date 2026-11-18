@@ -4,8 +4,9 @@ const path = stripBase(Astro.url.pathname);
 const links = [{ href: '/docs', label: 'Docs' }, { href: '/docs/components/button', label: 'Componentes' }, { href: '/docs/tokens', label: 'Tokens' }];
 const isActive = (h: string) => (h === '/docs/components/button' ? path.startsWith('/docs/components') : h === '/docs' ? path === '/docs' : path.startsWith(h));
 ---
-<header class="site-header">
-  <div class="site-header__in">
+<!-- ADAPTAÇÃO UaiUI: o <header> do docs vira <div>; o banner da página é o <header> do chrome (Portifa). -->
+<div class="docs-header">
+  <div class="docs-header__in">
     <button type="button" class="menu-btn uai-button uai-icon-button" data-type="outlined" data-menu aria-label="Abrir menu" aria-expanded="false" aria-controls="sidebar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
@@ -26,4 +27,4 @@ const isActive = (h: string) => (h === '/docs/components/button' ? path.startsWi
       </label>
     </div>
   </div>
-</header>
+</div>

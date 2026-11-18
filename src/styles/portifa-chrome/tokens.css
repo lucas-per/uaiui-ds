@@ -1,0 +1,95 @@
+/*
+  Tokens do chrome (cabeçalho e rodapé do Portifa), copiados de
+  src/styles/tokens/primitives.css e semantics.css do Portifa (a0e8583): só os
+  que o chrome usa, com os primitivos que eles referenciam.
+
+  ADAPTAÇÃO UaiUI: A2, os nomes genéricos do Portifa (--scale-*, --surface-*, --text-*, --button-*, --border-*, --icon-*, --shadow-*) podem colidir com os da UaiUI. Por isso ficam declarados só nos quatro contêineres, nunca em :root, e valem só dentro do chrome (decisão 3: nada em :root, inclusive --header-mobile-core e --header-mobile-divider).
+*/
+.site-header,
+.site-header-mobile,
+.site-footer,
+.site-footer-mobile {
+  /* ADAPTAÇÃO UaiUI: o chrome fica sempre claro, mesmo no tema escuro do docs (decisão 1): barras de rolagem e controles nativos também (decisão 7). */
+  color-scheme: light;
+
+  /* Primitivos */
+  --grey-1: oklch(99.58% 0.0025 228.78); /* #fcfeff */
+  --grey-8: oklch(30.85% 0.0132 239.00); /* #2a3136 */
+  --grey-9: oklch(20.96% 0.0134 243.58); /* #13191e */
+  --grey-1-transparent: oklch(99.58% 0.0025 228.78 / 0); /* #fcfeff00 — mesma cor, alpha 0 (borda "invisível" que ainda reserva espaço) */
+  --purple-3: oklch(73.25% 0.0362 306.15); /* #aea3bb */
+  --purple-6: oklch(41.61% 0.0366 306.45); /* #51475c */
+  --purple-7: oklch(34.68% 0.0362 305.09); /* #3e3549 */
+  --blue-2: oklch(87.37% 0.0667 244.52); /* #b1dbff */
+  --blue-3: oklch(76.82% 0.1281 243.85); /* #65bcff */
+  --blue-4: oklch(66.42% 0.1359 243.76); /* #3a9be0 */
+  --blue-5: oklch(55.82% 0.1361 243.96); /* #057abd */
+  --blue-6: oklch(47.12% 0.1163 244.05); /* #006097 */
+  --red-1: oklch(97.98% 0.0098 25.07); /* #fff6f5 */
+  --red-3: oklch(82.89% 0.0950 24.86); /* #ffafa8 */
+  --red-6: oklch(56.10% 0.2095 24.48); /* #d4222f */
+  --yellow-1: oklch(98.64% 0.0119 101.48); /* #fcfbf2 */
+  --scale-none: 0;
+  --scale-half: 0.125rem; /* 2px */
+  --scale-base: 0.25rem; /* 4px */
+  --scale-x2: 0.5rem; /* 8px */
+  --scale-x3: 0.75rem; /* 12px */
+  --scale-x4: 1rem; /* 16px */
+  --scale-x5: 1.25rem; /* 20px */
+  --scale-x6: 1.5rem; /* 24px */
+  --scale-x8: 2rem; /* 32px */
+  --scale-x10: 2.5rem; /* 40px */
+  --scale-x11: 2.75rem; /* 44px */
+  --scale-x14: 3.5rem; /* 56px — gap do hero mobile (Figma, node 235:745) */
+  --scale-x20: 5.5rem; /* 88px */
+  --weight-500: 500;
+  --weight-700: 700;
+
+  /* Semânticos */
+  --surface-bg-off-white-primary: var(--yellow-1);
+  --surface-bg-accent-medium: var(--blue-2);
+  --surface-bg-accent-strong: var(--blue-3);
+  --surface-bg-secondary-strong: var(--purple-3);
+  --surface-bg-tertiary-subtle: var(--red-1);
+  --surface-bg-tertiary-strong: var(--red-3);
+  --border-accent-subtle: var(--blue-5);
+  --border-accent-strong: var(--blue-4);
+  --border-primary-subtle: var(--purple-3);
+  --border-focus-strong: var(--red-6);
+  --text-label-neutral-1: var(--grey-1);
+  --text-label-accent: var(--blue-5);
+  --text-label-primary: var(--purple-7);
+  --text-body-neutral-medium: var(--grey-8);
+  --text-body-accent-strong: var(--blue-6);
+  --text-body-primary-strong: var(--purple-7);
+  --icon-accent: var(--blue-5);
+  --button-bg-accent-filled-regular: var(--blue-5);
+  --button-bg-accent-outline-regular: var(--yellow-1);
+  --button-bg-primary-filled-regular: var(--purple-6);
+  --button-bg-primary-outline-regular: var(--yellow-1);
+  --button-border-accent-strong: var(--blue-4);
+  --button-border-primary-strong: var(--purple-6);
+  --button-border-neutral-strong: var(--grey-8);
+  --button-border-neutral-invisible: var(--grey-1-transparent);
+  --shadow-comp-neutral: 3px 3px 0 0 var(--grey-9);
+  --shadow-comp-accent: 3px 3px 0 0 var(--blue-3);
+  --shadow-comp-primary: 3px 3px 0 0 var(--purple-3);
+  --shadow-layout-accent: 5px 5px 0 0 var(--blue-4);
+  --shadow-comp-neutral-hover: 5px 5px 0 0 var(--grey-9);
+  --shadow-comp-accent-hover: 5px 5px 0 0 var(--blue-3);
+  --shadow-comp-primary-hover: 5px 5px 0 0 var(--purple-3);
+  --line-height-none: 1;
+  --line-height-regular: 1.48;
+  --letter-spacing-regular: 0px;
+  --letter-spacing-comfortable: 1px;
+
+  /* Famílias de fonte (Portifa: styles/tokens/fonts.css, :root).
+     ADAPTAÇÃO UaiUI: decisão 1, as famílias têm nome próprio (ver fonts.css) para não mexer nas fontes do docs, e ganham fallback genérico. */
+  --font-family-body: 'Portifa DM Sans', sans-serif;
+  --font-family-label: 'Portifa JetBrains Mono', monospace;
+
+  /* Altura do cabeçalho mobile (Figma header-mobile, 254:1007): 16px, o miolo de 46px, 16px e o divider de 5px.
+     ADAPTAÇÃO UaiUI: decisão 3, sem --header-mobile-height (o cabeçalho não é sticky); os dois valores que sobram ficam aqui, não em :root. */
+  --header-mobile-core: 2.875rem;
+  --header-mobile-divider: 5px;
+}

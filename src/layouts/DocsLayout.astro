@@ -1,12 +1,20 @@
 ---
 import '../styles/tokens.css';
 import '../styles/site.css';
+import '../styles/portifa-chrome/fonts.css';
+import '../styles/portifa-chrome/tokens.css';
+import '../styles/portifa-chrome/typography.css';
+import '../styles/portifa-chrome/isolamento.css';
 import '../styles/components/button.css';
 import '../styles/components/accordion.css';
 import '../styles/components/toast.css';
 import Header from '../components/Header.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Search from '../components/Search.astro';
+import PortifaHeader from '../components/portifa-chrome/layout/Header.astro';
+import PortifaHeaderMobile from '../components/portifa-chrome/layout/HeaderMobile.astro';
+import PortifaFooter from '../components/portifa-chrome/layout/Footer.astro';
+import PortifaFooterMobile from '../components/portifa-chrome/layout/FooterMobile.astro';
 import { flat } from '../data/nav';
 import { withBase, stripBase } from '../data/url';
 
@@ -37,12 +45,16 @@ const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
     </script>
   </head>
   <body>
+    <!-- ADAPTAÇÃO UaiUI: A8, o skip link do docs já existia: continua um só, é o primeiro focável do <body> (antes do chrome) e leva ao <main id="conteudo" tabindex="-1">. -->
     <a class="skip uai-button" data-type="outlined" href="#conteudo">Pular para o conteúdo</a>
+    <!-- Cabeçalho e rodapé do Portifa (ver docs/CHROME-PORTIFA.md). Os quatro e o skip link são filhos diretos do <body>: o script do menu mobile marca como inert os filhos diretos que não contêm o cabeçalho. -->
+    <PortifaHeader />
+    <PortifaHeaderMobile />
     <Header />
     {docs ? (
       <div class="shell">
         <Sidebar />
-        <main class="content" id="conteudo">
+        <main class="content" id="conteudo" tabindex="-1">
           <slot />
           <nav class="pager" aria-label="Páginas anterior e seguinte">
             {prev ? <a href={withBase(prev.href)} rel="prev"><small>Anterior</small><strong>{prev.title}</strong></a> : <span />}
@@ -52,9 +64,11 @@ const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
         <nav class="toc" aria-label="Nesta página" data-toc hidden><h2>Nesta página</h2><ul></ul></nav>
       </div>
     ) : (
-      <main id="conteudo"><slot /></main>
+      <main id="conteudo" tabindex="-1"><slot /></main>
     )}
     <Search />
+    <PortifaFooter />
+    <PortifaFooterMobile />
     <script>
       import '../scripts/site.ts';
     </script>
