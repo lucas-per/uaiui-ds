@@ -6,9 +6,16 @@
  * slot "preview" e `code` é o que a pessoa copia. Os ids são estáveis
  * (utils/stable-id.ts), não aleatórios. A densidade fica dentro do painel
  * Preview, abaixo do palco (Figma 704:751); o name dos rádios sai do id.
+ *
+ * ADAPTAÇÃO UaiUI: tema dos exemplos (D13 em docs/DOCS-PORTIFA.md, adição deste
+ * repositório). O palco ganha a classe uaiui (um .uaiui aninhado, que recebe
+ * data-uaiui-theme e a cópia de data-uaiui-density por script) e o controle de
+ * Tema entra à direita do de densidade, numa linha (.uaiui-docs__controls). O
+ * painel Código fica fora do palco: o código não recebe o tema.
  */
 import CodeBlock from './CodeBlock.astro';
 import DocsDensity from './DocsDensity.astro';
+import DocsTheme from './DocsTheme.astro';
 import { stableId } from './utils/stable-id';
 
 interface Props {
@@ -35,11 +42,14 @@ const hasPreviewSlot = Astro.slots.has('preview');
   </div>
   <div role="tabpanel" id={`${id}-pp`} aria-labelledby={`${id}-p`}>
     {hasPreviewSlot ? (
-      <div class:list={['uaiui-docs__stage', { 'uaiui-docs__stage--col': column }]}><slot name="preview" /></div>
+      <div class:list={['uaiui uaiui-docs__stage', { 'uaiui-docs__stage--col': column }]}><slot name="preview" /></div>
     ) : (
-      <div class:list={['uaiui-docs__stage', { 'uaiui-docs__stage--col': column }]} set:html={code} />
+      <div class:list={['uaiui uaiui-docs__stage', { 'uaiui-docs__stage--col': column }]} set:html={code} />
     )}
-    <DocsDensity name={`${id}-densidade`} />
+    <div class="uaiui-docs__controls">
+      <DocsDensity name={`${id}-densidade`} />
+      <DocsTheme name={`${id}-tema`} />
+    </div>
   </div>
   <div role="tabpanel" id={`${id}-cp`} aria-labelledby={`${id}-c`} hidden>
     <CodeBlock code={code} bare />

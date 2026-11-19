@@ -1,0 +1,45 @@
+---
+/**
+ * ADAPTAÇÃO UaiUI: adição deste repositório (D13 em docs/DOCS-PORTIFA.md). Não
+ * existe no Portifa nem no Figma.
+ *
+ * Controle de tema de um exemplo, ao lado do de densidade e com o mesmo
+ * visual (as classes de DocsDensity.astro). Muda só o palco do exemplo: Claro
+ * é a ausência de data-uaiui-theme e Escuro é data-uaiui-theme="dark" no palco
+ * (.uaiui aninhado). A moldura da página e o bloco de código continuam claros.
+ * Cada exemplo tem o seu grupo de rádios (name próprio, como na densidade); a
+ * escolha vale para a página toda, os grupos ficam sincronizados por script
+ * (tema.ts) e ela fica em localStorage (uaiui-theme, só com o valor "dark").
+ * Não segue o tema do sistema. O script inline do DocsLayout aplica a escolha
+ * salva e marca a opção antes da pintura.
+ */
+interface Props {
+  /** name dos rádios: único por exemplo (vem do id estável dele). */
+  name: string;
+}
+
+const { name } = Astro.props;
+
+const themeOptions = [
+  { value: 'light', label: 'Claro' },
+  { value: 'dark', label: 'Escuro' },
+] as const;
+---
+
+<fieldset class="uaiui-docs__density uaiui-docs__theme" data-theme>
+  <legend class="uaiui-docs__density-legend">Tema</legend>
+  <div class="uaiui-docs__segments">
+    {themeOptions.map((option) => (
+      <label class="uaiui-docs__segment">
+        <input
+          class="uaiui-docs__segment-input"
+          type="radio"
+          name={name}
+          value={option.value}
+          checked={option.value === 'light'}
+        />
+        <span class="uaiui-docs__segment-text">{option.label}</span>
+      </label>
+    ))}
+  </div>
+</fieldset>

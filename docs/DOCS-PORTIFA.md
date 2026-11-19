@@ -33,6 +33,7 @@ git -C ~/Projetos/portifa diff a0e8583 origin/main -- src/layouts/UaiuiDocsLayou
 | `src/pages/projetos/uaiui/{index,tokens}.astro`, `componentes/*.astro` | `src/pages/index.astro`, `tokens.astro`, `componentes/*.astro` | estrutura do Portifa, texto deste repositório (D8) |
 | — | `src/styles/portifa-docs/base.css` | base da página, no lugar do antigo `site.css` (D5) |
 | — | `src/pages/sitemap.xml.ts` | sitemap (D11) |
+| — | `src/components/portifa-docs/DocsTheme.astro`, `tema.ts`, `src/styles/portifa-docs/uaiui-docs-tema.css` | tema dos exemplos, adição deste repositório (D13) |
 
 Saíram: `src/pages/docs/**`, `src/components/{Header,Sidebar,Search,Example,CodeBlock,PropsTable}.astro`, `src/data/{nav,icons,url}.ts`, `src/scripts/site.ts`, `src/styles/site.css` (o hero, o cabeçalho próprio do docs com os seletores globais de tema e densidade, a gaveta e o índice "Nesta página").
 
@@ -47,7 +48,7 @@ Cada uma está marcada no código com `ADAPTAÇÃO UaiUI` (`grep -rn "ADAPTAÇÃ
 - **D5. Base da página** (`base.css`). O CSS global do Portifa não veio no material. Ficam: os `@fontsource` (as famílias que o wrapper do DS lê nos componentes dos exemplos), `box-sizing` (o docs já tinha), `html { color-scheme: light }` (a moldura é sempre clara), o fundo off-white do site no `body` (valor do primitivo `--yellow-1` copiado, porque os tokens do Portifa não alcançam o `body`), o skip link e `main[tabindex="-1"]:focus`.
 - **D6. Rotas.** `/` (Introdução), `/tokens/` e `/componentes/<nome>/`, com barra final, como no Portifa. As descrições são as deste repositório; só a do Toast muda ("Aviso curto que aparece depois de uma ação ou de um evento: salvou, falhou, nova versão. Não bloqueia a tela."; a do Portifa dizia "some sozinho").
 - **D7. Faixa "UaiUI design system".** A frase do Portifa ("…e em breve disponível no GitHub") ficou desatualizada; vale a do hero da página inicial anterior: "Sistema de design com bordas retas, sombras duras e temas por tokens. Cada componente tem preview, código e requisitos de acessibilidade."
-- **D8. Páginas.** Estrutura do Portifa (lead como prop, h1 vindo do nav, callouts `--use`/`--avoid`, cards, tabela com região focável, amostras) com o texto deste repositório. Saíram as frases que ficariam falsas sem os seletores globais: "Use o seletor no cabeçalho para ver." (Introdução; volta na PR do tema como "Use os controles de cada exemplo para ver."), "como neste site" (Introdução, sobre `tokens.css`) e "Mude o tema no cabeçalho para ver as cores trocarem." (Tokens). O lead de Tokens perdeu o `<code>` em volta de `tokens.css` (a prop é texto).
+- **D8. Páginas.** Estrutura do Portifa (lead como prop, h1 vindo do nav, callouts `--use`/`--avoid`, cards, tabela com região focável, amostras) com o texto deste repositório. Saíram as frases que ficariam falsas sem os seletores globais: "Use o seletor no cabeçalho para ver." (Introdução; voltou na PR 2, com o tema, como "Use os controles de cada exemplo para ver.", só na Introdução: a página Tokens não tem exemplo, e as amostras de cores ficam fora de palco), "como neste site" (Introdução, sobre `tokens.css`) e "Mude o tema no cabeçalho para ver as cores trocarem." (Tokens). O lead de Tokens perdeu o `<code>` em volta de `tokens.css` (a prop é texto).
 - **D9. Toast.** A demonstração principal é a do Portifa: "Mostrar aviso", região viva vazia, `<template>`; fechar pelo X, por Desfazer ou com Esc devolve o foco ao botão; os tons estáticos voltam em 2 s. O texto da página foi ajustado a ela; o conteúdo de acessibilidade é o deste repositório (regiões `aria-live="polite"` e `role="alert"`, toast sem `role`, Esc como requisito de quem integra, entrada de 100 ms só em opacidade). Saiu a frase que dizia que o exemplo não fecha com Esc.
 - **D10. Skip link.** Continua um só, o primeiro focável, filho direto do `<body>` (A8 do chrome). Ganhou a classe `uaiui` no próprio `<a>`, para ter os tokens do DS sem o `:root`. Por isso o `button.css` é importado no layout; o do accordion e o do toast entram só na página deles, como no Portifa.
 - **D11. Sitemap.** `src/pages/sitemap.xml.ts` gera `dist/sitemap.xml` a partir de `uaiui-nav.ts`, com as URLs do canonical (sem dependência nova).
@@ -61,6 +62,14 @@ Cada uma está marcada no código com `ADAPTAÇÃO UaiUI` (`grep -rn "ADAPTAÇÃ
   | 400 ms, 0,4 Mbit/s | com preload | ~0,45 s | ~5,85 s | Plus Jakarta Sans | DM Sans, já na primeira pintura |
 
   Custo: a primeira pintura atrasa (~0,33 s na primeira rede, ~1,3 s na segunda), porque os 64 KB das duas fontes passam a dividir a banda com o CSS; o carregamento total fica igual. É o mesmo comportamento do Portifa. A JetBrains Mono 700 do chrome (`swap`, só rótulos) e as do `@fontsource` (`swap`) continuam sem preload, como no Portifa.
+- **D13. Tema dos exemplos** (PR 2). **Adição deste repositório: não existe no Portifa nem no Figma.** Arquivos novos: `DocsTheme.astro`, `tema.ts` e `uaiui-docs-tema.css`; alterados, com a marca: `Example.astro` e `DocsLayout.astro`. `docs.ts` e `DocsDensity.astro` continuam cópias literais.
+  - **Onde vale:** só no palco de cada exemplo (`.uaiui-docs__stage`). A moldura (o wrapper `.uaiui.uaiui-docs`) nunca recebe o tema e continua clara; o bloco de código (painel Código, fora do palco) também não muda, e já é escuro nos dois temas.
+  - **Como:** o palco tem sempre a classe `uaiui` (um `.uaiui` aninhado). Escuro é `data-uaiui-theme="dark"` no palco; Claro é a ausência do atributo. Como o `.uaiui` aninhado redeclara todos os tokens, o palco recebe também uma cópia do `data-uaiui-density` do wrapper: sem ela, voltaria para Confortável. No `tokens-wrapper.css`, os blocos do escuro (288 propriedades) e das densidades (174 cada) não têm nenhum nome em comum, então as combinações não dependem da ordem dos arquivos.
+  - **Controle:** `fieldset` com legenda "Tema" e rádios Claro e Escuro, com as classes do controle de densidade (mesmo visual), à direita dele numa linha (`.uaiui-docs__controls`); quando não cabem lado a lado, Tema desce para baixo de Densidade. Medido nas três páginas, de 4 em 4px: lado a lado de 604 a 764px e de 936px em diante; Tema embaixo de 320 a 600px e de 768 a 932px (a partir de 768px o menu lateral divide a largura). Um grupo por exemplo (`name` terminando em `-tema`), sincronizados na página.
+  - **Escolha:** vale para a página toda e para as outras páginas; fica em `localStorage`, chave `uaiui-theme`, só com o valor `dark` (Claro apaga a chave; outro valor vale Claro). Não segue o tema do sistema. As chaves antigas do site anterior (`uai-theme`, `uai-density`) são ignoradas. Anúncio no mesmo `role="status"` da densidade: "Tema dos exemplos: Escuro." / "Claro.".
+  - **Antes da pintura:** um script inline no início do wrapper, logo depois do da densidade, instala um `MutationObserver` que marca cada palco e cada rádio de tema assim que ele entra no documento (os palcos vêm depois do script); ele se desliga no `DOMContentLoaded`. `tema.ts` reaplica o estado salvo (idempotente), cuida da troca e acompanha a densidade do wrapper (observando o atributo, sem mexer em `docs.ts`).
+  - **Medido no Chromium:** nenhum quadro pintado com palco claro ou sem a densidade (rede lenta, página chegando em pedaços); tema escuro × Confortável, Padrão e Compacto no Button, no Accordion e no Toast (com o "Mostrar aviso"): os 174 tokens de densidade do palco iguais aos do wrapper, tamanhos iguais aos do claro, moldura e código iguais; Tab da densidade vai para a opção marcada do Tema, setas trocam, anel de foco de 2px com 17,51:1; contraste da legenda 5,78:1, opção não marcada 11,47:1, marcada e sublinhado 4,59:1 (os mesmos da densidade); sem rolagem horizontal de 320 a 1440px.
+  - **Observado, não mudado (cópia):** a legenda do controle de densidade começa exatamente na borda inferior do palco (0px de folga, como no Portifa). No claro não aparece, porque o palco e o painel têm quase a mesma cor; no escuro, as legendas "Densidade" e "Tema" ficam encostadas no palco escuro.
 
 **Não adaptado de propósito:** os blocos `@media (max-width: 887px)` e `@media (min-width: 768px) and (max-width: 887px)` de `uaiui-docs.css` (que leem `--header-mobile-height`) ficaram como no Portifa, porque o cabeçalho mobile do chrome voltou a ser sticky (decisão 11; A9 em `docs/CHROME-PORTIFA.md`). `--header-mobile-height` está definido em `.uaiui-docs` (D2) e nos contêineres do chrome.
 
@@ -85,7 +94,7 @@ Resultado: 71 propriedades em `.uaiui-docs`, **0** em `:root`, **0** de interse�
 | busca (`<dialog>` com `showModal()`) | camada superior |
 | painel Cases (chrome, desktop) | 20 |
 | cabeçalho mobile (chrome, sticky), com o painel do menu dentro | 10 |
-| barra do cabeçalho mobile; opção de densidade com foco | 1 (locais) |
+| barra do cabeçalho mobile; opção de densidade ou de tema com foco | 1 (locais) |
 | menu lateral (`sticky`, a partir de 768px) | sem z-index |
 
 Saíram o `.docs-header` (5) e a gaveta (30). Medido no Chromium: a 767, 768 e 887px, com a página na âncora `#acessibilidade` do Button, o `h2` fica a 91px do topo e o cabeçalho mobile termina em 83px; a 768 e 887px o menu lateral fica a 123px (83 + 40). A 888px o cabeçalho mobile some e o menu fica a 40px. A 888px o painel Cases abre por cima do menu lateral.
@@ -114,13 +123,13 @@ Registrados no design-notes do Portifa:
 
 Observações da leitura do código (não medidas):
 
-1. O mesmo controle de densidade se repete em cada exemplo (vários grupos "Densidade" sincronizados).
+1. O mesmo controle de densidade se repete em cada exemplo (vários grupos "Densidade" sincronizados). O de tema (D13) segue o mesmo padrão.
 2. Níveis de título nos exemplos do Accordion (ver ambiguidade 4).
 3. Combobox da busca com `aria-expanded="true"` fixo e `<a tabindex="-1">` nas opções; não testado com leitor de tela.
 4. Toasts estáticos que somem e voltam em 2 s (WCAG 2.2.2).
 5. Rótulos de grupo do menu são `<p>`, não títulos.
 6. Regiões roláveis com foco (tabelas) e nota de rolagem só no celular.
-7. Tema escuro não exposto (fica para a PR do controle de tema).
+7. Tema escuro não exposto no Portifa. Aqui ele entrou na PR 2, só no palco dos exemplos (D13).
 
 ## Ambiguidades do material e o que foi decidido
 
@@ -156,7 +165,7 @@ Na raiz, depois de `npm run build`:
 node --test "tests/portifa-docs/*.test.mjs" "tests/portifa-chrome/*.test.mjs"
 ```
 
-`tests/portifa-docs` cobre: colisão dos tokens do Portifa com os 970 nomes do wrapper (0) e nada em `:root`; todo `var()` dos CSS da documentação com definição; todo seletor começando por `.uaiui-docs`; links internos do HTML gerado e do sitemap existentes e com barra final, sem `/docs`; canonical igual ao sitemap; sha256 e licença da Plus Jakarta Sans; o preload das duas fontes em todas as páginas, apontando para o mesmo arquivo do `url()` do CSS, com `optional` mantido; os blocos do cabeçalho sticky presentes na cópia; marcas `ADAPTAÇÃO UaiUI`; o layout sem `tokens.css` e o skip link com `uaiui`.
+`tests/portifa-docs` cobre: colisão dos tokens do Portifa com os 970 nomes do wrapper (0) e nada em `:root`; todo `var()` dos CSS da documentação com definição; todo seletor começando por `.uaiui-docs`; links internos do HTML gerado e do sitemap existentes e com barra final, sem `/docs`; canonical igual ao sitemap; sha256 e licença da Plus Jakarta Sans; o preload das duas fontes em todas as páginas, apontando para o mesmo arquivo do `url()` do CSS, com `optional` mantido; os blocos do cabeçalho sticky presentes na cópia; marcas `ADAPTAÇÃO UaiUI`; o layout sem `tokens.css` e o skip link com `uaiui`. `tema.test.mjs` cobre o tema (D13): o CSS novo sem propriedades (zero colisão) e com seletores `.uaiui-docs`; no HTML gerado, todo palco com `uaiui` e sem tema ou densidade fixos, uma linha Densidade \| Tema por exemplo, nesta ordem, com Claro marcado e `name` único; nenhum elemento com `data-uaiui-theme` no HTML e nenhum `.uaiui` no painel Código; o script inline antes dos palcos e depois do da densidade, a chave `uaiui-theme` só com `dark`, a cópia da densidade, nada de `prefers-color-scheme` nem das chaves antigas; a frase só na Introdução.
 
 **Pendência:** estes testes e os do chrome não rodam no `npm run check` nem no CI (`package.json`, `scripts/` e `.github/` estavam fora do escopo).
 
@@ -164,4 +173,4 @@ node --test "tests/portifa-docs/*.test.mjs" "tests/portifa-chrome/*.test.mjs"
 
 - Texto ampliado a 200% e zoom: não verificados.
 - Só Chromium; sem Firefox, Safari, toque real nem leitor de tela.
-- O controle de tema dentro de cada exemplo entra na próxima PR. Até lá, o tema escuro do DS não aparece no site (como no Portifa).
+- O tema dos exemplos (D13) foi medido só no Chromium, sem leitor de tela.

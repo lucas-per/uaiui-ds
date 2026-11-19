@@ -14,7 +14,7 @@ const wrapper = new Set(props(readFileSync('src/styles/tokens-wrapper.css', 'utf
 const tokensDocs = readFileSync('src/styles/portifa-docs/tokens.css', 'utf8');
 const blocos = [...semComentarios(tokensDocs).matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ seletor: m[1].trim(), props: props(m[2]) }));
 const doDocs = blocos.flatMap((b) => b.props);
-const cssDocs = ['src/styles/portifa-docs/uaiui-docs.css', 'src/styles/portifa-docs/uaiui-docs-ds.css'];
+const cssDocs = ['src/styles/portifa-docs/uaiui-docs.css', 'src/styles/portifa-docs/uaiui-docs-ds.css', 'src/styles/portifa-docs/uaiui-docs-tema.css'];
 
 test('colisão: tokens do Portifa na documentação x os nomes do wrapper do DS', () => {
   const intersecao = doDocs.filter((p) => wrapper.has(p));
@@ -123,7 +123,7 @@ test('marcas "ADAPTAÇÃO UaiUI" na documentação', () => {
   const fontes = [...arquivos('src/components/portifa-docs', '.astro'), ...arquivos('src/components/portifa-docs', '.ts'), ...arquivos('src/styles/portifa-docs', '.css'), 'src/layouts/DocsLayout.astro', ...arquivos('src/pages', '.astro'), 'src/pages/sitemap.xml.ts'];
   const porArquivo = fontes.map((f) => [f, readFileSync(f, 'utf8').split('ADAPTAÇÃO UaiUI').length - 1]).filter(([, n]) => n);
   console.log(porArquivo.map(([f, n]) => `${n}  ${f}`).join('\n'));
-  for (const f of ['src/styles/portifa-docs/tokens.css', 'src/styles/portifa-docs/uaiui-docs.css', 'src/styles/portifa-docs/uaiui-docs-ds.css', 'src/styles/portifa-docs/fonts.css', 'src/styles/portifa-docs/base.css', 'src/layouts/DocsLayout.astro', 'src/components/portifa-docs/config/uaiui-nav.ts', 'src/pages/index.astro', 'src/pages/tokens.astro', 'src/pages/componentes/toast.astro']) {
+  for (const f of ['src/styles/portifa-docs/tokens.css', 'src/styles/portifa-docs/uaiui-docs.css', 'src/styles/portifa-docs/uaiui-docs-ds.css', 'src/styles/portifa-docs/fonts.css', 'src/styles/portifa-docs/base.css', 'src/layouts/DocsLayout.astro', 'src/components/portifa-docs/config/uaiui-nav.ts', 'src/pages/index.astro', 'src/pages/tokens.astro', 'src/pages/componentes/toast.astro', 'src/components/portifa-docs/Example.astro', 'src/components/portifa-docs/DocsTheme.astro', 'src/components/portifa-docs/tema.ts', 'src/styles/portifa-docs/uaiui-docs-tema.css']) {
     assert.ok(porArquivo.some(([g]) => g === f), `${f} sem marca`);
   }
 });

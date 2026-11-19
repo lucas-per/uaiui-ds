@@ -1,0 +1,15 @@
+/*
+  ADAPTAÇÃO UaiUI: adição deste repositório (D13 em docs/DOCS-PORTIFA.md). Não
+  existe no Portifa nem no Figma.
+
+  Linha de controles abaixo do palco: Densidade e, à direita, Tema. Os dois
+  fieldsets usam as classes do controle de densidade (uaiui-docs.css); aqui só
+  a linha. Quando não cabem lado a lado, Tema desce para baixo de Densidade.
+  Sem propriedades novas (nada a colidir com o wrapper do DS) e todo seletor
+  começa por .uaiui-docs, como no resto da cópia.
+*/
+.uaiui-docs .uaiui-docs__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
