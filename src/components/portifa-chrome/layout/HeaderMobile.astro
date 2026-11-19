@@ -113,8 +113,8 @@ const menuId = 'site-menu-mobile';
     display: none;
     flex-direction: column;
     background-color: var(--surface-bg-off-white-primary);
-    /* ADAPTAÇÃO UaiUI: decisão 3 (muda o A9), o cabeçalho mobile não é sticky no docs: o docs já tem cabeçalho sticky de 64px, e os dois somariam 147px fixos no topo (WCAG 2.4.11 e 1.4.10). position: relative serve de containing block do painel do menu (absolute). */
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 10;
   }
 

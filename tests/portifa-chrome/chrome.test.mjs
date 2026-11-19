@@ -27,7 +27,8 @@ test('todo var() usado no chrome tem definição nos tokens do chrome', () => {
 
 // Regiões do chrome no HTML gerado (os quatro são filhos diretos do <body>, sem aninhar <header>/<footer>).
 const regioes = (html) => [...html.matchAll(/<(header|footer) class="(site-header-mobile|site-footer-mobile|site-header|site-footer)(?=[ "])[^"]*"[\s\S]*?<\/\1>/g)].map((m) => ({ classe: m[2], html: m[0] }));
-const paginas = ['dist/index.html', 'dist/docs/index.html', 'dist/docs/tokens/index.html', 'dist/docs/components/button/index.html', 'dist/docs/components/accordion/index.html', 'dist/docs/components/toast/index.html'];
+// Rotas da documentação desde a PR no padrão do Portifa (/, /tokens/, /componentes/<nome>/); o /docs/ saiu.
+const paginas = ['dist/index.html', 'dist/tokens/index.html', 'dist/componentes/button/index.html', 'dist/componentes/accordion/index.html', 'dist/componentes/toast/index.html'];
 
 test('links do chrome: absolutos (ou mailto), exceto "UaiUI DS"; nenhum caminho com /uaiui', { skip: !existsSync('dist') && 'rode npm run build antes' }, () => {
   let total = 0; const ruins = [];
@@ -45,7 +46,7 @@ test('links do chrome: absolutos (ou mailto), exceto "UaiUI DS"; nenhum caminho 
       }
     }
   }
-  console.log(`links verificados nas 6 páginas: ${total}`);
+  console.log(`links verificados nas ${paginas.length} páginas: ${total}`);
   assert.deepEqual(ruins, []);
 });
 
@@ -67,13 +68,16 @@ test('fontes copiadas: iguais às do repositório do Portifa (se a pasta irmã e
 });
 
 test('cada adaptação A1 a A9 tem ao menos um comentário "ADAPTAÇÃO UaiUI"', () => {
-  const linhas = [...fontes, 'src/layouts/DocsLayout.astro', 'src/styles/site.css', 'src/components/Header.astro'].flatMap((f) => readFileSync(f, 'utf8').split('\n').filter((l) => l.includes('ADAPTAÇÃO UaiUI')));
+  const linhas = [...fontes, 'src/layouts/DocsLayout.astro', 'src/styles/portifa-docs/base.css'].flatMap((f) => readFileSync(f, 'utf8').split('\n').filter((l) => l.includes('ADAPTAÇÃO UaiUI')));
   for (let n = 1; n <= 9; n++) assert.ok(linhas.some((l) => new RegExp(`\\bA${n}\\b`).test(l)), `A${n} sem marcador`);
 });
 
-test('o chrome não declara nada em :root nem usa position: sticky no cabeçalho mobile (decisão 3)', () => {
-  assert.ok(!/(^|,)\s*:root\b/m.test(tokens.replace(/\/\*[\s\S]*?\*\//g, '')));
+// A decisão 3 (cabeçalho mobile sem sticky) foi revertida pela decisão 11 da PR da documentação:
+// o teste agora exige o sticky do Portifa e a altura nos contêineres, não em :root.
+test('o chrome não declara nada em :root e o cabeçalho mobile é sticky, como no Portifa (decisão 11)', () => {
+  const semComentarios = tokens.replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.ok(!/(^|,)\s*:root\b/m.test(semComentarios));
+  assert.match(semComentarios, /--header-mobile-height:\s*calc\(var\(--scale-x4\) \* 2 \+ var\(--header-mobile-core\) \+ var\(--header-mobile-divider\)\);/);
   const hm = readFileSync('src/components/portifa-chrome/layout/HeaderMobile.astro', 'utf8');
-  assert.ok(!/position:\s*sticky/.test(hm.replace(/\/\*[\s\S]*?\*\//g, '')));
-  assert.match(hm, /\.site-header-mobile \{[^}]*position: relative;[^}]*z-index: 10;/);
+  assert.match(hm, /\.site-header-mobile \{[^}]*position: sticky;\s*top: 0;\s*z-index: 10;/);
 });

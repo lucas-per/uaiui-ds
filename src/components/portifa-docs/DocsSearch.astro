@@ -1,0 +1,30 @@
+---
+/**
+ * Busca da documentação (porte de Search.astro do uaiui-ds): diálogo modal
+ * aberto pelos botões [data-search-open] e por Ctrl/⌘ + K. O índice são as
+ * páginas de uaiui-nav.ts. A contagem de resultados vai para um role="status".
+ */
+import { docsNavFlat } from './config/uaiui-nav';
+---
+
+<dialog class="uaiui-docs__search" aria-label="Buscar na documentação" data-search>
+  <form method="dialog" class="uaiui-docs__search-form">
+    <label class="uaiui-docs__sr-only" for="uaiui-docs-q">Buscar</label>
+    <input
+      id="uaiui-docs-q"
+      class="uaiui-docs__search-input"
+      type="search"
+      autocomplete="off"
+      placeholder="Buscar componente ou página…"
+      role="combobox"
+      aria-expanded="true"
+      aria-controls="uaiui-docs-results"
+      aria-autocomplete="list"
+      aria-describedby="uaiui-docs-search-status"
+    />
+    <button type="submit" class="uaiui-docs__search-close" aria-label="Fechar busca">Fechar</button>
+  </form>
+  <ul id="uaiui-docs-results" class="uaiui-docs__search-results" role="listbox" aria-label="Resultados"></ul>
+  <p id="uaiui-docs-search-status" class="uaiui-docs__sr-only" role="status"></p>
+  <script type="application/json" id="uaiui-docs-search-index" set:html={JSON.stringify(docsNavFlat)} />
+</dialog>

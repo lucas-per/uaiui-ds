@@ -1,0 +1,47 @@
+---
+/**
+ * Exemplo com abas Preview e Código (porte de Example.astro do uaiui-ds, Figma
+ * 666:133). O mesmo HTML vai ao preview e à aba Código. Quando o preview
+ * precisa de mais que o HTML (o botão "Mostrar aviso" do toast), ele vem no
+ * slot "preview" e `code` é o que a pessoa copia. Os ids são estáveis
+ * (utils/stable-id.ts), não aleatórios. A densidade fica dentro do painel
+ * Preview, abaixo do palco (Figma 704:751); o name dos rádios sai do id.
+ */
+import CodeBlock from './CodeBlock.astro';
+import DocsDensity from './DocsDensity.astro';
+import { stableId } from './utils/stable-id';
+
+interface Props {
+  code: string;
+  title?: string;
+  description?: string;
+  column?: boolean;
+  label?: string;
+}
+
+const { code, title, description, column = false, label } = Astro.props;
+const id = stableId('uaiui-ex', title ?? '', label ?? '', code);
+const hasPreviewSlot = Astro.slots.has('preview');
+---
+
+{title && <h3 id={`${id}-t`}>{title}</h3>}
+{description && <p>{description}</p>}
+<div class="uaiui-docs__example" data-example>
+  <div class="uaiui-docs__example-bar">
+    <div class="uaiui-docs__tabs" role="tablist" aria-label={label ?? title ?? 'Exemplo'}>
+      <button class="uaiui-docs__tab" type="button" role="tab" id={`${id}-p`} aria-controls={`${id}-pp`} aria-selected="true">Preview</button>
+      <button class="uaiui-docs__tab" type="button" role="tab" id={`${id}-c`} aria-controls={`${id}-cp`} aria-selected="false" tabindex="-1">Código</button>
+    </div>
+  </div>
+  <div role="tabpanel" id={`${id}-pp`} aria-labelledby={`${id}-p`}>
+    {hasPreviewSlot ? (
+      <div class:list={['uaiui-docs__stage', { 'uaiui-docs__stage--col': column }]}><slot name="preview" /></div>
+    ) : (
+      <div class:list={['uaiui-docs__stage', { 'uaiui-docs__stage--col': column }]} set:html={code} />
+    )}
+    <DocsDensity name={`${id}-densidade`} />
+  </div>
+  <div role="tabpanel" id={`${id}-cp`} aria-labelledby={`${id}-c`} hidden>
+    <CodeBlock code={code} bare />
+  </div>
+</div>

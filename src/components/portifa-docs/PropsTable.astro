@@ -1,0 +1,45 @@
+---
+/**
+ * Tabela de props (porte de PropsTable.astro do uaiui-ds, Figma 666:164). Rola
+ * na horizontal no celular, numa região com foco pelo teclado; a nota abaixo
+ * (Figma 667:310) só aparece nessa largura.
+ */
+interface Row {
+  name: string;
+  type: string;
+  default?: string;
+  description: string;
+}
+
+interface Props {
+  rows: Row[];
+  caption?: string;
+}
+
+const { rows, caption } = Astro.props;
+---
+
+<div class="uaiui-docs__table-wrap" tabindex="0" role="region" aria-label={caption ?? 'Tabela de props'}>
+  <table class="uaiui-docs__table uaiui-docs__table--props">
+    {caption && <caption class="uaiui-docs__sr-only">{caption}</caption>}
+    <thead>
+      <tr>
+        <th scope="col">Prop</th>
+        <th scope="col">Valores</th>
+        <th scope="col">Padrão</th>
+        <th scope="col">Descrição</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          <td><code>{row.name}</code></td>
+          <td><code>{row.type}</code></td>
+          <td>{row.default ? <code>{row.default}</code> : '—'}</td>
+          <td set:html={row.description} />
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="uaiui-docs__table-note">A tabela rola na horizontal; a região recebe foco pelo teclado.</p>

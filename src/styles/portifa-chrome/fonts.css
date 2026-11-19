@@ -4,7 +4,7 @@
   Mono 700 (rótulos). Plus Jakarta Sans é de títulos e não vem.
 
   ADAPTAÇÃO UaiUI: A7 e decisão 1, o docs já declara DM Sans e JetBrains Mono
-  (@fontsource, em site.css) com os mesmos nomes. Para o chrome não mexer nas
+  (@fontsource, em site.css; hoje em portifa-docs/base.css) com os mesmos nomes. Para o chrome não mexer nas
   fontes do docs, as famílias daqui têm nome próprio: "Portifa DM Sans" e
   "Portifa JetBrains Mono". As variáveis --font-family-* (tokens.css) apontam
   para elas, com fallback genérico.

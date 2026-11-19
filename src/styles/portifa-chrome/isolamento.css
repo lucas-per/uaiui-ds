@@ -16,6 +16,12 @@
   (os links do chrome ou não têm texto ou têm text-decoration: none) e a herança
   de `body`/`html` (font, color, line-height: todo texto do chrome tem a própria).
 
+  Desde a PR da documentação no padrão do Portifa, site.css não existe mais
+  (virou portifa-docs/base.css, sem :focus-visible global) e o :focus-visible
+  da documentação vale só dentro de .uaiui-docs, que não contém o chrome.
+  A regra abaixo ficou sem o que neutralizar; continua como proteção, sem
+  efeito colateral (decisão registrada em docs/DOCS-PORTIFA.md).
+
   O seletor :is() tem especificidade (0,2,0): vence o :focus-visible global do
   docs (0,1,0) e perde para os :focus-visible do próprio chrome ((0,3,0)).
 */

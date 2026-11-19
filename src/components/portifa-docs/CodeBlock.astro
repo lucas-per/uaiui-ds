@@ -1,0 +1,23 @@
+---
+/**
+ * Bloco de código da documentação (porte de CodeBlock.astro do uaiui-ds).
+ * Monocromático, como no Figma (666:144): sem o realce de sintaxe do <Code>
+ * do Astro, que traria cores fixas do tema do Shiki.
+ */
+interface Props {
+  code: string;
+  lang?: 'html' | 'css' | 'js';
+  /** Dentro de um Example: sem borda nem sombra própria (o exemplo já tem). */
+  bare?: boolean;
+}
+
+const { code, lang = 'html', bare = false } = Astro.props;
+---
+
+<figure class:list={['uaiui-docs__code', { 'uaiui-docs__code--bare': bare }]}>
+  <div class="uaiui-docs__code-bar">
+    <span class="uaiui-docs__code-lang" aria-hidden="true">{lang}</span>
+    <button type="button" class="uaiui-docs__copy" data-copy aria-label={`Copiar código ${lang.toUpperCase()}`}>Copiar</button>
+  </div>
+  <pre tabindex="0" aria-label={`Código ${lang.toUpperCase()}`}><code>{code.trim()}</code></pre>
+</figure>

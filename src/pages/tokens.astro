@@ -1,15 +1,19 @@
 ---
-import DocsLayout from '../../layouts/DocsLayout.astro';
-import CodeBlock from '../../components/CodeBlock.astro';
-const swatch = (name: string) => `<div class="swatch"><i style="background:var(${name})"></i>${name.replace('--', '')}</div>`;
+// Tokens e temas: estrutura da página do Portifa (src/pages/projetos/uaiui/tokens.astro,
+// a0e8583; ver docs/DOCS-PORTIFA.md), com o texto deste repositório.
+// ADAPTAÇÃO UaiUI: em /tokens/. Saiu "Mude o tema no cabeçalho para ver as
+// cores trocarem.", porque não há mais seletor de tema no cabeçalho. O lead
+// vai como texto na prop, sem o <code> em volta de tokens.css.
+import DocsLayout from '../layouts/DocsLayout.astro';
+import CodeBlock from '../components/portifa-docs/CodeBlock.astro';
+
 const sample = ['--ui-bg-page', '--ui-bg-panel', '--ui-fg-default', '--ui-fg-muted', '--ui-brand-band', '--interface-function-primary-normal-background', '--interface-function-secondary-normal-background', '--interface-function-error-normal-background', '--success-behavior-normal-surface', '--warning-behavior-normal-surface', '--info-behavior-normal-surface'];
 ---
-<DocsLayout title="Tokens e temas" description="Como as variables do Figma viram CSS, e como trocar tema e densidade.">
-  <h1>Tokens e temas</h1>
-  <p class="lead">As variables do Figma são a fonte de verdade. Um script as converte em <code>tokens.css</code>, e os componentes só leem essas propriedades.</p>
 
+<DocsLayout lead="As variables do Figma são a fonte de verdade. Um script as converte em tokens.css, e os componentes só leem essas propriedades.">
   <h2 id="camadas">Camadas</h2>
-  <div class="table-wrap"><table>
+  <div class="uaiui-docs__table-wrap" tabindex="0" role="region" aria-label="Camadas de tokens">
+    <table class="uaiui-docs__table">
     <thead><tr><th scope="col">Coleção no Figma</th><th scope="col">Modos</th><th scope="col">Papel</th></tr></thead>
     <tbody>
       <tr><td>Escala</td><td>Valor</td><td>Medidas base: 0, 2, 4, 8, 12, 16, 24 e 44 px.</td></tr>
@@ -19,11 +23,12 @@ const sample = ['--ui-bg-page', '--ui-bg-panel', '--ui-fg-default', '--ui-fg-mut
       <tr><td>Componente</td><td>Valor</td><td>Um token por parte do componente, apontando para a semântica.</td></tr>
       <tr><td>Densidade</td><td>comfortable, standard, compact</td><td>Todos os tamanhos dos componentes.</td></tr>
     </tbody>
-  </table></div>
+  </table>
+  </div>
   <p>As propriedades CSS seguem o nome da variable com barras trocadas por hífens: <code>button/padding-x</code> vira <code>--button-padding-x</code>.</p>
 
   <h2 id="usar">Usar no projeto</h2>
-  <CodeBlock lang="html" standalone code={`<link rel="stylesheet" href="tokens.css" />
+  <CodeBlock lang="html" code={`<link rel="stylesheet" href="tokens.css" />
 
 <!-- Tema: sem atributo, segue o sistema -->
 <html data-theme="dark" data-density="compact">`} />
@@ -37,9 +42,15 @@ const sample = ['--ui-bg-page', '--ui-bg-panel', '--ui-fg-default', '--ui-fg-mut
     <li>Os tokens ficam em <code>tokens/</code>, em JSON no padrão <a href="https://www.designtokens.org/tr/2025.10/">Design Tokens 2025.10</a>: um arquivo por coleção e um por modo em <code>primitivos/</code> e <code>densidade/</code>. O <code>tokens/uaiui.resolver.json</code> junta os arquivos e define os modos. Não edite esses JSON à mão: o Figma é a origem. O plugin (ou o CLI, com <code>npm run export</code> na pasta <code>figma-plugin/</code>) exporta <code>tokens/</code> e o CSS, e a próxima exportação sobrescreve qualquer edição manual.</li>
     <li>Rode <code>npm run tokens</code>. O script gera <code>src/styles/tokens.css</code>. O <code>npm run check</code> falha se um alias não resolver ou se um token não tiver <code>$type</code>.</li>
   </ol>
-  <div class="callout"><p>O CSS traz todos os tokens exportados do Figma, inclusive os de componentes que esta documentação ainda não tem. Um token novo nasce no Figma e chega pelo export.</p></div>
+  <div class="uaiui-docs__callout"><p>O CSS traz todos os tokens exportados do Figma, inclusive os de componentes que esta documentação ainda não tem. Um token novo nasce no Figma e chega pelo export.</p></div>
 
   <h2 id="amostra">Amostra de cores</h2>
-  <p>Mude o tema no cabeçalho para ver as cores trocarem.</p>
-  <div class="swatches" set:html={sample.map(swatch).join('')} />
+  <ul class="uaiui-docs__swatches" role="list">
+    {sample.map((name) => (
+      <li class="uaiui-docs__swatch">
+        <span class="uaiui-docs__swatch-color" style={{ backgroundColor: `var(${name})` }}></span>
+        {name.replace('--', '')}
+      </li>
+    ))}
+  </ul>
 </DocsLayout>

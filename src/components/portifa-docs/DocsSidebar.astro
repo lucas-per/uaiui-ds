@@ -1,0 +1,83 @@
+---
+/**
+ * Menu lateral da documentação (Figma 666:92) e, no celular, o botão "Páginas"
+ * (667:217) que abre a mesma lista no lugar (nota 668:358). A lista vem com
+ * `hidden`: no celular fica fechada até o botão abrir; do tablet em diante o
+ * CSS a mostra sempre (uaiui-docs.css). A busca é o primeiro item da lista, só
+ * a partir de 768px (abaixo disso a lupa ao lado de "Páginas" faz o mesmo, e
+ * os dois controles nunca aparecem juntos).
+ */
+import DocsIcon from './DocsIcon.astro';
+import { docsNavGroups } from './config/uaiui-nav';
+
+interface Props {
+  currentHref?: string;
+  currentTitle?: string;
+}
+
+const { currentHref, currentTitle } = Astro.props;
+const listId = 'uaiui-docs-pages';
+---
+
+<div class="uaiui-docs__nav">
+  <div class="uaiui-docs__pages-row">
+    <button
+      type="button"
+      class="uaiui-docs__pages-toggle"
+      aria-expanded="false"
+      aria-controls={listId}
+      data-pages-toggle
+    >
+      <DocsIcon name="menu" />
+      <span class="uaiui-docs__pages-label">
+        <span class="uaiui-docs__pages-kicker">Páginas</span>
+        <span class="uaiui-docs__pages-current">{currentTitle}</span>
+      </span>
+      <DocsIcon name="chevron-down" class="uaiui-docs__chevron" />
+    </button>
+    <button
+      type="button"
+      class="uaiui-docs__search-open uaiui-docs__search-open--icon"
+      aria-label="Buscar na documentação"
+      aria-haspopup="dialog"
+      aria-keyshortcuts="Control+K Meta+K"
+      data-search-open
+    >
+      <DocsIcon name="search" />
+    </button>
+  </div>
+  <nav id={listId} class="uaiui-docs__sidebar" aria-label="Documentação do UaiUI DS" hidden>
+    <button
+      type="button"
+      class="uaiui-docs__search-open uaiui-docs__search-open--full"
+      aria-label="Buscar na documentação"
+      aria-haspopup="dialog"
+      aria-keyshortcuts="Control+K Meta+K"
+      data-search-open
+    >
+      <DocsIcon name="search" />
+      <span class="uaiui-docs__search-text">Buscar</span>
+      <kbd class="uaiui-docs__kbd" hidden>Ctrl K</kbd>
+    </button>
+    {docsNavGroups.map((group, index) => (
+      <div class="uaiui-docs__group">
+        <!-- Rótulo do grupo, não título: os h2 da página são as seções do conteúdo. -->
+        <p class="uaiui-docs__group-title" id={`uaiui-docs-group-${index}`}>{group.title}</p>
+        <ul class="uaiui-docs__group-list" role="list" aria-labelledby={`uaiui-docs-group-${index}`}>
+          {group.items.map((item) => (
+            <li>
+              <a
+                class="uaiui-docs__nav-link"
+                href={item.href}
+                aria-current={item.href === currentHref ? 'page' : undefined}
+              >
+                <span class="uaiui-docs__nav-text">{item.title}</span>
+                {item.status && <span class="uaiui-docs__badge">{item.status}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+</div>

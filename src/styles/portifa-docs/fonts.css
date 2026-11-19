@@ -1,0 +1,23 @@
+/*
+  Fonte de título da documentação (Plus Jakarta Sans), de src/styles/tokens/fonts.css
+  do Portifa (a0e8583): o mesmo woff2 variável (700–800) e o mesmo
+  font-display: optional (o comentário de lá explica: sem reflow em títulos
+  grandes quando a fonte chega atrasada).
+
+  ADAPTAÇÃO UaiUI: nome de família próprio, "Portifa Plus Jakarta Sans", como as
+  fontes do chrome (A7 em docs/CHROME-PORTIFA.md), lido por
+  --uaiui-docs-font-title (portifa-docs/tokens.css). DM Sans e JetBrains Mono
+  da documentação: ver o comentário das fontes em portifa-docs/tokens.css.
+
+  Licença: SIL Open Font License 1.1, confirmada no repositório oficial.
+  Plus Jakarta Sans: Copyright 2020 The Plus Jakarta Sans Project Authors
+  (https://github.com/tokotype/PlusJakartaSans), OFL-Plus-Jakarta-Sans.txt em
+  src/assets/fonts/.
+*/
+@font-face {
+  font-family: 'Portifa Plus Jakarta Sans';
+  src: url('../../assets/fonts/plus-jakarta-sans-variable.woff2') format('woff2-variations');
+  font-weight: 700 800;
+  font-style: normal;
+  font-display: optional;
+}
