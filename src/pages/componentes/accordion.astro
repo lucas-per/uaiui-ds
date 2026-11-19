@@ -1,11 +1,17 @@
 ---
-import { withBase } from '../../../data/url';
-import DocsLayout from '../../../layouts/DocsLayout.astro';
-import Example from '../../../components/Example.astro';
-import CodeBlock from '../../../components/CodeBlock.astro';
-import PropsTable from '../../../components/PropsTable.astro';
-import css from '../../../styles/components/accordion.css?raw';
-import { svg } from '../../../data/icons';
+// Accordion: estrutura da página do Portifa (src/pages/projetos/uaiui/componentes/accordion.astro,
+// a0e8583; ver docs/DOCS-PORTIFA.md), com o texto deste repositório.
+// ADAPTAÇÃO UaiUI: o título e a descrição vêm de uaiui-nav.ts (o layout os
+// lê); o lead vai como prop, como no Portifa. Links internos nas rotas novas,
+// com barra final. O CSS do componente entra só nesta página; o bloco de
+// código mostra o próprio arquivo do pacote (?raw).
+import '../../styles/components/accordion.css';
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import Example from '../../components/portifa-docs/Example.astro';
+import CodeBlock from '../../components/portifa-docs/CodeBlock.astro';
+import PropsTable from '../../components/portifa-docs/PropsTable.astro';
+import css from '../../styles/components/accordion.css?raw';
+import { svg } from '../../components/portifa-docs/icons';
 
 const item = (id: string, title: string, body: string, open = false, disabled = false) => `<div class="uai-accordion-item">
   <h3>
@@ -34,19 +40,17 @@ const rows = [
   { name: 'h2 … h6', type: 'nível', default: 'h3', description: 'O <code>button</code> fica dentro de um título; escolha o nível conforme a página.' },
 ];
 ---
-<DocsLayout title="Accordion" description="Esconde conteúdo secundário que a pessoa consulta sob demanda.">
-  <h1>Accordion</h1>
-  <p class="lead">Esconde conteúdo secundário que a pessoa consulta sob demanda: perguntas frequentes, detalhes de um pedido, seções longas de configurações.</p>
+<DocsLayout lead="Esconde conteúdo secundário que a pessoa consulta sob demanda: perguntas frequentes, detalhes de um pedido, seções longas de configurações.">
 
   <Example code={basic} column label="Accordion com três itens" />
 
   <h2 id="instalacao">Instalação</h2>
-  <p>Instale o pacote e importe os tokens (veja <a href={withBase("/docs#instalacao")}>Instalação</a>). Depois, importe o CSS do componente:</p>
-  <CodeBlock lang="css" standalone code={`@import '@uaiui/ds/components/accordion.css';`} />
+  <p>Instale o pacote e importe os tokens (veja <a href="/#instalacao">Instalação</a>). Depois, importe o CSS do componente:</p>
+  <CodeBlock lang="css" code={`@import '@uaiui/ds/components/accordion.css';`} />
   <p><strong>Sem npm ou sem bundler:</strong> copie o CSS abaixo para <code>accordion.css</code> e ligue o arquivo no projeto.</p>
-  <CodeBlock code={css} lang="css" standalone />
+  <CodeBlock code={css} lang="css" />
   <p>O comportamento é seu: alterne <code>aria-expanded</code> no botão e <code>hidden</code> no painel, como no código abaixo.</p>
-  <CodeBlock lang="js" standalone code={`document.addEventListener('click', (e) => {
+  <CodeBlock lang="js" code={`document.addEventListener('click', (e) => {
   const t = e.target.closest('.uai-accordion-trigger');
   if (!t || t.getAttribute('aria-disabled') === 'true') return;
   const open = t.getAttribute('aria-expanded') !== 'true';
@@ -55,9 +59,9 @@ const rows = [
 });`} />
 
   <h2 id="uso">Uso</h2>
-  <CodeBlock code={single} standalone />
-  <div class="callout"><p><strong>Quando usar.</strong> Para esconder conteúdo secundário. Se todo o conteúdo precisa ser lido junto, deixe aberto e sem accordion.</p></div>
-  <div class="callout"><p><strong>Quando não usar.</strong> Conteúdo essencial ao próximo passo: deixe visível. Alternar painéis do mesmo nível, um por vez: use abas (ainda não existem). Disparar ação: use button. Esconder opções de formulário: veja antes se checkbox ou radio com texto de apoio resolve.</p></div>
+  <CodeBlock code={single} />
+  <div class="uaiui-docs__callout uaiui-docs__callout--use"><p><strong>Quando usar.</strong> Para esconder conteúdo secundário. Se todo o conteúdo precisa ser lido junto, deixe aberto e sem accordion.</p></div>
+  <div class="uaiui-docs__callout uaiui-docs__callout--avoid"><p><strong>Quando não usar.</strong> Conteúdo essencial ao próximo passo: deixe visível. Alternar painéis do mesmo nível, um por vez: use abas (ainda não existem). Disparar ação: use button. Esconder opções de formulário: veja antes se checkbox ou radio com texto de apoio resolve.</p></div>
 
   <h2 id="exemplos">Exemplos</h2>
   <Example title="Item desabilitado" description="Cinza, sem resposta ao hover, e continua na ordem de Tab. O painel de quem usa o componente mantém as cores normais." code={disabled} column />

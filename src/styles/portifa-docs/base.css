@@ -1,0 +1,29 @@
+/*
+  Base da página da documentação: o que fica fora do chrome (cabeçalho e
+  rodapé) e do wrapper .uaiui.uaiui-docs. Substitui src/styles/site.css.
+
+  ADAPTAÇÃO UaiUI: o CSS global do Portifa (reset de html e body) não veio no
+  material de referência. Ficam só as regras que o docs já tinha e que ainda
+  valem, mais o fundo e o color-scheme da moldura:
+  - @fontsource DM Sans 400/600 e JetBrains Mono 400/700: as famílias que o
+    wrapper do DS lê (--font-family-body e --font-family-label) nos
+    componentes dos exemplos; a JetBrains Mono também é a dos rótulos e do
+    código da documentação (--uaiui-docs-font-label);
+  - box-sizing, que o docs já tinha (no chrome, medido sem efeito);
+  - a moldura é sempre clara (decisão 1b): color-scheme light, e o fundo é o
+    off-white do site (--surface-bg-off-white-primary = --yellow-1 do
+    Portifa). Os tokens do Portifa não alcançam o body (só .uaiui-docs e os
+    contêineres do chrome), então o valor do primitivo vai aqui, copiado;
+  - o skip link (A8 do chrome) e o <main tabindex="-1"> sem contorno.
+*/
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/600.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/700.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light; }
+body { margin: 0; background-color: oklch(98.64% 0.0119 101.48); }
+.skip { position: absolute; left: 8px; top: -60px; z-index: 100; }
+.skip:focus { top: 8px; }
+main[tabindex="-1"]:focus { outline: none; }

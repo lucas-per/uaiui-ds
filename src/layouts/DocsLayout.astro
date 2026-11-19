@@ -1,76 +1,153 @@
 ---
-import '../styles/tokens.css';
-import '../styles/site.css';
+/**
+ * Layout da documentação (porte de src/layouts/UaiuiDocsLayout.astro do
+ * Portifa, a0e8583; ver docs/DOCS-PORTIFA.md). O corpo, do wrapper
+ * .uaiui.uaiui-docs em diante, é cópia literal.
+ *
+ * ADAPTAÇÃO UaiUI: o BaseLayout do Portifa não existe aqui. O <head>, o skip
+ * link, o cabeçalho e o rodapé do Portifa (src/components/portifa-chrome,
+ * docs/CHROME-PORTIFA.md) e o <main> que o BaseLayout dá ficam neste arquivo.
+ * O <title> segue o do Portifa ("<página> · UaiUI DS"); descrição e canonical
+ * vêm de uaiui-nav.ts. Os tokens do DS vêm de tokens-wrapper.css (wrapper
+ * .uaiui), no lugar de tokens.css no :root: nada do DS fica no :root.
+ *
+ * Wrapper: .uaiui (tokens do DS, tokens-wrapper.css) e .uaiui-docs
+ * (shell: uaiui-docs.css, o chrome, e uaiui-docs-ds.css, a zona do DS: exemplo,
+ * código e tabelas), no mesmo elemento. Só este layout importa os dois. Sem
+ * data-uaiui-theme: a área segue o tema claro.
+ */
+import '../styles/tokens-wrapper.css';
+import '../styles/portifa-docs/base.css';
 import '../styles/portifa-chrome/fonts.css';
 import '../styles/portifa-chrome/tokens.css';
 import '../styles/portifa-chrome/typography.css';
 import '../styles/portifa-chrome/isolamento.css';
+import '../styles/portifa-docs/fonts.css';
+import '../styles/portifa-docs/tokens.css';
+import '../styles/portifa-docs/uaiui-docs.css';
+import '../styles/portifa-docs/uaiui-docs-ds.css';
+// ADAPTAÇÃO UaiUI: o button.css vem para todas as páginas por causa do skip link (.uai-button); o do accordion e o do toast entram só na página deles, como no Portifa.
 import '../styles/components/button.css';
-import '../styles/components/accordion.css';
-import '../styles/components/toast.css';
-import Header from '../components/Header.astro';
-import Sidebar from '../components/Sidebar.astro';
-import Search from '../components/Search.astro';
 import PortifaHeader from '../components/portifa-chrome/layout/Header.astro';
 import PortifaHeaderMobile from '../components/portifa-chrome/layout/HeaderMobile.astro';
 import PortifaFooter from '../components/portifa-chrome/layout/Footer.astro';
 import PortifaFooterMobile from '../components/portifa-chrome/layout/FooterMobile.astro';
-import { flat } from '../data/nav';
-import { withBase, stripBase } from '../data/url';
+import DocsSidebar from '../components/portifa-docs/DocsSidebar.astro';
+import DocsSearch from '../components/portifa-docs/DocsSearch.astro';
+import DocsIcon from '../components/portifa-docs/DocsIcon.astro';
+import { getDocsPage } from '../components/portifa-docs/config/uaiui-nav';
 
+interface Props {
+  /** Linha de apoio sob o título da página (o "lead" das páginas do DS). */
+  lead: string;
+}
 
-interface Props { title: string; description?: string; docs?: boolean }
-const { title, description = 'UaiUI: sistema de design com bordas retas, sombras duras e temas por tokens.', docs = true } = Astro.props;
-const path = stripBase(Astro.url.pathname);
-const idx = flat.findIndex((i) => i.href === path);
-const prev = idx > 0 ? flat[idx - 1] : undefined;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : undefined;
+const { lead } = Astro.props;
+const { current, prev, next } = getDocsPage(Astro.url.pathname);
+if (!current) throw new Error(`Página do UaiUI fora de uaiui-nav.ts: ${Astro.url.pathname}`);
+const canonical = new URL(current.href, Astro.site).href;
 ---
 <!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} · UaiUI</title>
-    <meta name="description" content={description} />
+    <title>{`${current.title} · UaiUI DS`}</title>
+    <meta name="description" content={current.description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23e7398a'/%3E%3Ctext x='16' y='23' font-size='20' font-family='monospace' font-weight='700' text-anchor='middle' fill='%231a1818'%3EU%3C/text%3E%3C/svg%3E" />
-    <script is:inline>
-      try {
-        var t = localStorage.getItem('uai-theme'), d = localStorage.getItem('uai-density');
-        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-        if (d === 'standard' || d === 'compact') document.documentElement.dataset.density = d;
-      } catch (e) {}
-    </script>
   </head>
   <body>
-    <!-- ADAPTAÇÃO UaiUI: A8, o skip link do docs já existia: continua um só, é o primeiro focável do <body> (antes do chrome) e leva ao <main id="conteudo" tabindex="-1">. -->
-    <a class="skip uai-button" data-type="outlined" href="#conteudo">Pular para o conteúdo</a>
-    <!-- Cabeçalho e rodapé do Portifa (ver docs/CHROME-PORTIFA.md). Os quatro e o skip link são filhos diretos do <body>: o script do menu mobile marca como inert os filhos diretos que não contêm o cabeçalho. -->
+    <!-- ADAPTAÇÃO UaiUI: A8 do chrome, o skip link é um só, o primeiro focável do <body> (antes do chrome) e leva ao <main id="conteudo" tabindex="-1">. A classe uaiui dá a ele os tokens do DS, que não estão mais no :root. -->
+    <a class="skip uaiui uai-button" data-type="outlined" href="#conteudo">Pular para o conteúdo</a>
+    <!-- Cabeçalho e rodapé do Portifa (ver docs/CHROME-PORTIFA.md). Os quatro, o skip link e o <main> são filhos diretos do <body>: o script do menu mobile marca como inert os filhos diretos que não contêm o cabeçalho. -->
     <PortifaHeader />
     <PortifaHeaderMobile />
-    <Header />
-    {docs ? (
-      <div class="shell">
-        <Sidebar />
-        <main class="content" id="conteudo" tabindex="-1">
-          <slot />
-          <nav class="pager" aria-label="Páginas anterior e seguinte">
-            {prev ? <a href={withBase(prev.href)} rel="prev"><small>Anterior</small><strong>{prev.title}</strong></a> : <span />}
-            {next && <a href={withBase(next.href)} rel="next"><small>Próxima</small><strong>{next.title}</strong></a>}
-          </nav>
-        </main>
-        <nav class="toc" aria-label="Nesta página" data-toc hidden><h2>Nesta página</h2><ul></ul></nav>
+    <main id="conteudo" tabindex="-1">
+    <div class="uaiui uaiui-docs">
+      <script is:inline>
+        // Densidade salva aplicada antes da pintura (sem piscar). Sem armazenamento, fica sem atributo (Confortável). "mobile" é o valor da v0.3.x do DS: vira "standard" e a chave é regravada.
+        (function () {
+          var wrapper = document.currentScript.parentElement;
+          try {
+            var saved = localStorage.getItem('uaiui-density');
+            if (saved === 'mobile') {
+              saved = 'standard';
+              localStorage.setItem('uaiui-density', saved);
+            }
+            if (saved === 'standard' || saved === 'compact') wrapper.setAttribute('data-uaiui-density', saved);
+          } catch (e) {}
+        })();
+      </script>
+
+      <!-- Cabeçalho da área (Figma 666:70). "UaiUI design system" não é título: o h1 é o da página. -->
+      <div class="uaiui-docs__top">
+        <div class="uaiui-docs__top-inner">
+          <p class="uaiui-docs__brand">UaiUI design system</p>
+          <!-- ADAPTAÇÃO UaiUI: a frase do Portifa ("…em breve disponível no GitHub") ficou desatualizada; vale a do hero da página inicial anterior deste repositório. -->
+          <p class="uaiui-docs__lead">
+            Sistema de design com bordas retas, sombras duras e temas por tokens. Cada componente tem preview, código e requisitos de acessibilidade.
+          </p>
+        </div>
+        <div class="uaiui-docs__top-divider"></div>
       </div>
-    ) : (
-      <main id="conteudo" tabindex="-1"><slot /></main>
-    )}
-    <Search />
+
+      <div class="uaiui-docs__shell">
+        <DocsSidebar currentHref={current.href} currentTitle={current.title} />
+
+        <div class="uaiui-docs__content">
+          <div class="uaiui-docs__title">
+            <h1>{current.title}</h1>
+            <p>{lead}</p>
+          </div>
+          <div class="uaiui-docs__body">
+            <slot />
+          </div>
+          {(prev || next) && (
+            <nav class="uaiui-docs__pager" aria-label="Páginas anterior e seguinte">
+              {prev && (
+                <a class="uaiui-docs__pager-link" href={prev.href} rel="prev">
+                  <DocsIcon name="arrow-left" />
+                  <span class="uaiui-docs__pager-text">
+                    <span class="uaiui-docs__pager-kicker">Anterior</span>
+                    <span class="uaiui-docs__pager-title">{prev.title}</span>
+                  </span>
+                </a>
+              )}
+              {next && (
+                <a class="uaiui-docs__pager-link uaiui-docs__pager-link--next" href={next.href} rel="next">
+                  <span class="uaiui-docs__pager-text">
+                    <span class="uaiui-docs__pager-kicker">Próxima</span>
+                    <span class="uaiui-docs__pager-title">{next.title}</span>
+                  </span>
+                  <DocsIcon name="arrow-right" />
+                </a>
+              )}
+            </nav>
+          )}
+        </div>
+      </div>
+
+      <p id="uaiui-docs-live" class="uaiui-docs__sr-only" role="status"></p>
+      <DocsSearch />
+      <script is:inline>
+        // Marca, em todos os controles de densidade dos exemplos, a opção salva (a
+        // que o script do início do wrapper já aplicou): antes da pintura, sem piscar.
+        (function () {
+          var saved = document.currentScript.parentElement.getAttribute('data-uaiui-density');
+          if (!saved) return;
+          document.currentScript.parentElement.querySelectorAll('input[name$="-densidade"]').forEach(function (input) {
+            input.checked = input.value === saved;
+          });
+        })();
+      </script>
+    </div>
+    </main>
     <PortifaFooter />
     <PortifaFooterMobile />
-    <script>
-      import '../scripts/site.ts';
-    </script>
   </body>
 </html>
+
+<script>
+  import '../components/portifa-docs/docs.ts';
+</script>

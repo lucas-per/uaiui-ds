@@ -3,7 +3,7 @@
   src/styles/tokens/primitives.css e semantics.css do Portifa (a0e8583): só os
   que o chrome usa, com os primitivos que eles referenciam.
 
-  ADAPTAÇÃO UaiUI: A2, os nomes genéricos do Portifa (--scale-*, --surface-*, --text-*, --button-*, --border-*, --icon-*, --shadow-*) podem colidir com os da UaiUI. Por isso ficam declarados só nos quatro contêineres, nunca em :root, e valem só dentro do chrome (decisão 3: nada em :root, inclusive --header-mobile-core e --header-mobile-divider).
+  ADAPTAÇÃO UaiUI: A2, os nomes genéricos do Portifa (--scale-*, --surface-*, --text-*, --button-*, --border-*, --icon-*, --shadow-*) podem colidir com os da UaiUI. Por isso ficam declarados só nos quatro contêineres, nunca em :root, e valem só dentro do chrome (decisão 3: nada em :root, inclusive --header-mobile-core, --header-mobile-divider e --header-mobile-height).
 */
 .site-header,
 .site-header-mobile,
@@ -89,7 +89,12 @@
   --font-family-label: 'Portifa JetBrains Mono', monospace;
 
   /* Altura do cabeçalho mobile (Figma header-mobile, 254:1007): 16px, o miolo de 46px, 16px e o divider de 5px.
-     ADAPTAÇÃO UaiUI: decisão 3, sem --header-mobile-height (o cabeçalho não é sticky); os dois valores que sobram ficam aqui, não em :root. */
+     ADAPTAÇÃO UaiUI: A9, no Portifa ficam em :root; aqui ficam nos contêineres. O
+     cabeçalho mobile voltou a ser sticky (decisão 11 da PR do docs) e
+     --header-mobile-height voltou. O chrome não lê a altura; quem lê é o
+     uaiui-docs.css, que tem a mesma definição em .uaiui-docs
+     (portifa-docs/tokens.css), porque os contêineres não envolvem o docs. */
   --header-mobile-core: 2.875rem;
   --header-mobile-divider: 5px;
+  --header-mobile-height: calc(var(--scale-x4) * 2 + var(--header-mobile-core) + var(--header-mobile-divider));
 }

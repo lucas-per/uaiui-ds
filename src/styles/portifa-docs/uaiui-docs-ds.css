@@ -1,0 +1,314 @@
+/*
+  Zona do DS da documentação do UaiUI (/projetos/uaiui/): o exemplo (moldura,
+  abas Preview e Código, palco), o bloco de código e as tabelas. Aqui o que
+  aparece é o DS, então as cores vêm só de tokens do wrapper .uaiui (--ui-*,
+  --interface-function-*, uaiui-ds/tokens-wrapper.css), nunca de tokens do
+  site. O chrome da página (cabeçalho da área, menu, títulos, divisores,
+  callouts, paginação, densidade) fica em uaiui-docs.css. Os dois arquivos
+  são importados só pelo UaiuiDocsLayout; este vem depois do outro.
+
+  Regras (guardadas por uaiui-docs.test.ts):
+  - todo seletor começa por .uaiui-docs, o mesmo elemento do wrapper .uaiui;
+  - nenhum token semântico do site (--surface-*, --text-*, --border-*, --icon-*,
+    --button-*, --tag-*, --shadow-*), nem cor fixa;
+  - sombras na escala do DS: --shadow-offset-layout (4px);
+  - espaçamentos em múltiplos de 4 (spacing-scale.test.ts).
+  ADAPTAÇÃO UaiUI: colisão de nomes com o wrapper .uaiui do DS, que está no
+  mesmo elemento (.uaiui.uaiui-docs) e tem a mesma especificidade. Os nomes do
+  Portifa que existem também no DS foram renomeados nesta cópia, para a ordem
+  dos arquivos não decidir quem vence (docs/DOCS-PORTIFA.md, "Colisões"):
+  --font-family-title → --uaiui-docs-font-title, --font-family-body →
+  --uaiui-docs-font-body, --font-family-label → --uaiui-docs-font-label.
+  Os valores ficam em src/styles/portifa-docs/tokens.css.
+*/
+
+.uaiui-docs {
+  --uaiui-docs-layout-shadow: var(--shadow-offset-layout) var(--shadow-offset-layout) 0 0 var(--ui-shadow-color);
+}
+
+/* Tabela (Figma 666:166): borda externa de 2px; o cabeçalho tem a borda de baixo
+   forte e as linhas se separam pela borda de campo. Colunas fluidas (table-layout:
+   auto). Rola na horizontal no celular; a região recebe foco pelo teclado. */
+.uaiui-docs .uaiui-docs__table-wrap {
+  overflow-x: auto;
+  border: var(--border-width-default) solid var(--ui-border-strong);
+}
+
+.uaiui-docs .uaiui-docs__table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: var(--line-height-comfortable);
+}
+
+.uaiui-docs .uaiui-docs__table th,
+.uaiui-docs .uaiui-docs__table td {
+  padding: var(--scale-x3) var(--scale-x4);
+  border-bottom: var(--border-width-default) solid var(--ui-border-field);
+  text-align: left;
+  vertical-align: top;
+}
+
+.uaiui-docs .uaiui-docs__table th {
+  border-bottom-color: var(--ui-border-strong);
+  background-color: var(--ui-bg-panel);
+  font-family: var(--uaiui-docs-font-label);
+  font-weight: var(--weight-700);
+  font-size: var(--scale-x3);
+  line-height: var(--line-height-regular);
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.uaiui-docs .uaiui-docs__table tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Bloco de código: monocromático (Figma), fundo e texto invertidos do tema. */
+.uaiui-docs .uaiui-docs__code {
+  border: var(--border-width-default) solid var(--ui-fg-default);
+  background-color: var(--ui-fg-default);
+  color: var(--ui-bg-page);
+  box-shadow: var(--uaiui-docs-layout-shadow);
+}
+
+.uaiui-docs .uaiui-docs__code-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--scale-x4);
+  padding-left: var(--scale-x4);
+  border-bottom: var(--border-width-default) solid var(--ui-fg-muted);
+}
+
+.uaiui-docs .uaiui-docs__code-lang {
+  font-family: var(--uaiui-docs-font-label);
+  font-weight: var(--weight-700);
+  font-size: var(--scale-x3);
+  line-height: var(--line-height-none);
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.uaiui-docs .uaiui-docs__copy {
+  margin-left: auto;
+  min-height: 44px;
+  padding: 0 var(--scale-x4);
+  border: 0;
+  background-color: var(--ui-bg-page);
+  color: var(--ui-fg-default);
+  font-family: var(--uaiui-docs-font-label);
+  font-weight: var(--weight-700);
+  font-size: 0.875rem;
+  line-height: var(--line-height-none);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .uaiui-docs .uaiui-docs__copy:hover {
+    background-color: var(--interface-function-ghost-action-background);
+    color: var(--interface-function-ghost-action-txtOn);
+  }
+}
+
+/* O anel de fora sumiria sobre a barra escura: aqui ele fica por dentro do botão claro. */
+.uaiui-docs .uaiui-docs__copy:focus-visible {
+  outline-offset: calc(-2 * var(--focus-ring-width));
+}
+
+.uaiui-docs .uaiui-docs__code pre {
+  margin: 0;
+  padding: var(--scale-x4);
+  overflow: auto;
+  font-family: var(--uaiui-docs-font-label);
+  font-weight: var(--weight-400);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+.uaiui-docs .uaiui-docs__code pre:focus-visible {
+  outline-color: var(--ui-bg-page);
+  outline-offset: calc(-1 * var(--focus-ring-width));
+}
+
+/* ---------- Exemplo: Preview / Código (Figma 666:133 e 667:242) ---------- */
+
+.uaiui-docs .uaiui-docs__example {
+  border: var(--border-width-default) solid var(--ui-border-strong);
+  background-color: var(--ui-bg-page);
+  box-shadow: var(--uaiui-docs-layout-shadow);
+  /* Os componentes do DS trazem a própria tipografia: nada do corpo da página
+     (espaçamento entre letras, caixa) pode vazar para dentro do preview. */
+  letter-spacing: 0;
+  line-height: normal;
+  text-transform: none;
+  overflow-wrap: normal;
+}
+
+.uaiui-docs .uaiui-docs__example-bar {
+  display: flex;
+  background-color: var(--ui-bg-panel);
+  border-bottom: var(--border-width-default) solid var(--ui-border-strong);
+}
+
+.uaiui-docs .uaiui-docs__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+/* Aba de 44px (o site de docs do DS tinha 36), indicador de 4px na cor da marca. */
+.uaiui-docs .uaiui-docs__tab {
+  position: relative;
+  min-height: 44px;
+  padding: 0 var(--scale-x4);
+  border: 0;
+  border-right: var(--border-width-default) solid var(--ui-border-strong);
+  background-color: transparent;
+  color: var(--ui-fg-default);
+  font-family: var(--uaiui-docs-font-label);
+  font-weight: var(--weight-700);
+  font-size: 0.875rem;
+  line-height: var(--line-height-none);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .uaiui-docs .uaiui-docs__tab:hover {
+    background-color: var(--interface-function-ghost-action-background);
+    color: var(--interface-function-ghost-action-txtOn);
+  }
+}
+
+.uaiui-docs .uaiui-docs__tab[aria-selected='true'] {
+  background-color: var(--ui-bg-page);
+  color: var(--ui-fg-default);
+}
+
+.uaiui-docs .uaiui-docs__tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--scale-base);
+  background-color: var(--ui-brand-band);
+}
+
+.uaiui-docs .uaiui-docs__tab:focus-visible {
+  outline-offset: calc(-2 * var(--focus-ring-width));
+}
+
+.uaiui-docs .uaiui-docs__example [role='tabpanel'][hidden] {
+  display: none;
+}
+
+/* Palco: o componente na densidade escolhida. Sem overflow próprio (rolagem
+   interna precisaria de foco pelo teclado): o que não cabe quebra linha. */
+.uaiui-docs .uaiui-docs__stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--scale-x4);
+  /* Laterais: 16px é 5vw a 320px, então o min() só atua com texto ampliado
+     (32px a 200%): o palco não perde 32px de largura. Ver o respiro lateral em
+     uaiui-docs.css. */
+  padding: var(--scale-x6) min(var(--scale-x4), 5vw) var(--scale-x8);
+  background-color: var(--ui-bg-page);
+}
+
+.uaiui-docs .uaiui-docs__stage--col {
+  flex-direction: column;
+  /* Sem quebra: num contêiner flex que quebra linha, a largura da coluna vem do
+     item mais largo (o toast de 400px) e ele passaria da tela. */
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+/* Botão sozinho numa coluna (o "Mostrar aviso" do toast) não estica. */
+.uaiui-docs .uaiui-docs__stage--col > .uai-button {
+  align-self: flex-start;
+}
+
+/* Região viva vazia (o toast ainda não entrou): fica na árvore de acessibilidade,
+   mas sem a folga do gap, que só aparece quando há aviso. */
+.uaiui-docs .uaiui-docs__stage--col > [aria-live]:empty {
+  margin-top: calc(-1 * var(--scale-x4));
+}
+
+/* O código dentro do exemplo usa a moldura do exemplo. */
+.uaiui-docs .uaiui-docs__code--bare {
+  border: 0;
+  box-shadow: none;
+}
+
+.uaiui-docs .uaiui-docs__code--bare pre {
+  max-height: 520px;
+}
+
+/* Tabela de props: colunas fluidas, sem as larguras do Figma (128/261/100/451). Nome,
+   valores e padrão não quebram (a coluna fica do tamanho do código) e a descrição
+   fica com o resto; sem espaço, a tabela rola. */
+.uaiui-docs .uaiui-docs__table--props {
+  min-width: 640px;
+  overflow-wrap: normal;
+}
+
+.uaiui-docs .uaiui-docs__table--props td:not(:last-child) code {
+  white-space: nowrap;
+}
+
+/* Descrição: largura mínima para não ficar estreita demais; se faltar espaço, a tabela rola. */
+.uaiui-docs .uaiui-docs__table--props th:last-child {
+  min-width: 320px;
+}
+
+.uaiui-docs .uaiui-docs__table code {
+  font-family: var(--uaiui-docs-font-label);
+  font-weight: var(--weight-400);
+  font-size: var(--scale-x3);
+  letter-spacing: 0;
+}
+
+.uaiui-docs .uaiui-docs__table-note {
+  color: var(--ui-fg-muted);
+  font-size: 0.875rem;
+  line-height: var(--line-height-comfortable);
+}
+
+@media (min-width: 768px) {
+  .uaiui-docs .uaiui-docs__code-bar {
+    padding-left: var(--scale-x6);
+  }
+
+  .uaiui-docs .uaiui-docs__code pre {
+    padding: var(--scale-x5) var(--scale-x6);
+  }
+}
+
+@media (min-width: 768px) {
+  .uaiui-docs .uaiui-docs__stage {
+    padding: var(--scale-x8) var(--scale-x6) var(--scale-x12);
+  }
+
+  .uaiui-docs .uaiui-docs__table-note {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .uaiui-docs .uaiui-docs__tab[aria-selected='true']::after {
+    forced-color-adjust: none;
+    background-color: Highlight;
+  }
+
+  .uaiui-docs .uaiui-docs__code-bar {
+    border-bottom-color: CanvasText;
+  }
+}

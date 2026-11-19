@@ -1,0 +1,98 @@
+/*
+  Tokens do Portifa lidos pela documentação (uaiui-docs.css e
+  uaiui-docs-ds.css), copiados da seção 4.1 do material de referência
+  (src/styles/tokens/primitives.css e semantics.css do Portifa, a0e8583): só o
+  que a página usa, direto ou por alias, na ordem e com os valores originais.
+
+  ADAPTAÇÃO UaiUI: no Portifa ficam em :root. Aqui ficam só em .uaiui-docs (o
+  mesmo elemento do wrapper .uaiui do DS), nunca em :root: o docs não tem
+  tokens no :root, e os nomes genéricos (--surface-*, --text-*, --scale-*…)
+  não podem alcançar o chrome nem o resto da página. Nenhum nome deste bloco
+  existe no tokens-wrapper.css (tests/portifa-docs/docs.test.mjs); os que
+  existiam foram renomeados para --uaiui-docs-* (ver docs/DOCS-PORTIFA.md).
+*/
+.uaiui-docs {
+  /* primitives.css */
+  --grey-1: oklch(99.58% 0.0025 228.78);
+  --grey-6: oklch(50.54% 0.0137 240.12);
+  --grey-8: oklch(30.85% 0.0132 239.00);
+  --grey-9: oklch(20.96% 0.0134 243.58);
+  --purple-7: oklch(34.68% 0.0362 305.09);
+  --blue-1: oklch(99.58% 0.0025 228.78);
+  --blue-2: oklch(87.37% 0.0667 244.52);
+  --blue-3: oklch(76.82% 0.1281 243.85);
+  --blue-4: oklch(66.42% 0.1359 243.76);
+  --blue-5: oklch(55.82% 0.1361 243.96);
+  --blue-6: oklch(47.12% 0.1163 244.05);
+  --red-1: oklch(97.98% 0.0098 25.07);
+  --red-2: oklch(90.34% 0.0500 24.21);
+  --red-6: oklch(56.10% 0.2095 24.48);
+  --red-7: oklch(44.47% 0.1802 24.76);
+  --yellow-1: oklch(98.64% 0.0119 101.48);
+  --green-2: oklch(93.29% 0.0629 147.14);
+  --scale-half: 0.125rem;
+  --scale-base: 0.25rem;
+  --scale-x2: 0.5rem;
+  --scale-x3: 0.75rem;
+  --scale-x4: 1rem;
+  --scale-x5: 1.25rem;
+  --scale-x6: 1.5rem;
+  --scale-x7: 1.75rem;
+  --scale-x8: 2rem;
+  --scale-x9: 2.25rem;
+  --scale-x10: 2.5rem;
+  --scale-x12: 3rem;
+  --scale-x16: 4rem;
+  --scale-x20: 5.5rem;
+  --weight-400: 400;
+  --weight-500: 500;
+  --weight-600: 600;
+  --weight-700: 700;
+  --weight-800: 800;
+
+  /* semantics.css */
+  --surface-bg-neutral-subtle: var(--grey-1);
+  --surface-bg-off-white-primary: var(--yellow-1);
+  --surface-bg-accent-subtle: var(--blue-1);
+  --surface-bg-accent-medium: var(--blue-2);
+  --surface-bg-accent-strong: var(--blue-3);
+  --surface-bg-tertiary-subtle: var(--red-1);
+  --surface-bg-quaternary-subtle: var(--green-2);
+  --border-neutral-strong: var(--grey-8);
+  --border-accent-subtle: var(--blue-5);
+  --border-accent-strong: var(--blue-4);
+  --text-label-accent: var(--blue-5);
+  --text-label-primary: var(--purple-7);
+  --text-label-extra-1: var(--red-7);
+  --text-body-neutral-subtle: var(--grey-6);
+  --text-body-neutral-strong: var(--grey-9);
+  --text-body-accent-strong: var(--blue-6);
+  --text-body-primary-strong: var(--purple-7);
+  --icon-neutral-3: var(--grey-9);
+  --icon-accent: var(--blue-5);
+  --button-border-accent-medium: var(--blue-2);
+  --tag-bg-secondary: var(--red-2);
+  /* ADAPTAÇÃO UaiUI: --tag-border-subtle também existe no DS (var(--ui-border-field)); renomeado. */
+  --uaiui-docs-tag-border-subtle: var(--red-6);
+  --shadow-layout-accent: 5px 5px 0 0 var(--blue-4);
+  --line-height-none: 1;
+  --line-height-compact: 1.24;
+  --line-height-regular: 1.48;
+  --line-height-comfortable: 1.72;
+  --letter-spacing-regular: 0px;
+  --letter-spacing-comfortable: 1px;
+  --header-mobile-core: 2.875rem;
+  --header-mobile-divider: 5px;
+  --header-mobile-height: calc(var(--scale-x4) * 2 + var(--header-mobile-core) + var(--header-mobile-divider));
+
+  /* ADAPTAÇÃO UaiUI: fontes. No Portifa são --font-family-title/body/label em
+     :root (fonts.css); body e label existem no DS com outros valores, então os
+     três foram renomeados. Título: Plus Jakarta Sans do Portifa, com nome
+     próprio (portifa-docs/fonts.css). Corpo: "Portifa DM Sans" variável do
+     chrome (portifa-chrome/fonts.css), que tem o peso 500. Rótulos e código:
+     JetBrains Mono do @fontsource (400 e 700, base.css), no lugar da 700 do
+     Portifa e do subset 400 de uaiui-code-font.css. */
+  --uaiui-docs-font-title: 'Portifa Plus Jakarta Sans', sans-serif;
+  --uaiui-docs-font-body: 'Portifa DM Sans', sans-serif;
+  --uaiui-docs-font-label: 'JetBrains Mono', monospace;
+}
