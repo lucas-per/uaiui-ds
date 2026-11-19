@@ -162,7 +162,8 @@
   min-width: 0;
 }
 
-/* Aba de 44px (o site de docs do DS tinha 36), indicador de 4px na cor da marca. */
+/* Aba de 44px (o site de docs do DS tinha 36).
+   ADAPTAÇÃO UaiUI: o Portifa tem um indicador de 4px na cor da marca sob a aba ativa; aqui ele saiu (decisão do Lucas) e a aba ativa se distingue só pelo fundo (--ui-bg-page contra --ui-bg-panel). Em forced-colors o fundo some, então o indicador continua só dentro do @media (forced-colors: active), no fim do arquivo. Ver docs/DOCS-PORTIFA.md (D14). */
 .uaiui-docs .uaiui-docs__tab {
   position: relative;
   min-height: 44px;
@@ -189,16 +190,6 @@
 .uaiui-docs .uaiui-docs__tab[aria-selected='true'] {
   background-color: var(--ui-bg-page);
   color: var(--ui-fg-default);
-}
-
-.uaiui-docs .uaiui-docs__tab[aria-selected='true']::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: var(--scale-base);
-  background-color: var(--ui-brand-band);
 }
 
 .uaiui-docs .uaiui-docs__tab:focus-visible {
@@ -303,7 +294,14 @@
 }
 
 @media (forced-colors: active) {
+  /* ADAPTAÇÃO UaiUI (D14): a faixa, antes declarada fora do @media, agora vive só aqui. */
   .uaiui-docs .uaiui-docs__tab[aria-selected='true']::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: var(--scale-base);
     forced-color-adjust: none;
     background-color: Highlight;
   }
