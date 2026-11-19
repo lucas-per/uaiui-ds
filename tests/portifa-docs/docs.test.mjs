@@ -14,7 +14,7 @@ const wrapper = new Set(props(readFileSync('src/styles/tokens-wrapper.css', 'utf
 const tokensDocs = readFileSync('src/styles/portifa-docs/tokens.css', 'utf8');
 const blocos = [...semComentarios(tokensDocs).matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ seletor: m[1].trim(), props: props(m[2]) }));
 const doDocs = blocos.flatMap((b) => b.props);
-const cssDocs = ['src/styles/portifa-docs/uaiui-docs.css', 'src/styles/portifa-docs/uaiui-docs-ds.css'];
+const cssDocs = ['src/styles/portifa-docs/uaiui-docs.css', 'src/styles/portifa-docs/uaiui-docs-ds.css', 'src/styles/portifa-docs/uaiui-docs-tema.css'];
 
 test('colisão: tokens do Portifa na documentação x os nomes do wrapper do DS', () => {
   const intersecao = doDocs.filter((p) => wrapper.has(p));
@@ -96,6 +96,22 @@ test('Plus Jakarta Sans: igual à do repositório do Portifa (se a pasta irmã e
   assert.equal(createHash('sha256').update(orig).digest('hex'), createHash('sha256').update(readFileSync('src/assets/fonts/plus-jakarta-sans-variable.woff2')).digest('hex'));
 });
 
+test('preload das fontes (D12): as 5 páginas pedem a Plus Jakarta Sans e a DM Sans no <head>, no mesmo arquivo do url() do CSS', { skip: !existsSync('dist') && 'rode npm run build antes' }, () => {
+  const cssGerado = arquivos('dist/_astro', '.css').map((f) => readFileSync(f, 'utf8')).join('\n');
+  for (const p of arquivos('dist', '.html')) {
+    const html = readFileSync(p, 'utf8');
+    const head = html.slice(0, html.indexOf('</head>'));
+    for (const nome of ['plus-jakarta-sans-variable', 'dm-sans-variable']) {
+      const m = new RegExp(`<link rel="preload" as="font" type="font/woff2" href="(/_astro/${nome}\\.[\\w-]+\\.woff2)" crossorigin>`).exec(head);
+      assert.ok(m, `${p}: sem preload de ${nome}`);
+      assert.ok(existsSync(join('dist', m[1])), `${p}: ${m[1]} não existe`);
+      assert.ok(cssGerado.includes(`url(${m[1]})`), `${p}: ${m[1]} não é o arquivo do url() do CSS (seria baixado duas vezes)`);
+    }
+  }
+  // O preload não troca o font-display: a fonte de título continua optional.
+  assert.match(readFileSync('src/styles/portifa-docs/fonts.css', 'utf8'), /font-family: 'Portifa Plus Jakarta Sans';[\s\S]*?font-display: optional;/);
+});
+
 test('cópia: os blocos do cabeçalho mobile sticky continuam em uaiui-docs.css, sem marca de adaptação (decisão 11)', () => {
   const css = readFileSync('src/styles/portifa-docs/uaiui-docs.css', 'utf8');
   assert.match(css, /@media \(max-width: 887px\) \{\s*\.uaiui-docs \.uaiui-docs__body > h2 \{\s*scroll-margin-top: calc\(var\(--header-mobile-height\) \+ var\(--scale-x2\)\);/);
@@ -107,7 +123,7 @@ test('marcas "ADAPTAÇÃO UaiUI" na documentação', () => {
   const fontes = [...arquivos('src/components/portifa-docs', '.astro'), ...arquivos('src/components/portifa-docs', '.ts'), ...arquivos('src/styles/portifa-docs', '.css'), 'src/layouts/DocsLayout.astro', ...arquivos('src/pages', '.astro'), 'src/pages/sitemap.xml.ts'];
   const porArquivo = fontes.map((f) => [f, readFileSync(f, 'utf8').split('ADAPTAÇÃO UaiUI').length - 1]).filter(([, n]) => n);
   console.log(porArquivo.map(([f, n]) => `${n}  ${f}`).join('\n'));
-  for (const f of ['src/styles/portifa-docs/tokens.css', 'src/styles/portifa-docs/uaiui-docs.css', 'src/styles/portifa-docs/uaiui-docs-ds.css', 'src/styles/portifa-docs/fonts.css', 'src/styles/portifa-docs/base.css', 'src/layouts/DocsLayout.astro', 'src/components/portifa-docs/config/uaiui-nav.ts', 'src/pages/index.astro', 'src/pages/tokens.astro', 'src/pages/componentes/toast.astro']) {
+  for (const f of ['src/styles/portifa-docs/tokens.css', 'src/styles/portifa-docs/uaiui-docs.css', 'src/styles/portifa-docs/uaiui-docs-ds.css', 'src/styles/portifa-docs/fonts.css', 'src/styles/portifa-docs/base.css', 'src/layouts/DocsLayout.astro', 'src/components/portifa-docs/config/uaiui-nav.ts', 'src/pages/index.astro', 'src/pages/tokens.astro', 'src/pages/componentes/toast.astro', 'src/components/portifa-docs/Example.astro', 'src/components/portifa-docs/DocsTheme.astro', 'src/components/portifa-docs/tema.ts', 'src/styles/portifa-docs/uaiui-docs-tema.css']) {
     assert.ok(porArquivo.some(([g]) => g === f), `${f} sem marca`);
   }
 });

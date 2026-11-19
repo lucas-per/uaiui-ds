@@ -14,7 +14,12 @@
  * Wrapper: .uaiui (tokens do DS, tokens-wrapper.css) e .uaiui-docs
  * (shell: uaiui-docs.css, o chrome, e uaiui-docs-ds.css, a zona do DS: exemplo,
  * código e tabelas), no mesmo elemento. Só este layout importa os dois. Sem
- * data-uaiui-theme: a área segue o tema claro.
+ * data-uaiui-theme no wrapper: a moldura segue sempre o tema claro.
+ *
+ * ADAPTAÇÃO UaiUI: tema dos exemplos (D13 em docs/DOCS-PORTIFA.md, adição deste
+ * repositório). O tema escuro vale só no palco de cada exemplo (um .uaiui
+ * aninhado): o script inline logo depois do da densidade aplica a escolha salva
+ * antes da pintura, e tema.ts cuida da troca.
  */
 import '../styles/tokens-wrapper.css';
 import '../styles/portifa-docs/base.css';
@@ -26,8 +31,13 @@ import '../styles/portifa-docs/fonts.css';
 import '../styles/portifa-docs/tokens.css';
 import '../styles/portifa-docs/uaiui-docs.css';
 import '../styles/portifa-docs/uaiui-docs-ds.css';
+// ADAPTAÇÃO UaiUI: linha Densidade | Tema abaixo do palco (D13).
+import '../styles/portifa-docs/uaiui-docs-tema.css';
 // ADAPTAÇÃO UaiUI: o button.css vem para todas as páginas por causa do skip link (.uai-button); o do accordion e o do toast entram só na página deles, como no Portifa.
 import '../styles/components/button.css';
+// ADAPTAÇÃO UaiUI: o preload das duas fontes vem do BaseLayout do Portifa (a0e8583), que não existe aqui. Sem ele, o navegador só pede as fontes depois de ler o CSS e pintar: a Plus Jakarta Sans (font-display: optional) perde a janela e os títulos ficam na genérica até a visita seguinte, e a DM Sans (swap) troca depois de aparecer. O import devolve o mesmo arquivo com hash que o url() do fonts.css.
+import plusJakartaSansUrl from '../assets/fonts/plus-jakarta-sans-variable.woff2';
+import dmSansUrl from '../assets/fonts/dm-sans-variable.woff2';
 import PortifaHeader from '../components/portifa-chrome/layout/Header.astro';
 import PortifaHeaderMobile from '../components/portifa-chrome/layout/HeaderMobile.astro';
 import PortifaFooter from '../components/portifa-chrome/layout/Footer.astro';
@@ -52,6 +62,8 @@ const canonical = new URL(current.href, Astro.site).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" as="font" type="font/woff2" href={plusJakartaSansUrl} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={dmSansUrl} crossorigin />
     <title>{`${current.title} · UaiUI DS`}</title>
     <meta name="description" content={current.description} />
     <link rel="canonical" href={canonical} />
@@ -77,6 +89,44 @@ const canonical = new URL(current.href, Astro.site).href;
             }
             if (saved === 'standard' || saved === 'compact') wrapper.setAttribute('data-uaiui-density', saved);
           } catch (e) {}
+        })();
+      </script>
+      <script is:inline>
+        // ADAPTAÇÃO UaiUI: tema dos exemplos (D13, adição deste repositório; não existe no Portifa nem no Figma).
+        // Cada palco (.uaiui-docs__stage) é um .uaiui aninhado: recebe data-uaiui-theme="dark" se o escuro estiver
+        // salvo (uaiui-theme) e uma cópia do data-uaiui-density que o script acima pôs no wrapper (sem ela, o .uaiui
+        // aninhado voltaria para Confortável). Claro é a ausência do atributo; não segue o tema do sistema; as chaves
+        // antigas (uai-theme, uai-density) são ignoradas. Antes da pintura: enquanto a página é lida, o observador
+        // marca cada palco e cada rádio de tema assim que ele entra no documento (os palcos vêm depois deste script).
+        (function () {
+          var wrapper = document.currentScript.parentElement;
+          var dark = false;
+          try {
+            dark = localStorage.getItem('uaiui-theme') === 'dark';
+          } catch (e) {}
+          var density = wrapper.getAttribute('data-uaiui-density');
+          if (!dark && !density) return;
+          function mark(el) {
+            if (el.classList.contains('uaiui-docs__stage')) {
+              if (density) el.setAttribute('data-uaiui-density', density);
+              if (dark) el.setAttribute('data-uaiui-theme', 'dark');
+            } else if (dark && el.matches('input[name$="-tema"]')) {
+              el.checked = el.value === 'dark';
+            }
+          }
+          var observer = new MutationObserver(function (records) {
+            records.forEach(function (record) {
+              record.addedNodes.forEach(function (node) {
+                if (node.nodeType !== 1) return;
+                mark(node);
+                node.querySelectorAll('.uaiui-docs__stage, input[name$="-tema"]').forEach(mark);
+              });
+            });
+          });
+          observer.observe(wrapper, { childList: true, subtree: true });
+          document.addEventListener('DOMContentLoaded', function () {
+            observer.disconnect();
+          });
         })();
       </script>
 
@@ -150,4 +200,6 @@ const canonical = new URL(current.href, Astro.site).href;
 
 <script>
   import '../components/portifa-docs/docs.ts';
+  // ADAPTAÇÃO UaiUI: tema dos exemplos (D13).
+  import '../components/portifa-docs/tema.ts';
 </script>
