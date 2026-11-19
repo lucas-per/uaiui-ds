@@ -135,3 +135,13 @@ test('o layout não importa tokens.css (DS só no wrapper .uaiui) e o skip link 
   assert.match(layout, /<a class="skip uaiui uai-button"[^>]*href="#conteudo"/);
   assert.match(layout, /<main id="conteudo" tabindex="-1">\s*<div class="uaiui uaiui-docs">/);
 });
+
+test('ajustes de UI (D14, D15): faixa da aba ativa só em forced-colors; 8px acima dos controles', () => {
+  const css = readFileSync('src/styles/portifa-docs/uaiui-docs-ds.css', 'utf8');
+  const semForced = semComentarios(css).replace(/@media \(forced-colors: active\) \{[\s\S]*$/, '');
+  assert.doesNotMatch(semForced, /__tab\[aria-selected='true'\]::after/, 'sem faixa fora do forced-colors');
+  assert.match(semComentarios(css), /@media \(forced-colors: active\) \{\s*\.uaiui-docs \.uaiui-docs__tab\[aria-selected='true'\]::after \{[^}]*content: '';[^}]*background-color: Highlight;/);
+  assert.match(semComentarios(readFileSync('src/styles/portifa-docs/uaiui-docs-tema.css', 'utf8')), /\.uaiui-docs__controls \{[^}]*padding-top: var\(--scale-x2\);/);
+  assert.match(css, /ADAPTAÇÃO UaiUI[^]*D14/);
+  assert.match(readFileSync('src/styles/portifa-docs/uaiui-docs-tema.css', 'utf8'), /ADAPTAÇÃO UaiUI \(D15\)/);
+});

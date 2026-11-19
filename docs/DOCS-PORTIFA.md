@@ -69,8 +69,9 @@ Cada uma está marcada no código com `ADAPTAÇÃO UaiUI` (`grep -rn "ADAPTAÇÃ
   - **Escolha:** vale para a página toda e para as outras páginas; fica em `localStorage`, chave `uaiui-theme`, só com o valor `dark` (Claro apaga a chave; outro valor vale Claro). Não segue o tema do sistema. As chaves antigas do site anterior (`uai-theme`, `uai-density`) são ignoradas. Anúncio no mesmo `role="status"` da densidade: "Tema dos exemplos: Escuro." / "Claro.".
   - **Antes da pintura:** um script inline no início do wrapper, logo depois do da densidade, instala um `MutationObserver` que marca cada palco e cada rádio de tema assim que ele entra no documento (os palcos vêm depois do script); ele se desliga no `DOMContentLoaded`. `tema.ts` reaplica o estado salvo (idempotente), cuida da troca e acompanha a densidade do wrapper (observando o atributo, sem mexer em `docs.ts`).
   - **Medido no Chromium:** nenhum quadro pintado com palco claro ou sem a densidade (rede lenta, página chegando em pedaços); tema escuro × Confortável, Padrão e Compacto no Button, no Accordion e no Toast (com o "Mostrar aviso"): os 174 tokens de densidade do palco iguais aos do wrapper, tamanhos iguais aos do claro, moldura e código iguais; Tab da densidade vai para a opção marcada do Tema, setas trocam, anel de foco de 2px com 17,51:1; contraste da legenda 5,78:1, opção não marcada 11,47:1, marcada e sublinhado 4,59:1 (os mesmos da densidade); sem rolagem horizontal de 320 a 1440px.
-  - **Observado, não mudado (cópia):** a legenda do controle de densidade começa exatamente na borda inferior do palco (0px de folga, como no Portifa). No claro não aparece, porque o palco e o painel têm quase a mesma cor; no escuro, as legendas "Densidade" e "Tema" ficam encostadas no palco escuro.
-
+  - **Observado:** a legenda do controle de densidade começava na borda inferior do palco (0px, como no Portifa); no escuro, as legendas ficavam encostadas no palco. Resolvido em D15.
+- **D14. Aba ativa sem a faixa azul** (`uaiui-docs-ds.css`, desvio da cópia). Saiu o indicador de 4px (`::after`, `--ui-brand-band`) sob a aba ativa de Preview e Código, por decisão do Lucas: a aba ativa se distingue **só pelo fundo** (`--ui-bg-page` contra `--ui-bg-panel`) fora do forced-colors. Em `@media (forced-colors: active)` o fundo some, então a faixa continua só ali, em `Highlight` (o bloco passou a declarar `content`, posição e altura, que antes vinham do bloco removido). `aria-selected` não mudou. Os sublinhados das opções de Densidade e Tema (`__segment`) ficam: neles o sublinhado é o único sinal do item marcado.
+- **D15. Folga acima dos controles** (`uaiui-docs-tema.css`, desvio da cópia). `padding-top: var(--scale-x2)` (8px) em `.uaiui-docs__controls`, nos dois temas: a legenda "Densidade" (e "Tema") ficava colada no palco (0px). Sem variável nova. Medido a 320, 375, 768 e 1440px: folga de 0 para 8px, sem rolagem horizontal; a página cresce 32px no Button (4 exemplos × 8px).
 **Não adaptado de propósito:** os blocos `@media (max-width: 887px)` e `@media (min-width: 768px) and (max-width: 887px)` de `uaiui-docs.css` (que leem `--header-mobile-height`) ficaram como no Portifa, porque o cabeçalho mobile do chrome voltou a ser sticky (decisão 11; A9 em `docs/CHROME-PORTIFA.md`). `--header-mobile-height` está definido em `.uaiui-docs` (D2) e nos contêineres do chrome.
 
 ## Colisões
@@ -120,6 +121,10 @@ Registrados no design-notes do Portifa:
 6. Componentes do DS em px: só o zoom os amplia, não o tamanho de texto.
 7. Ordem do Tab × ordem visual no celular (Densidade acima de "Páginas", divergência do Figma).
 8. Divergências do Toast com a página do DS: (a) toast sem `role`, (b) saída sem animação. Do lado do DS, o texto deste repositório já diz as duas coisas (PR A).
+
+Débito novo (PR de ajustes, D14), **medido, não corrigido**:
+
+0. **Aba ativa só pela cor de fundo** (WCAG 1.4.1 e 1.4.11). Fundo da aba ativa `--ui-bg-page` (#fcfeff) contra a barra e as abas inativas `--ui-bg-panel` (#d6dee6): **1,34:1**, abaixo de 3:1. Fora do forced-colors a aba ativa se diferencia por uma pista de cor fraca; o texto é o mesmo nas duas, e `aria-selected` dá o estado a leitor de tela.
 
 Observações da leitura do código (não medidas):
 
