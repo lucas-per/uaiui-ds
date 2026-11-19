@@ -96,6 +96,22 @@ test('Plus Jakarta Sans: igual à do repositório do Portifa (se a pasta irmã e
   assert.equal(createHash('sha256').update(orig).digest('hex'), createHash('sha256').update(readFileSync('src/assets/fonts/plus-jakarta-sans-variable.woff2')).digest('hex'));
 });
 
+test('preload das fontes (D12): as 5 páginas pedem a Plus Jakarta Sans e a DM Sans no <head>, no mesmo arquivo do url() do CSS', { skip: !existsSync('dist') && 'rode npm run build antes' }, () => {
+  const cssGerado = arquivos('dist/_astro', '.css').map((f) => readFileSync(f, 'utf8')).join('\n');
+  for (const p of arquivos('dist', '.html')) {
+    const html = readFileSync(p, 'utf8');
+    const head = html.slice(0, html.indexOf('</head>'));
+    for (const nome of ['plus-jakarta-sans-variable', 'dm-sans-variable']) {
+      const m = new RegExp(`<link rel="preload" as="font" type="font/woff2" href="(/_astro/${nome}\\.[\\w-]+\\.woff2)" crossorigin>`).exec(head);
+      assert.ok(m, `${p}: sem preload de ${nome}`);
+      assert.ok(existsSync(join('dist', m[1])), `${p}: ${m[1]} não existe`);
+      assert.ok(cssGerado.includes(`url(${m[1]})`), `${p}: ${m[1]} não é o arquivo do url() do CSS (seria baixado duas vezes)`);
+    }
+  }
+  // O preload não troca o font-display: a fonte de título continua optional.
+  assert.match(readFileSync('src/styles/portifa-docs/fonts.css', 'utf8'), /font-family: 'Portifa Plus Jakarta Sans';[\s\S]*?font-display: optional;/);
+});
+
 test('cópia: os blocos do cabeçalho mobile sticky continuam em uaiui-docs.css, sem marca de adaptação (decisão 11)', () => {
   const css = readFileSync('src/styles/portifa-docs/uaiui-docs.css', 'utf8');
   assert.match(css, /@media \(max-width: 887px\) \{\s*\.uaiui-docs \.uaiui-docs__body > h2 \{\s*scroll-margin-top: calc\(var\(--header-mobile-height\) \+ var\(--scale-x2\)\);/);

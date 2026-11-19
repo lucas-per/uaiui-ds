@@ -28,6 +28,9 @@ import '../styles/portifa-docs/uaiui-docs.css';
 import '../styles/portifa-docs/uaiui-docs-ds.css';
 // ADAPTAÇÃO UaiUI: o button.css vem para todas as páginas por causa do skip link (.uai-button); o do accordion e o do toast entram só na página deles, como no Portifa.
 import '../styles/components/button.css';
+// ADAPTAÇÃO UaiUI: o preload das duas fontes vem do BaseLayout do Portifa (a0e8583), que não existe aqui. Sem ele, o navegador só pede as fontes depois de ler o CSS e pintar: a Plus Jakarta Sans (font-display: optional) perde a janela e os títulos ficam na genérica até a visita seguinte, e a DM Sans (swap) troca depois de aparecer. O import devolve o mesmo arquivo com hash que o url() do fonts.css.
+import plusJakartaSansUrl from '../assets/fonts/plus-jakarta-sans-variable.woff2';
+import dmSansUrl from '../assets/fonts/dm-sans-variable.woff2';
 import PortifaHeader from '../components/portifa-chrome/layout/Header.astro';
 import PortifaHeaderMobile from '../components/portifa-chrome/layout/HeaderMobile.astro';
 import PortifaFooter from '../components/portifa-chrome/layout/Footer.astro';
@@ -52,6 +55,8 @@ const canonical = new URL(current.href, Astro.site).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" as="font" type="font/woff2" href={plusJakartaSansUrl} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={dmSansUrl} crossorigin />
     <title>{`${current.title} · UaiUI DS`}</title>
     <meta name="description" content={current.description} />
     <link rel="canonical" href={canonical} />

@@ -22,7 +22,7 @@ git -C ~/Projetos/portifa diff a0e8583 origin/main -- src/layouts/UaiuiDocsLayou
 
 | Portifa (a0e8583) | Aqui | Como |
 |---|---|---|
-| `src/layouts/UaiuiDocsLayout.astro` | `src/layouts/DocsLayout.astro` | corpo (do wrapper em diante) literal; o BaseLayout virou `<head>`, skip link, chrome e `<main>` aqui (D1) |
+| `src/layouts/UaiuiDocsLayout.astro` | `src/layouts/DocsLayout.astro` | corpo (do wrapper em diante) literal; o BaseLayout virou `<head>` (com o preload das fontes, D12), skip link, chrome e `<main>` aqui (D1) |
 | `src/components/uaiui/{DocsSidebar,DocsSearch,DocsDensity,DocsIcon,CodeBlock,Example,PropsTable}.astro`, `icons.ts`, `docs.ts` | `src/components/portifa-docs/` | literais; só os caminhos de `import` mudaram |
 | `src/utils/stable-id.ts` | `src/components/portifa-docs/utils/stable-id.ts` | literal |
 | `src/config/uaiui-nav.ts` | `src/components/portifa-docs/config/uaiui-nav.ts` | rotas e uma descrição (D6) |
@@ -51,6 +51,16 @@ Cada uma está marcada no código com `ADAPTAÇÃO UaiUI` (`grep -rn "ADAPTAÇÃ
 - **D9. Toast.** A demonstração principal é a do Portifa: "Mostrar aviso", região viva vazia, `<template>`; fechar pelo X, por Desfazer ou com Esc devolve o foco ao botão; os tons estáticos voltam em 2 s. O texto da página foi ajustado a ela; o conteúdo de acessibilidade é o deste repositório (regiões `aria-live="polite"` e `role="alert"`, toast sem `role`, Esc como requisito de quem integra, entrada de 100 ms só em opacidade). Saiu a frase que dizia que o exemplo não fecha com Esc.
 - **D10. Skip link.** Continua um só, o primeiro focável, filho direto do `<body>` (A8 do chrome). Ganhou a classe `uaiui` no próprio `<a>`, para ter os tokens do DS sem o `:root`. Por isso o `button.css` é importado no layout; o do accordion e o do toast entram só na página deles, como no Portifa.
 - **D11. Sitemap.** `src/pages/sitemap.xml.ts` gera `dist/sitemap.xml` a partir de `uaiui-nav.ts`, com as URLs do canonical (sem dependência nova).
+- **D12. Preload das fontes** (PR 2, commit próprio). O BaseLayout do Portifa faz preload da Plus Jakarta Sans e da DM Sans variáveis; a PR 1 não trouxe isso para o `DocsLayout.astro`. Sem o preload, o navegador só pede as fontes depois de ler o CSS e pintar. Com `font-display: optional`, a Plus Jakarta Sans perde a janela e os títulos ficam na fonte genérica até a visita seguinte (o arquivo já em cache). A DM Sans (`swap`) não fica presa: aparece na genérica e troca quando chega. Correção: o mesmo preload do BaseLayout (`import` do `.woff2`, que devolve o arquivo com hash do `url()` do CSS, e `<link rel="preload" as="font" type="font/woff2" crossorigin>`), mantendo `optional`. Medido no Chromium (perfil novo, sem cache, rede simulada), com a fonte desenhada lida por `CSS.getPlatformFontsForNode`:
+
+  | Rede | Build | Fontes pedidas em | Primeira pintura | Títulos (h1, h2, faixa) | Corpo e rodapé |
+  |---|---|---|---|---|---|
+  | 150 ms, 1,6 Mbit/s | sem preload | ~1,2 s (depois da pintura) | ~1,2 s | Liberation Sans (genérica) | DM Sans, trocada ~0,7 s depois da pintura |
+  | 150 ms, 1,6 Mbit/s | com preload | ~0,16 s | ~1,55 s | Plus Jakarta Sans | DM Sans, já na primeira pintura |
+  | 400 ms, 0,4 Mbit/s | sem preload | ~4,5 s | ~4,5 s | Liberation Sans | DM Sans, trocada ~2,6 s depois |
+  | 400 ms, 0,4 Mbit/s | com preload | ~0,45 s | ~5,85 s | Plus Jakarta Sans | DM Sans, já na primeira pintura |
+
+  Custo: a primeira pintura atrasa (~0,33 s na primeira rede, ~1,3 s na segunda), porque os 64 KB das duas fontes passam a dividir a banda com o CSS; o carregamento total fica igual. É o mesmo comportamento do Portifa. A JetBrains Mono 700 do chrome (`swap`, só rótulos) e as do `@fontsource` (`swap`) continuam sem preload, como no Portifa.
 
 **Não adaptado de propósito:** os blocos `@media (max-width: 887px)` e `@media (min-width: 768px) and (max-width: 887px)` de `uaiui-docs.css` (que leem `--header-mobile-height`) ficaram como no Portifa, porque o cabeçalho mobile do chrome voltou a ser sticky (decisão 11; A9 em `docs/CHROME-PORTIFA.md`). `--header-mobile-height` está definido em `.uaiui-docs` (D2) e nos contêineres do chrome.
 
@@ -146,7 +156,7 @@ Na raiz, depois de `npm run build`:
 node --test "tests/portifa-docs/*.test.mjs" "tests/portifa-chrome/*.test.mjs"
 ```
 
-`tests/portifa-docs` cobre: colisão dos tokens do Portifa com os 970 nomes do wrapper (0) e nada em `:root`; todo `var()` dos CSS da documentação com definição; todo seletor começando por `.uaiui-docs`; links internos do HTML gerado e do sitemap existentes e com barra final, sem `/docs`; canonical igual ao sitemap; sha256 e licença da Plus Jakarta Sans; os blocos do cabeçalho sticky presentes na cópia; marcas `ADAPTAÇÃO UaiUI`; o layout sem `tokens.css` e o skip link com `uaiui`.
+`tests/portifa-docs` cobre: colisão dos tokens do Portifa com os 970 nomes do wrapper (0) e nada em `:root`; todo `var()` dos CSS da documentação com definição; todo seletor começando por `.uaiui-docs`; links internos do HTML gerado e do sitemap existentes e com barra final, sem `/docs`; canonical igual ao sitemap; sha256 e licença da Plus Jakarta Sans; o preload das duas fontes em todas as páginas, apontando para o mesmo arquivo do `url()` do CSS, com `optional` mantido; os blocos do cabeçalho sticky presentes na cópia; marcas `ADAPTAÇÃO UaiUI`; o layout sem `tokens.css` e o skip link com `uaiui`.
 
 **Pendência:** estes testes e os do chrome não rodam no `npm run check` nem no CI (`package.json`, `scripts/` e `.github/` estavam fora do escopo).
 
