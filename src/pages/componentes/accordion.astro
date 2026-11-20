@@ -13,6 +13,7 @@ import PropsTable from '../../components/portifa-docs/PropsTable.astro';
 import css from '../../styles/components/accordion.css?raw';
 import { svg } from '../../components/portifa-docs/icons';
 
+// ADAPTAÇÃO UaiUI (D18, B-04): os h3 dos itens da demo vêm antes do primeiro h2 e pulavam um nível (h1 → h3). O h2 "Demonstração" logo antes do primeiro <Example> é só para leitor de tela (.uaiui-docs__sr-only) e fecha o outline sem mudar nada visível; Button e Toast não têm título antes do primeiro exemplo.
 const item = (id: string, title: string, body: string, open = false, disabled = false) => `<div class="uai-accordion-item">
   <h3>
     <button class="uai-accordion-trigger" id="${id}-h" aria-expanded="${open}" aria-controls="${id}-p"${disabled ? ' aria-disabled="true"' : ''}>
@@ -42,6 +43,7 @@ const rows = [
 ---
 <DocsLayout lead="Esconde conteúdo secundário que a pessoa consulta sob demanda: perguntas frequentes, detalhes de um pedido, seções longas de configurações.">
 
+  <h2 class="uaiui-docs__sr-only">Demonstração</h2>
   <Example code={basic} column label="Accordion com três itens" />
 
   <h2 id="instalacao">Instalação</h2>
