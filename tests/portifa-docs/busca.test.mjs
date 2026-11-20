@@ -112,6 +112,8 @@ test('Chromium: lista vazia tem aria-expanded=false; com resultados, true; fecha
   await page.fill('#uaiui-docs-q', 'tok');
   assert.equal(await exp(), 'true', 'voltou a ter resultado');
   await page.keyboard.press('Escape');
+  // O evento `close` do <dialog> é assíncrono (é ele que põe aria-expanded em false): espera o estado, sem pausa fixa.
+  await page.waitForFunction(() => document.querySelector('#uaiui-docs-q').getAttribute('aria-expanded') === 'false');
   assert.equal(await exp(), 'false', 'fechada');
   await page.keyboard.press('Control+k');
   await page.locator('#uaiui-docs-results li[role="option"]').nth(3).click();
@@ -136,6 +138,8 @@ test('Chromium: Ctrl+K com o menu mobile aberto fecha o menu, abre a busca com o
   }));
   assert.deepEqual(s, { dialog: true, foco: 'uaiui-docs-q', menu: 'false', rotulo: 'Abrir menu', inertes: 0, painelOculto: true });
   await page.keyboard.press('Escape');
+  // Quem devolve o foco ao botão do menu é o evento `close` do <dialog>, assíncrono: espera o foco chegar.
+  await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Abrir menu');
   const f = await page.evaluate(() => ({ dialog: document.querySelector('dialog').open, foco: document.activeElement.getAttribute('aria-label'), menu: document.querySelector('[data-menu-toggle]').getAttribute('aria-expanded') }));
   assert.deepEqual(f, { dialog: false, foco: 'Abrir menu', menu: 'false' }, 'o foco volta ao botão do menu, que continua fechado');
   await page.keyboard.press('Tab');
