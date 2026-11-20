@@ -27,3 +27,15 @@ body { margin: 0; background-color: oklch(98.64% 0.0119 101.48); }
 .skip { position: absolute; left: 8px; top: -60px; z-index: 100; }
 .skip:focus { top: 8px; }
 main[tabindex="-1"]:focus { outline: none; }
+
+/*
+  ADAPTAÇÃO UaiUI (D20, B-15): destino do skip link. Até 887px o cabeçalho mobile do chrome é sticky (83px); ao ativar
+  "Pular para o conteúdo", o navegador levava o topo do <main> a y=0, e os primeiros 83px do conteúdo ficavam sob o
+  cabeçalho. O <main> fica fora de .uaiui-docs e dos contêineres do chrome, então --header-mobile-height não chega
+  até ele (e não existe em :root): a conta do token está escrita por extenso, a mesma de portifa-chrome/tokens.css
+  (2 × --scale-x4 + --header-mobile-core + --header-mobile-divider) mais --scale-x2, o deslocamento de 91px que os h2 e
+  os elementos focáveis já usam (D19, B-12). Em rem e px como no chrome, então acompanha o tamanho da fonte do cabeçalho.
+*/
+@media (max-width: 887px) {
+  main[tabindex="-1"] { scroll-margin-top: calc(2 * 1rem + 2.875rem + 5px + 0.5rem); }
+}
