@@ -72,6 +72,12 @@ Cada uma está marcada no código com `ADAPTAÇÃO UaiUI` (`grep -rn "ADAPTAÇÃ
   - **Observado:** a legenda do controle de densidade começava na borda inferior do palco (0px, como no Portifa); no escuro, as legendas ficavam encostadas no palco. Resolvido em D15.
 - **D14. Aba ativa sem a faixa azul** (`uaiui-docs-ds.css`, desvio da cópia). Saiu o indicador de 4px (`::after`, `--ui-brand-band`) sob a aba ativa de Preview e Código, por decisão do Lucas: a aba ativa se distingue **só pelo fundo** (`--ui-bg-page` contra `--ui-bg-panel`) fora do forced-colors. Em `@media (forced-colors: active)` o fundo some, então a faixa continua só ali, em `Highlight` (o bloco passou a declarar `content`, posição e altura, que antes vinham do bloco removido). `aria-selected` não mudou. Os sublinhados das opções de Densidade e Tema (`__segment`) ficam: neles o sublinhado é o único sinal do item marcado.
 - **D15. Folga acima dos controles** (`uaiui-docs-tema.css`, desvio da cópia). `padding-top: var(--scale-x2)` (8px) em `.uaiui-docs__controls`, nos dois temas: a legenda "Densidade" (e "Tema") ficava colada no palco (0px). Sem variável nova. Medido a 320, 375, 768 e 1440px: folga de 0 para 8px, sem rolagem horizontal; a página cresce 32px no Button (4 exemplos × 8px).
+- **D16. Busca: item ativo visível, combobox e Ctrl+K com o menu mobile** (PR de acessibilidade da busca; achados B-02, B-05 e B-09 da auditoria). Desvios da cópia do Portifa, todos marcados `ADAPTAÇÃO UaiUI (D16` em `docs.ts`, `DocsSearch.astro` e `uaiui-docs.css`:
+  - **B-02 (WCAG 2.4.7, 2.4.11).** Ao fim de `render()`, `scrollIntoView({ block: 'nearest' })` no `[aria-selected="true"]`. Antes, com a lista cortada pela altura da tela, ↓ selecionava um item fora da vista e o Enter ia para ele. Medido antes: item ativo fora da lista visível depois de ↓×4 em 375×667 e 1280×600; depois: dentro, nos dois.
+  - **B-05 (4.1.2).** `aria-expanded` do campo acompanha a existência de resultados: `false` no HTML, `true` com resultados, `false` em "Nada encontrado." e quando a busca fecha. O `<li role="option">` deixou de ter um `<a tabindex="-1">` dentro (interativo dentro de option) e passou a ter `<span class="uaiui-docs__search-item">`; o clique no item faz o que o Enter faz (`window.location.href`), por um `click` na lista. Escolhida por ser a menos invasiva: o `role` e a navegação por teclado continuam iguais, e o `<a>` nunca recebia Tab. Perda aceita: abrir um resultado em nova aba pelo menu do botão direito.
+  - **CSS (`uaiui-docs.css`, só os seletores do item).** Os seletores `a`, `a:hover` e `[aria-selected='true'] a` dos resultados (e o `[aria-selected='true'] a` do bloco `forced-colors`, que também casava pelo `<a>`) passaram a casar por `.uaiui-docs__search-item`. Acrescentado `cursor: pointer`, que o `<a>` tinha por padrão. Medido antes e depois (24 propriedades do item, do título e do `<small>`, nos estados normal, ativo e hover, em Claro e Escuro): nenhuma diferença. Única diferença, só em `forced-colors`: o texto do item normal e do hover era `LinkText` (por ser um link) e agora é `CanvasText`.
+  - **B-09 (2.4.3).** `open()`, se o menu mobile do chrome estiver aberto, clica no `[data-menu-toggle]` antes de `showModal()` (o próprio botão levanta o `inert` e atualiza `aria-expanded` e o rótulo) e só depois guarda o `opener`, que nesse caso é o botão do menu, já fechado. Antes, a busca abria dentro do `<main>` inerte, o que só funciona porque o Chromium deixa o modal sair do `inert`. Escolhido fechar o menu, e não ignorar o atalho, para o Ctrl+K continuar funcionando. O código do chrome não foi tocado.
+  - **Testes:** `tests/portifa-docs/busca.test.mjs` (3 estáticos; 3 em Chromium, que procuram Playwright e Chromium na máquina e se pulam, com o motivo, se não os acharem).
 **Não adaptado de propósito:** os blocos `@media (max-width: 887px)` e `@media (min-width: 768px) and (max-width: 887px)` de `uaiui-docs.css` (que leem `--header-mobile-height`) ficaram como no Portifa, porque o cabeçalho mobile do chrome voltou a ser sticky (decisão 11; A9 em `docs/CHROME-PORTIFA.md`). `--header-mobile-height` está definido em `.uaiui-docs` (D2) e nos contêineres do chrome.
 
 ## Colisões
@@ -104,7 +110,7 @@ Saíram o `.docs-header` (5) e a gaveta (30). Medido no Chromium: a 767, 768 e 8
 
 - **Landmarks:** em todas as larguras, 1 `banner` e 1 `contentinfo` visíveis e 1 `main`. `nav` com nomes únicos: "Menu do site" (menu mobile do chrome, só aberto), "Documentação do UaiUI DS" (menu lateral; fechado no celular) e "Páginas anterior e seguinte".
 - **`inert`:** com o menu mobile aberto, o script do chrome marca como `inert` o skip link, o cabeçalho desktop, o `<main>` (com a busca e o "Páginas" dentro) e os dois rodapés.
-- **Ctrl+K com o menu mobile aberto (observado, não corrigido):** a busca abre por cima do menu, o campo recebe o foco e funciona, embora o `<dialog>` esteja dentro do `<main>` inerte (o Chromium deixa o diálogo modal sair do `inert`). Esc fecha a busca e o foco volta ao botão do menu, que continua aberto. É a mesma estrutura do Portifa (busca dentro do `<main>`, cabeçalho fora).
+- **Ctrl+K com o menu mobile aberto:** a busca fecha o menu antes de abrir e o Esc devolve o foco ao botão do menu, já fechado (D16, B-09). O `<dialog>` não abre mais dentro do `<main>` inerte.
 - **`isolamento.css` (chrome):** neutralizava o `:focus-visible` global do `site.css`. Sem o `site.css`, ficou sem o que neutralizar; continua como proteção, sem efeito colateral.
 
 ## Débitos de acessibilidade do Portifa (registrados, não corrigidos)
@@ -130,11 +136,10 @@ Observações da leitura do código (não medidas):
 
 1. O mesmo controle de densidade se repete em cada exemplo (vários grupos "Densidade" sincronizados). O de tema (D13) segue o mesmo padrão.
 2. Níveis de título nos exemplos do Accordion (ver ambiguidade 4).
-3. Combobox da busca com `aria-expanded="true"` fixo e `<a tabindex="-1">` nas opções; não testado com leitor de tela.
-4. Toasts estáticos que somem e voltam em 2 s (WCAG 2.2.2).
-5. Rótulos de grupo do menu são `<p>`, não títulos.
-6. Regiões roláveis com foco (tabelas) e nota de rolagem só no celular.
-7. Tema escuro não exposto no Portifa. Aqui ele entrou na PR 2, só no palco dos exemplos (D13).
+3. Toasts estáticos que somem e voltam em 2 s (WCAG 2.2.2).
+4. Rótulos de grupo do menu são `<p>`, não títulos.
+5. Regiões roláveis com foco (tabelas) e nota de rolagem só no celular.
+6. Tema escuro não exposto no Portifa. Aqui ele entrou na PR 2, só no palco dos exemplos (D13).
 
 ## Ambiguidades do material e o que foi decidido
 
@@ -171,6 +176,8 @@ node --test "tests/portifa-docs/*.test.mjs" "tests/portifa-chrome/*.test.mjs"
 ```
 
 `tests/portifa-docs` cobre: colisão dos tokens do Portifa com os 970 nomes do wrapper (0) e nada em `:root`; todo `var()` dos CSS da documentação com definição; todo seletor começando por `.uaiui-docs`; links internos do HTML gerado e do sitemap existentes e com barra final, sem `/docs`; canonical igual ao sitemap; sha256 e licença da Plus Jakarta Sans; o preload das duas fontes em todas as páginas, apontando para o mesmo arquivo do `url()` do CSS, com `optional` mantido; os blocos do cabeçalho sticky presentes na cópia; marcas `ADAPTAÇÃO UaiUI`; o layout sem `tokens.css` e o skip link com `uaiui`. `tema.test.mjs` cobre o tema (D13): o CSS novo sem propriedades (zero colisão) e com seletores `.uaiui-docs`; no HTML gerado, todo palco com `uaiui` e sem tema ou densidade fixos, uma linha Densidade \| Tema por exemplo, nesta ordem, com Claro marcado e `name` único; nenhum elemento com `data-uaiui-theme` no HTML e nenhum `.uaiui` no painel Código; o script inline antes dos palcos e depois do da densidade, a chave `uaiui-theme` só com `dark`, a cópia da densidade, nada de `prefers-color-scheme` nem das chaves antigas; a frase só na Introdução.
+
+`busca.test.mjs` (D16) cobre a busca: o código sem `<a>` no option, com `scrollIntoView`, `aria-expanded` sincronizado e o menu fechado antes do `opener`; o HTML gerado com `aria-expanded="false"`; e, em Chromium (se Playwright e Chromium existirem na máquina; senão pulados), o item ativo visível depois de ↓×4 em 375×667 e 1280×600, a lista vazia com `aria-expanded=false` e o Ctrl+K com o menu mobile aberto.
 
 **Pendência:** estes testes e os do chrome não rodam no `npm run check` nem no CI (`package.json`, `scripts/` e `.github/` estavam fora do escopo).
 

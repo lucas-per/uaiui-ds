@@ -199,6 +199,8 @@ if (root) {
     const escape = (text: string) =>
       text.replace(/[&<>"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[char]!);
 
+    // ADAPTAÇÃO UaiUI (D16, B-05): aria-expanded do combobox acompanha a existência de resultados (false em
+    // "Nada encontrado." e com a busca fechada; no Portifa ficava fixo em "true").
     const render = () => {
       const query = normalize(input.value.trim());
       shown = items.filter((item) => !query || normalize(`${item.title} ${item.description} ${item.group}`).includes(query));
@@ -207,12 +209,15 @@ if (root) {
         ? shown
             .map(
               (item, index) =>
-                `<li role="option" id="uaiui-docs-r${index}" aria-selected="${index === selected}"><a href="${escape(item.href)}" tabindex="-1"><strong>${escape(item.title)}</strong><small>${escape(item.group)} · ${escape(item.description)}</small></a></li>`,
+                `<li role="option" id="uaiui-docs-r${index}" aria-selected="${index === selected}"><span class="uaiui-docs__search-item"><strong>${escape(item.title)}</strong><small>${escape(item.group)} · ${escape(item.description)}</small></span></li>`,
             )
             .join('')
         : '<li class="uaiui-docs__search-empty" role="presentation">Nada encontrado.</li>';
+      input.setAttribute('aria-expanded', String(shown.length > 0));
       if (shown.length) input.setAttribute('aria-activedescendant', `uaiui-docs-r${selected}`);
       else input.removeAttribute('aria-activedescendant');
+      // ADAPTAÇÃO UaiUI (D16, B-02): o item ativo fica sempre visível na lista que rola.
+      list.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' });
       const message = shown.length === 1 ? '1 resultado.' : shown.length ? `${shown.length} resultados.` : 'Nada encontrado.';
       if (status.textContent !== message) status.textContent = message;
     };
@@ -220,13 +225,21 @@ if (root) {
     // Quem abriu a busca recebe o foco de volta ao fechar (pelo atalho, sem botão, o foco sai do campo).
     let opener: HTMLElement | null = null;
     dialog.addEventListener('close', () => {
+      input.setAttribute('aria-expanded', 'false');
       if (opener && opener !== document.body && opener.isConnected) opener.focus();
       else if (dialog.contains(document.activeElement)) (document.activeElement as HTMLElement).blur();
       opener = null;
     });
 
+    // ADAPTAÇÃO UaiUI (D16, B-09): com o menu mobile do chrome aberto, o <main> (e o diálogo dentro dele) fica inert e o
+    // Chromium só deixa o modal sair do inert por tolerância. O menu fecha antes (pelo próprio botão, que levanta o
+    // inert e atualiza aria-expanded e o rótulo), e só depois o opener é guardado: o foco que estava dentro do painel
+    // não existe mais, então o opener é o botão do menu, já fechado.
+    const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
     const open = () => {
-      opener = document.activeElement as HTMLElement | null;
+      const menuWasOpen = menuToggle?.getAttribute('aria-expanded') === 'true';
+      if (menuWasOpen) menuToggle!.click();
+      opener = menuWasOpen ? menuToggle : (document.activeElement as HTMLElement | null);
       dialog.showModal();
       input.value = '';
       selected = 0;
@@ -267,6 +280,12 @@ if (root) {
         event.preventDefault();
         window.location.href = shown[selected].href;
       }
+    });
+    // ADAPTAÇÃO UaiUI (D16, B-05): o item é o próprio option (sem <a> dentro); o clique faz o que o Enter faz.
+    list.addEventListener('click', (event) => {
+      const option = (event.target as HTMLElement).closest('li[role="option"]');
+      const item = option && shown[[...list.children].indexOf(option)];
+      if (item) window.location.href = item.href;
     });
     // Clique fora do diálogo (no fundo) fecha.
     dialog.addEventListener('click', (event) => {

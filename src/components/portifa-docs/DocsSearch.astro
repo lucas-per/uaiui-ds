@@ -3,6 +3,9 @@
  * Busca da documentação (porte de Search.astro do uaiui-ds): diálogo modal
  * aberto pelos botões [data-search-open] e por Ctrl/⌘ + K. O índice são as
  * páginas de uaiui-nav.ts. A contagem de resultados vai para um role="status".
+ *
+ * ADAPTAÇÃO UaiUI (D16, B-05): aria-expanded começa em false e docs.ts o mantém
+ * igual à existência de resultados (no Portifa era um "true" fixo).
  */
 import { docsNavFlat } from './config/uaiui-nav';
 ---
@@ -17,7 +20,7 @@ import { docsNavFlat } from './config/uaiui-nav';
       autocomplete="off"
       placeholder="Buscar componente ou página…"
       role="combobox"
-      aria-expanded="true"
+      aria-expanded="false"
       aria-controls="uaiui-docs-results"
       aria-autocomplete="list"
       aria-describedby="uaiui-docs-search-status"
