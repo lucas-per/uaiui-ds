@@ -162,8 +162,8 @@
   min-width: 0;
 }
 
-/* Aba de 44px (o site de docs do DS tinha 36).
-   ADAPTAÇÃO UaiUI: o Portifa tem um indicador de 4px na cor da marca sob a aba ativa; aqui ele saiu (decisão do Lucas) e a aba ativa se distingue só pelo fundo (--ui-bg-page contra --ui-bg-panel). Em forced-colors o fundo some, então o indicador continua só dentro do @media (forced-colors: active), no fim do arquivo. Ver docs/DOCS-PORTIFA.md (D14). */
+/* Aba de 44px (o site de docs do DS tinha 36), indicador de 4px na cor da marca.
+   ADAPTAÇÃO UaiUI (D17): o indicador (::after da aba ativa, mais abaixo) voltou, como no Portifa. A D14 o havia tirado, e a aba ativa ficava só pelo fundo (1,34:1, WCAG 1.4.11). Ver docs/DOCS-PORTIFA.md (D14 revogada pela D17). */
 .uaiui-docs .uaiui-docs__tab {
   position: relative;
   min-height: 44px;
@@ -190,6 +190,17 @@
 .uaiui-docs .uaiui-docs__tab[aria-selected='true'] {
   background-color: var(--ui-bg-page);
   color: var(--ui-fg-default);
+}
+
+/* ADAPTAÇÃO UaiUI (D17): igual ao bloco do Portifa, que a D14 havia removido. */
+.uaiui-docs .uaiui-docs__tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: var(--scale-base);
+  background-color: var(--ui-brand-band);
 }
 
 .uaiui-docs .uaiui-docs__tab:focus-visible {
@@ -294,7 +305,7 @@
 }
 
 @media (forced-colors: active) {
-  /* ADAPTAÇÃO UaiUI (D14): a faixa, antes declarada fora do @media, agora vive só aqui. */
+  /* ADAPTAÇÃO UaiUI (D14, mantido pela D17): em forced-colors a cor da marca é trocada por Highlight. As declarações de geometria repetem as do bloco base de propósito: este bloco continua autossuficiente, e como é o mesmo ::after, a faixa não se duplica. */
   .uaiui-docs .uaiui-docs__tab[aria-selected='true']::after {
     content: '';
     position: absolute;
