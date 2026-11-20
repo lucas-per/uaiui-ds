@@ -11,6 +11,7 @@ interface Props {
   bare?: boolean;
 }
 
+// ADAPTAÇÃO UaiUI (D18, B-11): aria-label num <pre> (role genérico) não é permitido; role="group" dá o nome sem criar landmark (region viraria um por bloco de código).
 const { code, lang = 'html', bare = false } = Astro.props;
 ---
 
@@ -19,5 +20,5 @@ const { code, lang = 'html', bare = false } = Astro.props;
     <span class="uaiui-docs__code-lang" aria-hidden="true">{lang}</span>
     <button type="button" class="uaiui-docs__copy" data-copy aria-label={`Copiar código ${lang.toUpperCase()}`}>Copiar</button>
   </div>
-  <pre tabindex="0" aria-label={`Código ${lang.toUpperCase()}`}><code>{code.trim()}</code></pre>
+  <pre tabindex="0" role="group" aria-label={`Código ${lang.toUpperCase()}`}><code>{code.trim()}</code></pre>
 </figure>
