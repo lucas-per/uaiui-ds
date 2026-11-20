@@ -813,7 +813,11 @@
   list-style: none;
 }
 
-.uaiui-docs .uaiui-docs__search-results a {
+/* ADAPTAÇÃO UaiUI (D16, B-05): o item da busca deixou de ser um <a> dentro do option; os três seletores abaixo
+   (antes `a`, `a:hover` e `[aria-selected='true'] a`) casam pelo span .uaiui-docs__search-item. O cursor: pointer
+   é o que o <a> tinha por padrão do navegador; nenhuma outra declaração mudou. */
+.uaiui-docs .uaiui-docs__search-results .uaiui-docs__search-item {
+  cursor: pointer;
   display: grid;
   gap: var(--scale-half);
   min-height: 44px;
@@ -824,13 +828,13 @@
 }
 
 @media (hover: hover) {
-  .uaiui-docs .uaiui-docs__search-results a:hover {
+  .uaiui-docs .uaiui-docs__search-results .uaiui-docs__search-item:hover {
     background-color: var(--interface-function-ghost-active-background);
     color: var(--interface-function-ghost-active-txtOn);
   }
 }
 
-.uaiui-docs .uaiui-docs__search-results [aria-selected='true'] a {
+.uaiui-docs .uaiui-docs__search-results [aria-selected='true'] .uaiui-docs__search-item {
   background-color: var(--interface-function-ghost-active-background);
   color: var(--interface-function-ghost-active-txtOn);
 }
@@ -1029,7 +1033,7 @@
     border-color: CanvasText;
   }
 
-  .uaiui-docs .uaiui-docs__search-results [aria-selected='true'] a {
+  .uaiui-docs .uaiui-docs__search-results [aria-selected='true'] .uaiui-docs__search-item {
     forced-color-adjust: none;
     background-color: Highlight;
     color: HighlightText;
