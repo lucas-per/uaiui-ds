@@ -340,13 +340,17 @@
   text-transform: uppercase;
 }
 
+/* ADAPTAÇÃO UaiUI (D19, B-10): o título da página atual no botão "Páginas" não é mais cortado com "…" (antes nowrap +
+   ellipsis; WCAG 1.4.12: com o espaçamento de texto ampliado a 320px "Tokens e temas" perdia o fim). Agora quebra a
+   linha, e overflow-wrap: anywhere cobre uma palavra maior que a coluna. Sem o espaçamento ampliado, cabe numa linha
+   e nada muda. */
 .uaiui-docs .uaiui-docs__pages-current {
   overflow: hidden;
   font-weight: var(--weight-600);
   font-size: var(--scale-x4);
   line-height: var(--line-height-regular);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .uaiui-docs .uaiui-docs__pages-toggle[aria-expanded='true'] .uaiui-docs__chevron {
@@ -637,11 +641,13 @@
   font-size: var(--scale-x4);
 }
 
-/* Amostra de cores (Tokens e temas). */
+/* Amostra de cores (Tokens e temas).
+   ADAPTAÇÃO UaiUI (D19, B-07): padding: 0. O Portifa tem um reset global de listas que esta cópia não trouxe (base.css, D5), então o ul ficava com o recuo de 40px do navegador, fora da coluna do texto. */
 .uaiui-docs .uaiui-docs__swatches {
   display: flex;
   flex-wrap: wrap;
   gap: var(--scale-x2);
+  padding: 0;
 }
 
 .uaiui-docs .uaiui-docs__swatch {
@@ -856,6 +862,18 @@
   .uaiui-docs .uaiui-docs__body > h2 {
     scroll-margin-top: calc(var(--header-mobile-height) + var(--scale-x2));
   }
+
+  /* ADAPTAÇÃO UaiUI (D19, B-12): o mesmo deslocamento para tudo o que recebe foco (WCAG 2.4.11). Sem ele, o foco num bloco
+     muito alto (o pre de CSS tem 2067px) deixava a borda superior sob o cabeçalho sticky. É scroll-margin nos elementos, e
+     não scroll-padding no html (base.css), porque --header-mobile-height só existe em .uaiui-docs e nos contêineres do
+     chrome (nunca em :root). */
+  .uaiui-docs a[href],
+  .uaiui-docs button,
+  .uaiui-docs input,
+  .uaiui-docs summary,
+  .uaiui-docs [tabindex] {
+    scroll-margin-top: calc(var(--header-mobile-height) + var(--scale-x2));
+  }
 }
 
 /* ---------- Tablet: menu de 288px e conteúdo ---------- */
@@ -1020,6 +1038,14 @@
 }
 
 @media (forced-colors: active) {
+  /* ADAPTAÇÃO UaiUI (D19, B-08): a amostra de cor é a informação (o fundo é o que esse modo troca por Canvas, e a caixa
+     ficava vazia). Só ela mantém a cor; a borda volta a cor de sistema, porque forced-color-adjust: none também a
+     deixaria como o autor escreveu. O nome ao lado continua adaptando. */
+  .uaiui-docs .uaiui-docs__swatch-color {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+  }
+
   /* Divisores e linha vertical são fundos, que esse modo troca: cor de sistema. */
   .uaiui-docs .uaiui-docs__top-divider,
   .uaiui-docs .uaiui-docs__nav::after,
