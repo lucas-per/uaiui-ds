@@ -1,4 +1,4 @@
-// Testes dos acabamentos de CSS da moldura (D19 em docs/DOCS-PORTIFA.md: B-07, B-08, B-10 e B-12 da auditoria).
+// Testes dos acabamentos de CSS da moldura (D19 em docs/DOCS-PORTIFA.md: B-07, B-08, B-10 e B-12 da auditoria; D21: amostra de cores em lista).
 // Rodar na raiz, depois de `npm run build`:
 //   node --test "tests/portifa-docs/*.test.mjs"
 // Os testes "Chromium" dirigem o site de dist/ num navegador real; o repositório não tem Playwright como dependência
@@ -42,6 +42,34 @@ test('CSS: o forced-color-adjust: none fica só na amostra de cor; nenhum token 
 test('HTML gerado: as marcas ADAPTAÇÃO UaiUI da D19 não vão para o HTML', { skip: semBuild }, () => {
   const todos = (d) => readdirSync(d).flatMap((n) => { const p = join(d, n); return statSync(p).isDirectory() ? todos(p) : p.endsWith('.html') ? [p] : []; });
   for (const f of todos('dist')) assert.ok(!/D19/.test(readFileSync(f, 'utf8')), f);
+});
+
+test('CSS: a amostra de cores é uma lista (quadrado à esquerda, nome à direita), marcada ADAPTAÇÃO UaiUI (D21), sem valor solto nem token novo', () => {
+  assert.ok(cssBruto.includes('ADAPTAÇÃO UaiUI (D21)'), 'D21 sem marca');
+  const ul = regra('.uaiui-docs .uaiui-docs__swatches');
+  assert.match(ul, /flex-direction:\s*column;/);
+  assert.match(ul, /gap:\s*var\(--scale-x2\);/, 'entre linhas: 8px pela escala');
+  assert.doesNotMatch(ul, /flex-wrap/, 'sem quebra em linha: um item por linha');
+  const li = regra('.uaiui-docs .uaiui-docs__swatch');
+  assert.match(li, /display:\s*flex;/);
+  assert.match(li, /align-items:\s*center;/);
+  assert.match(li, /gap:\s*var\(--scale-x4\);/, 'entre quadrado e nome: 16px pela escala');
+  assert.match(li, /overflow-wrap:\s*anywhere;/);
+  assert.match(li, /font-family:\s*var\(--uaiui-docs-font-label\);/, 'o nome segue em fonte monoespaçada');
+  const cor = regra('.uaiui-docs .uaiui-docs__swatch-color');
+  assert.match(cor, /flex:\s*none;/, 'mesma largura em todos (não encolhe)');
+  assert.match(cor, /width:\s*72px;[^}]*height:\s*40px;/, 'o quadrado mantém o tamanho');
+  assert.match(cor, /border:\s*var\(--border-width-default\) solid var\(--ui-border-strong\);/, 'e a borda');
+  assert.match(readFileSync('docs/DOCS-PORTIFA.md', 'utf8'), /D21\./);
+});
+
+test('HTML gerado: a amostra segue sendo ul/li com 11 itens, o quadrado vazio e sem texto alternativo novo; a marca D21 não vai para o HTML', { skip: semBuild }, () => {
+  const html = readFileSync('dist/tokens/index.html', 'utf8');
+  const ul = html.match(/<ul class="uaiui-docs__swatches"[^>]*>([\s\S]*?)<\/ul>/)[1];
+  assert.equal((ul.match(/<li class="uaiui-docs__swatch"/g) ?? []).length, 11);
+  assert.equal((ul.match(/<span class="uaiui-docs__swatch-color" style="[^"]*"><\/span>/g) ?? []).length, 11);
+  assert.doesNotMatch(ul, /alt=|aria-label|aria-hidden|<img|<table/);
+  assert.ok(!/D21/.test(html));
 });
 
 // ---------- Chromium ----------
@@ -90,6 +118,48 @@ test('Chromium: as amostras da página Tokens alinham com o h2 (x igual) de 320 
     assert.equal(r.pad, '0px', `${largura}px`);
     assert.equal(r.x, r.h2, `${largura}px: a 1ª amostra começa na coluna do texto`);
     assert.ok(r.direita <= r.vw && r.hs === 0, `${largura}px: sem overflow`);
+  }
+});
+
+test('Chromium: a amostra de cores é uma lista: quadrado à esquerda do nome, nomes na mesma coluna, 16px entre os dois e 8px entre as linhas, sem rolagem horizontal, nem com o espaçamento de texto da WCAG (D21)', { skip: semNavegador }, async () => {
+  const espacamento = '*{line-height:1.5 !important;letter-spacing:.12em !important;word-spacing:.16em !important} p{margin-bottom:2em !important}';
+  const medir = (page) => page.evaluate(() => {
+    const lis = [...document.querySelectorAll('.uaiui-docs__swatch')];
+    const nome = (li) => { const r = document.createRange(); r.selectNodeContents([...li.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim())); return r.getBoundingClientRect(); };
+    const quad = lis.map((l) => l.querySelector('.uaiui-docs__swatch-color').getBoundingClientRect());
+    const nomes = lis.map(nome);
+    const ul = document.querySelector('.uaiui-docs__swatches').getBoundingClientRect();
+    const arred = (n) => Math.round(n * 100) / 100;
+    return {
+      n: lis.length, h2: document.querySelector('.uaiui-docs__body h2').getBoundingClientRect().x,
+      xQuad: [...new Set(quad.map((r) => r.x))], largQuad: [...new Set(quad.map((r) => r.width))], xNome: [...new Set(nomes.map((r) => arred(r.x)))],
+      gapH: [...new Set(nomes.map((r, i) => arred(r.x - quad[i].right)))], gapV: [...new Set(lis.slice(1).map((l, i) => arred(l.getBoundingClientRect().top - lis[i].getBoundingClientRect().bottom)))],
+      centro: Math.max(...nomes.map((r, i) => Math.abs((r.top + r.bottom) / 2 - (quad[i].top + quad[i].bottom) / 2))),
+      cortado: lis.some((l) => l.scrollWidth > l.clientWidth + 1) || nomes.some((r) => r.right > ul.right + 0.5),
+      hs: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    };
+  });
+  for (const [largura, comEspacamento] of [[320, false], [320, true], [375, false], [768, false], [1440, false]]) {
+    const page = await abrir(largura, 900);
+    await page.goto(`${base}/tokens/`);
+    await page.waitForSelector('.uaiui-docs__swatch');
+    if (comEspacamento) {
+      await page.addStyleTag({ content: espacamento });
+      await page.waitForFunction(() => getComputedStyle(document.querySelector('.uaiui-docs__swatch')).letterSpacing !== 'normal');
+    }
+    const r = await medir(page);
+    const rotulo = `${largura}px${comEspacamento ? ' com espaçamento WCAG' : ''}`;
+    assert.equal(r.n, 11, rotulo);
+    assert.deepEqual(r.xQuad, [r.h2], `${rotulo}: todos os quadrados na coluna do texto`);
+    assert.deepEqual(r.largQuad, [72], `${rotulo}: todos com a mesma largura`);
+    assert.equal(r.xNome.length, 1, `${rotulo}: os nomes numa só coluna`);
+    assert.ok(r.xNome[0] > r.xQuad[0] + 72, `${rotulo}: o nome fica à direita do quadrado`);
+    assert.deepEqual(r.gapH, [16], `${rotulo}: 16px entre quadrado e nome`);
+    assert.deepEqual(r.gapV, [8], `${rotulo}: 8px entre linhas`);
+    assert.ok(r.centro <= 1, `${rotulo}: nome centralizado na vertical (${r.centro}px)`);
+    assert.equal(r.cortado, false, `${rotulo}: nenhum nome cortado`);
+    assert.equal(r.hs, 0, `${rotulo}: sem rolagem horizontal`);
+    await page.context().close();
   }
 });
 

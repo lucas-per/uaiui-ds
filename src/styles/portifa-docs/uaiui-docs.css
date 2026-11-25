@@ -642,17 +642,20 @@
 }
 
 /* Amostra de cores (Tokens e temas).
-   ADAPTAÇÃO UaiUI (D19, B-07): padding: 0. O Portifa tem um reset global de listas que esta cópia não trouxe (base.css, D5), então o ul ficava com o recuo de 40px do navegador, fora da coluna do texto. */
+   ADAPTAÇÃO UaiUI (D19, B-07): padding: 0. O Portifa tem um reset global de listas que esta cópia não trouxe (base.css, D5), então o ul ficava com o recuo de 40px do navegador, fora da coluna do texto.
+   ADAPTAÇÃO UaiUI (D21): lista de um item por linha, com o quadrado de cor à esquerda e o nome do token à direita, centralizado na vertical (pedido do Lucas: varredura mais fácil). Antes eram quadrados em linha que quebravam, com o nome embaixo. Mesmo quadrado, mesma borda, mesma fonte; só o arranjo mudou. */
 .uaiui-docs .uaiui-docs__swatches {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--scale-x2);
   padding: 0;
 }
 
 .uaiui-docs .uaiui-docs__swatch {
-  display: grid;
-  gap: var(--scale-base);
+  display: flex;
+  align-items: center;
+  gap: var(--scale-x4);
+  overflow-wrap: anywhere;
   font-family: var(--uaiui-docs-font-label);
   font-weight: var(--weight-400);
   font-size: var(--scale-x3);
@@ -661,6 +664,7 @@
 }
 
 .uaiui-docs .uaiui-docs__swatch-color {
+  flex: none;
   width: 72px;
   height: 40px;
   border: var(--border-width-default) solid var(--ui-border-strong);
